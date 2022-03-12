@@ -78,8 +78,8 @@ DATABASES = {
 'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'AggieEducatorPortal',
-        'USER': 'aggie',
-        'PASSWORD': 'aggieeducator',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'aggieeducator.czyhmdb1waqz.us-east-1.rds.amazonaws.com',
         'PORT': '5432'
     }
