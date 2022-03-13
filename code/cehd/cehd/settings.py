@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+from django.contrib.messages import constants as messages
+
 # load environment variables from .env
 load_dotenv()
 
@@ -39,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'login.apps.LoginConfig',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -84,8 +88,7 @@ PORT = str(os.getenv('POSTGRES_PORT'))
 print("Successfully retrieved settings for Postgres database.")
 
 DATABASES = {
-    'default': {},
-    'dev': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'AggieEducatorPortal',
         'USER': USER,
@@ -133,3 +136,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
