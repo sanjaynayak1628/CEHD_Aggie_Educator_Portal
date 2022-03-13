@@ -9,12 +9,15 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# load environment variables from .env
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,7 +29,6 @@ SECRET_KEY = '#tr8@3h)fq3pjp8c7meo6h4i-!#)sx5+7+o+&-l22iju!h(6=h'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -70,21 +72,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cehd.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# database details
+USER = str(os.getenv('POSTGRES_USERNAME'))
+PASSWORD = str(os.getenv('POSTGRES_PASSWORD'))
+HOST = str(os.getenv('POSTGRES_HOSTNAME'))
+PORT = str(os.getenv('POSTGRES_PORT'))
+
+print("Successfully retrieved settings for Postgres database.")
+
 DATABASES = {
-'default': {
+    'default': {},
+    'dev': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'AggieEducatorPortal',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': 'aggieeducator.czyhmdb1waqz.us-east-1.rds.amazonaws.com',
-        'PORT': '5432'
+        'USER': USER,
+        'PASSWORD': PASSWORD,
+        'HOST': HOST,
+        'PORT': PORT,
+        'TEST': {
+            'DEPENDENCIES': []
+        }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -104,7 +116,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -117,7 +128,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
