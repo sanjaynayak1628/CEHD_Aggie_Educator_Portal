@@ -1,0 +1,18 @@
+{% extends 'login/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+    <h5>In the profile of {{user.username}}</h5>
+</div>
+{% else %}
+<div class="container">
+    No user has logged in
+    <a href="{% url 'login' %}"><button class="btn btn-danger" style="color: white;">Log In</button></a>
+</div>
+{% endif %}
+
+
+{% endblock %}

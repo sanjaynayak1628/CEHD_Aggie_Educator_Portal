@@ -28,6 +28,9 @@
             {% endfor %}
         {% endif %}
         </div>
+        {% if user.is_authenticated %}
+            {{user.username}} is currently authenticated and logged in.
+        {% endif %}
         {% block content %}
         {% endblock content %}
     </div>
