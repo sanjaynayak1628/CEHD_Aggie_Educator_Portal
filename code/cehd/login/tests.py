@@ -7,7 +7,7 @@ class DatabaseConnectionTest(TestCase):
     This class is for testing the database connection to Postgres server in AWS
     """
 
-    databases = {'dev'}
+    # databases = {'dev'}
 
     @classmethod
     def setUpTestData(cls):
@@ -26,11 +26,11 @@ class DatabaseConnectionTest(TestCase):
         This function is used to check the postgres connection
         return: None
         """
-        from django.db import connections
+        from django.db import connection
 
         check = False
         try:
-            self.c = connections['dev'].cursor()
+            self.c = connection.cursor()
             check = True
             self.c.close()
         except Exception as e:
