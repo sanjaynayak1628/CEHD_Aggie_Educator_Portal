@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
+    'epp_program',
+    'epp_student',
+    'login'
 ]
 
 MIDDLEWARE = [
@@ -84,8 +88,7 @@ PORT = str(os.getenv('POSTGRES_PORT'))
 print("Successfully retrieved settings for Postgres database.")
 
 DATABASES = {
-    'default': {},
-    'dev': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'AggieEducatorPortal',
         'USER': USER,
