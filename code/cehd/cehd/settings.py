@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+from django.contrib.messages import constants as messages
+
 # load environment variables from .env
 load_dotenv()
 
@@ -39,10 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
-    'epp_program',
-    'epp_student',
-    'login'
+    'login.apps.LoginConfig',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -91,12 +91,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'AggieEducatorPortal',
-<<<<<<< HEAD
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': 'aggieeducator.czyhmdb1waqz.us-east-1.rds.amazonaws.com',
-        'PORT': '5432'
-=======
         'USER': USER,
         'PASSWORD': PASSWORD,
         'HOST': HOST,
@@ -104,7 +98,6 @@ DATABASES = {
         'TEST': {
             'DEPENDENCIES': []
         }
->>>>>>> sanjay
     }
 }
 
@@ -143,3 +136,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
