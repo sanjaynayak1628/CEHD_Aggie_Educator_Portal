@@ -4,33 +4,8 @@
 # python==3.10.2
 asgiref
 behave
-# bzip2==1.0.8
-# ca-certificates
-# click==8.0.4
-# colorama==0.4.4
 django
-# krb5==1.19.2
-# libffi==3.4.2
-# libpq==14.2
-# libzlib==1.2.11
-# openssl==3.0.0
-# parse==1.19.0
-# parse_type==0.6.0
-# pip==22.0.3
 psycopg2
 python-dotenv
 django-crispy-forms
 gunicorn
-# python_abi==3.10
-# pytz==2020.1
-# setuptools==60.9.3
-# six==1.16.0
-# sqlite==3.37.0
-# sqlparse==0.4.1
-# tk==8.6.12
-# tzdata==2021e
-# ucrt==10.0.20348.0
-# vc==14.2
-# vs2015_runtime==14.29.30037
-# wheel==0.37.1
-# xz==5.2.5
