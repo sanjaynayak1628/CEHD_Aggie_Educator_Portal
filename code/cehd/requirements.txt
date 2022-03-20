@@ -11,3 +11,4 @@ django-crispy-forms
 gunicorn
 # for running coverage of python code
 coverage
+selenium
