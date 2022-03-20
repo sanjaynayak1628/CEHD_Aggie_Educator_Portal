@@ -3,7 +3,7 @@
 # platform: win-64
 asgiref==3.3.0
 behave==1.2.6
-bzip2==1.0.8
+# bzip2==1.0.8
 ca-certificates
 click==8.0.4
 colorama==0.4.4
