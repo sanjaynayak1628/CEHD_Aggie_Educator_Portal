@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 
-# Create your tests here.
 class DatabaseConnectionTest(TestCase):
     """
     This class is for testing the database connection to Postgres server in AWS
