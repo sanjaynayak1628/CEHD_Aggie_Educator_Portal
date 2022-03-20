@@ -19,6 +19,7 @@ django
 # pip==22.0.3
 psycopg2
 python-dotenv
+django-crispy-forms
 # python_abi==3.10
 # pytz==2020.1
 # setuptools==60.9.3
