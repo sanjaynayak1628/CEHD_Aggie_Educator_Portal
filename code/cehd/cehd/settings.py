@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+from django.contrib.messages import constants as messages
+
 # load environment variables from .env
 load_dotenv()
 
@@ -28,7 +30,7 @@ SECRET_KEY = '#tr8@3h)fq3pjp8c7meo6h4i-!#)sx5+7+o+&-l22iju!h(6=h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['arcane-temple-55328.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
@@ -137,3 +139,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
