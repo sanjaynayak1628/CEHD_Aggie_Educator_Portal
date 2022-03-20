@@ -30,7 +30,7 @@ SECRET_KEY = '#tr8@3h)fq3pjp8c7meo6h4i-!#)sx5+7+o+&-l22iju!h(6=h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['arcane-temple-55328.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
