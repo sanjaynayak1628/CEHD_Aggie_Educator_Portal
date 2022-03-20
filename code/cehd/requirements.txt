@@ -12,3 +12,4 @@ gunicorn
 # for running coverage of python code
 coverage
 selenium
+whitenoise
