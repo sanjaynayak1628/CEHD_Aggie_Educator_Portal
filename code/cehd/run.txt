@@ -1,2 +1,3 @@
 # Test case for Database Connection
 python manage.py test login.tests.DatabaseConnectionTest
+python mange.py runserver
