@@ -1,1 +1,4 @@
-code/cehd/cehd/__pycache__
+**/__pycache__
+*.pyc
+.env
+.idea
