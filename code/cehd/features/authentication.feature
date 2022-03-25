@@ -4,5 +4,5 @@ Feature: User Authentication
 
   Scenario: student authentication
     Given we have a student
-    When a student successfully logins
-    Then student timesheet should be opened
+    When a student logins with incorrect password
+    Then error message should be displayed
