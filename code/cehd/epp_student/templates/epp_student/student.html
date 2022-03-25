@@ -33,13 +33,14 @@
         </div>
     </div>
 
-    <form action="" method="post">
+    <form action="/student/" method="post">
+        {% csrf_token %}
         <div class="container rowpadding">
             <table class="table table-bordered" id="timesheet_table">
                 <thead style="background-color: rgb(80, 0, 0); color: white;">
                     <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Task Description</th>
+                        <th scope="col">Notes/Comments</th>
                         <th scope="col">Start Time</th>
                         <th scope="col">End Time</th>
                         <th scope="col">Total Hours</th>

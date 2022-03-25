@@ -73,7 +73,18 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <!-- <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li> -->
+                        <!-- <li class="nav-item"><a class="nav-link" href="/" target="_blank">certification</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/" target="_blank">education.tamu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">help</a></li> -->
+                    </ul>
+                    <ul class="navbar-nav ml-auto mb-2 mb-md-0">
+                        {% if user.is_authenticated %}
+                        <div class="container">
+                            <div class="col">
+                                <button onClick="location.href='/logout'" class="btn btn-danger">Logout</button>
+                            </div>
+                        </div>
+                        {% endif %}
                         <!-- <li class="nav-item"><a class="nav-link" href="/" target="_blank">certification</a></li>
                         <li class="nav-item"><a class="nav-link" href="/" target="_blank">education.tamu</a></li>
                         <li class="nav-item"><a class="nav-link" href="">help</a></li> -->
