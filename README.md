@@ -22,3 +22,7 @@ If more than one apps present in your heroku account and you want to use a parti
 7. heroku config:set DISABLE_COLLECTSTATIC=0
 To push to heroku from a non-master btranch use the following command
 8. git subtree push --prefix \<sub folder path to Django app\> heroku \<non-master branch-name\>:main
+
+# run BDD Test case
+1. Download the chrome driver based on the chrome version you have and update the path in the features/environment.py file
+2. In the console, go to the project cehd folder and run `behave --no-capture` \<`--no-capture` allows the print statements to shown in the console during behave execution\>
