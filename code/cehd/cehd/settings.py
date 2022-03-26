@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'behave_django',
     'core',
     'epp_program',
     'epp_student',
-    'login'
+    'login',
 ]
 
 MIDDLEWARE = [
