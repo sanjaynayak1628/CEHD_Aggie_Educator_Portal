@@ -50,7 +50,10 @@ INSTALLED_APPS = [
     'core',
     'epp_program',
     'epp_student',
-    'login'
+    'login',
+    'rest_framework',
+    'student_placements',
+    'time_logs',
 ]
 
 MIDDLEWARE = [

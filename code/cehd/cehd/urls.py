@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from time_logs import urls as timelog_urls
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('login.urls'))
+    path('', include('login.urls')),
+    path('timelogs/', include('time_logs.urls')),
 ]

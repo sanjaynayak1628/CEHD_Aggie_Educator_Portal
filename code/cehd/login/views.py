@@ -2,11 +2,13 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from . forms import UserRegisterForm
+from .forms import UserRegisterForm
+
 
 # Create your views here.
 def home(request):
     return render(request, 'login/login.html')
+
 
 def register(request):
     if request.method == 'POST':
@@ -24,6 +26,7 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'login/register.html', {'form': form})
+
 
 def profile(request):
     return render(request, 'login/profile.html')
