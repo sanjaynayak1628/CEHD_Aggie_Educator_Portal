@@ -23,7 +23,6 @@ class TimeLogViewsSave(APIView):
                     tmp = dict(request_data)
                     tmp.pop("student_uin", None)
                     tmp.pop("log_date", None)
-                    print("Step 1")
                     obj, created = TimeLogs.objects.update_or_create(defaults=tmp, **kwargs)
                     tmp = request_data
                     tmp['created'] = created
