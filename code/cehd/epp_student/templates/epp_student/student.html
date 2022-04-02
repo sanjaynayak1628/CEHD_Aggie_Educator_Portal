@@ -1,0 +1,90 @@
+{% extends 'login/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated%}
+<div class="container body_content" style="margin-top: 30px;">
+    <h1>Submit your Timesheets</h1>
+    <!-- Contains non editable data from database -->
+    <div class="container row" style="border-style: solid; border-width: 0.5px;">
+        <div class="row rowpadding">
+            <div class="col">
+                Student Name:
+            </div>
+            <div class="col">
+                Semester:
+            </div>
+        </div>
+        <div class="row rowpadding">
+            <div class="col">
+                Department:
+            </div>
+            <div class="col">
+                Supervisor:
+            </div>
+        </div>
+        <div class="row rowpadding">
+            <div class="col">
+                Co Operating Teacher:
+            </div>
+            <div class="col">
+                <button onClick="location.href='#'" class="btn btn-primary">View Previous Timesheets</button>
+            </div>
+        </div>
+    </div>
+
+    <form action="/accounts/profile/" method="post">
+        {% csrf_token %}
+        <div class="container rowpadding">
+            <table class="table table-bordered" id="timesheet_table">
+                <thead style="background-color: rgb(80, 0, 0); color: white;">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Notes/Comments</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
+                        <th scope="col">Total Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="date" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                        </td>
+                        <td>
+                            <input type="text" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                        </td>
+                        <td>
+                            <input type="time" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                        </td>
+                        <td>
+                            <input type="time" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                        </td>
+                        <td>
+                            <input type="text" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="container row">
+                <div class="row rowpadding">
+                    <button type="button" onclick='addRow()' class="btn btn-dark">Add another Time Entry</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container row">
+            <button type="submit" class="btn btn-success">Submit Timesheet</button>
+        </div>
+    </form>
+</div>
+{% else %}
+
+<div class="container">
+    <p id="login_msg"> You haven't logged in. To login, press the login button</p>
+    <a href="{% url 'login' %}"><button class="btn btn-danger" style="color: white;">Log In</button></a>
+</div>
+
+{% endif %}
+{% endblock %}

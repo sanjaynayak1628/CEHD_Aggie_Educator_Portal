@@ -13,4 +13,4 @@ gunicorn
 coverage
 selenium
 whitenoise
-djangorestframework
+behave_django
