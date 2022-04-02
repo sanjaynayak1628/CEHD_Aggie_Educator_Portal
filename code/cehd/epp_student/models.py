@@ -22,7 +22,7 @@ class EPPStudent(models.Model):
     middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     """
-    Name is stored here (in addition to name in Person) for student to specify name to be used with TEA for certification.  The name in Person
+    Name is stored here (in addition to name in Person) for student to specify name to be used with TEA for certification. The name in Person
     would be updated when load Compass data
     """
     cohort = models.CharField(max_length=20, null=True, blank=True)
@@ -74,3 +74,6 @@ class EPPStudent(models.Model):
     """
     notes is a place for the Certification Office to add comments about the student 
     """
+
+    class Meta:
+        ordering = ['last_name', 'first_name']
