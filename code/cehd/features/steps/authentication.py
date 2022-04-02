@@ -11,7 +11,7 @@ def step_impl(context):
     u = UserFactory(username='foo', email='foo@example.com')
     u.set_password('Password123*')
 
-	# Don't omit to call save() to insert object in database
+    # Don't omit to call save() to insert object in database
     u.save()
 
 
@@ -25,11 +25,13 @@ def step_impl(context):
     password.send_keys("password")
     context.browser.find_element_by_xpath("//*[@id='signup-button']/button").click()
 
+
 @then("error message should be displayed for wrong username")
 def step_impl(context):
     assert "Please enter a correct username and password. Note that both fields may be case-sensitive." == \
            context.browser.find_element_by_xpath("//ul[contains(@class, 'm-0')]//following::li[1]").get_attribute(
                'innerText')
+
 
 @when("a student logins with incorrect password")
 def step_impl(context):
@@ -47,6 +49,7 @@ def step_impl(context):
     assert "Please enter a correct username and password. Note that both fields may be case-sensitive." == \
            context.browser.find_element_by_xpath("//ul[contains(@class, 'm-0')]//following::li[1]").get_attribute(
                'innerText')
+
 
 @when("a student logins with correct username and password")
 def step_impl(context):

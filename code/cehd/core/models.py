@@ -82,3 +82,7 @@ class Person(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     last_login_ip = models.CharField(max_length=50, null=True)
+
+    class Meta(AbstractBaseUser.Meta):
+        db_table = "person"
+        ordering = ['last_name', 'first_name']
