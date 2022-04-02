@@ -24,4 +24,5 @@ class TimeLogs(models.Model):
 
     class Meta:
         db_table = "time_logs"
-        unique_together = (('student_uin', 'log_date'),)
+        # don't use unique_together if using update_or_create in time_logs/views.py
+        # unique_together = (('student_uin', 'log_date'),)

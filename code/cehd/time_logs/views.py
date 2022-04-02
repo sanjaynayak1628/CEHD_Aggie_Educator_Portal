@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import TimeLogsSerializer
 from .models import TimeLogs
+from core.models import Person
 import datetime
 
 
@@ -17,30 +18,26 @@ class TimeLogViewsSave(APIView):
             time_log_serializer = TimeLogsSerializer(data=request_data)
             if time_log_serializer.is_valid():
                 try:
-                    print("Valid")
-                    time_log_serializer.save()
-                    tmp = time_log_serializer.data
-                    tmp["created"] = True
+                    # update the entries, if UIN and log date present pr create a new one
+                    kwargs = {"student_uin": Person.objects.get(uin=request_data["student_uin"]), "log_date": request_data["log_date"]}
+                    tmp = dict(request_data)
+                    tmp.pop("student_uin", None)
+                    tmp.pop("log_date", None)
+                    print("Step 1")
+                    obj, created = TimeLogs.objects.update_or_create(defaults=tmp, **kwargs)
+                    tmp = request_data
+                    tmp['created'] = created
                     response_data.append(tmp)
                 except Exception as e:
+                    print("Exception: {}".format(e))
                     request_status_fail.append(request_data.get("log_date", None))
             else:
-                print("invalid")
                 print(time_log_serializer.errors)
-                # update the entries, if UIN and log date present
-                kwargs = {"student_uin": request_data["student_uin"], "log_date": request_data["log_date"]}
-                tmp = request_data
-                tmp.pop("student_uin", None)
-                tmp.pop("log_date", None)
-                obj, created = TimeLogs.objects.update_or_create(defaults=tmp, **kwargs)
-                tmp = request_data
-                tmp['created'] = False
-                response_data.append(tmp)
+                request_status_fail.append(request_data.get("log_date", None))
         if request_status_fail:
             return Response({"status": "error", "message": "Time entered for dates: {} are not saved/submitted. "
-                                                           "Please resave/resubmit again!".format(", "
-                                                                                                  "".join(
-                request_status_fail)), "data": response_data}, status=status.HTTP_400_BAD_REQUEST)
+                            "Please resave/resubmit again!".format(", ".join(
+                                request_status_fail)), "data": response_data}, status=status.HTTP_400_BAD_REQUEST)
         return Response(
             {"status": "success",
              "message": "Entered {} time entries saved/updated successfully".format(len(request.data)),
