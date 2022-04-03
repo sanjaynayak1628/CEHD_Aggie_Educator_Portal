@@ -54,18 +54,34 @@ class TimeLogViewsSave(APIView):
             return Response({"status": "not found", "message": "Delete unsuccessful", "data": {"student_uin": student_uin, "log_date": log_date}}, status=status.HTTP_204_NO_CONTENT)
 
 
+def query_timelog(uin, start_date, end_date):
+    saved_time = TimeLogs.objects.all().filter(student_uin=uin, log_date__lte=end_date, log_date__gte=start_date).order_by('log_date')
+    saved_time_serializer = json.loads(serializers.serialize('json', saved_time))
+    # print("Data: {}".format(saved_time_serializer))
+    saved_data = dict()
+    for sv_data in saved_time_serializer:
+        if sv_data.get('fields', None):
+            saved_data[sv_data['fields']['log_date']] = sv_data['fields']
+    return saved_data
+
+
 class TimeLogViewsGet(APIView):
     def get(self, request, uin, start_date=None, end_date=None):
+        message = ""
         if not start_date and not end_date:
             today = datetime.date.today()
-            week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
             dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
-            week_dates = {week_day[i]: dates[i] for i in range(7)}
-            return Response({"status": "success", "message": "Retrieval successful", "data": week_dates}, status=status.HTTP_200_OK)
+            start_date = dates[0]
+            end_date = dates[6]
+            message = "retrieval successful for current week"
+            # week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+            # week_dates = {week_day[i]: dates[i] for i in range(7)}
         elif not end_date:
-            today = datetime.date.today()
-            print(start_date)
-            return Response({"status": "success", "message": "start date only given", "data": ""}, status=status.HTTP_200_OK)
+            end_date = datetime.date.today()
+            message = "start date only provided"
         else:
             print(start_date, end_date)
-            return Response({"status": "success", "message": "start date and end date given", "data": ""}, status=status.HTTP_200_OK)
+            message = "start date and end date provided"
+
+        saved_data = query_timelog(uin, start_date, end_date)
+        return Response({"status": "success", "message": message, "data": saved_data}, status=status.HTTP_200_OK)
