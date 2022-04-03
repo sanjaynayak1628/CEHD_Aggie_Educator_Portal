@@ -2,9 +2,11 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.core import serializers
 from .serializers import TimeLogsSerializer
 from .models import TimeLogs
 from core.models import Person
+import json
 import datetime
 
 
@@ -13,7 +15,7 @@ class TimeLogViewsSave(APIView):
         request_status_fail = list()
         response_data = list()
         response_status_list = list()
-        for request_data in request.data:
+        for request_data in request.data.get("data", []):
             # print(request_data)
             time_log_serializer = TimeLogsSerializer(data=request_data)
             if time_log_serializer.is_valid():
@@ -39,8 +41,17 @@ class TimeLogViewsSave(APIView):
                                 request_status_fail)), "data": response_data}, status=status.HTTP_400_BAD_REQUEST)
         return Response(
             {"status": "success",
-             "message": "Entered {} time entries saved/updated successfully".format(len(request.data)),
+             "message": "Entered {} time entries saved/updated successfully".format(len(request.data.get("data", []))),
              "data": response_data}, status=status.HTTP_200_OK)
+
+    def delete(self, request, student_uin=None, log_date=None):
+        try:
+            item = TimeLogs.objects.get(student_uin=student_uin, log_date=log_date)
+            item_serializer = TimeLogsSerializer(item)
+            item.delete()
+            return Response({"status": "success", "message": "Delete successful", "data": item_serializer.data}, status=status.HTTP_200_OK)
+        except TimeLogs.DoesNotExist:
+            return Response({"status": "not found", "message": "Delete unsuccessful", "data": {"student_uin": student_uin, "log_date": log_date}}, status=status.HTTP_204_NO_CONTENT)
 
 
 class TimeLogViewsGet(APIView):
@@ -50,5 +61,11 @@ class TimeLogViewsGet(APIView):
             week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
             dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
             week_dates = {week_day[i]: dates[i] for i in range(7)}
-            return Response({"status": "success", "message": "Retrieval successful",
-                             "data": week_dates}, status=status.HTTP_200_OK)
+            return Response({"status": "success", "message": "Retrieval successful", "data": week_dates}, status=status.HTTP_200_OK)
+        elif not end_date:
+            today = datetime.date.today()
+            print(start_date)
+            return Response({"status": "success", "message": "start date only given", "data": ""}, status=status.HTTP_200_OK)
+        else:
+            print(start_date, end_date)
+            return Response({"status": "success", "message": "start date and end date given", "data": ""}, status=status.HTTP_200_OK)

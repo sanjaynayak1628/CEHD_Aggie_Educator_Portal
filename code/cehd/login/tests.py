@@ -8,17 +8,17 @@ class DatabaseConnectionTest(TestCase):
 
     # databases = {'dev'}
 
-    @classmethod
-    def setUpTestData(cls):
-        pass
-
-    def setUp(self) -> None:
-        print("setUp: Run once for every test method to setup clean data.")
-        pass
-
-    def tearDown(self) -> None:
-        print("tearDown: Run once for every test method to setup clean data.")
-        pass
+    # @classmethod
+    # def setUpTestData(cls):
+    #     pass
+    #
+    # def setUp(self) -> None:
+    #     print("setUp: Run once for every test method to setup clean data.")
+    #     pass
+    #
+    # def tearDown(self) -> None:
+    #     print("tearDown: Run once for every test method to setup clean data.")
+    #     pass
 
     def test_checkConnection(self):
         """
@@ -33,6 +33,6 @@ class DatabaseConnectionTest(TestCase):
             check = True
             self.c.close()
         except Exception as e:
-            print("Exception occured")
+            print("Exception occurred")
             check = False
         self.assertEqual(check, True)
