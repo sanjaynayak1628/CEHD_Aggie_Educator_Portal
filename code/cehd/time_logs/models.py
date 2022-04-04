@@ -9,7 +9,6 @@ class TimeLogs(models.Model):
     """
     This is the model for time logs
     """
-    # student_placements = models.ForeignKey(StudentPlacements, on_delete=models.PROTECT, related_name="placements")
     student_uin = models.ForeignKey(Person, on_delete=models.PROTECT, to_field='uin', related_name="person_uin", default=0)
     student_email = models.EmailField()
     log_date = models.DateField()
