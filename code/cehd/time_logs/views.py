@@ -21,7 +21,7 @@ class TimeLogViewsSave(APIView):
             time_log_serializer = TimeLogsSerializer(data=request_data)
             if time_log_serializer.is_valid():
                 try:
-                    # update the entries, if UIN and log date present pr create a new one
+                    # update the entries, if UIN and log date present or create a new one
                     kwargs = {"student_uin": Person.objects.get(uin=request_data["student_uin"]),
                               "log_date": request_data["log_date"]}
                     tmp = dict(request_data)
