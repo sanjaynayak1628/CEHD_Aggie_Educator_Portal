@@ -65,7 +65,7 @@
         <!-- Fixed navbar -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="https://education.tamu.edu/">
+                <a class="navbar-brand" href="#">
                     <img src="{% static 'login/images/cehd_horizontal_medium_rgb.png' %}" height=100 /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,17 +95,17 @@
     </header>
 
     <div class="container">
-        <div class="container">
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{message.tags}}">{{message}}</div>
-            {% endfor %}
-            {% endif %}
-        </div>
         {% if user.is_authenticated %}
         {{user.username}} is currently authenticated and logged in.
         {% endif %}
         <div class="container" style="padding: 10% 10% 10% 10%;">
+            <div>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}}">{{message}}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
             {% block content %}
             {% endblock content %}
         </div>

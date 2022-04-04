@@ -14,7 +14,14 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Sign In</legend>
             {{ form|crispy }}
+            
+            <select id="usertype" name="usertype" class="form-select">
+                <option value="student">Student</option>
+                <option value="coop">Co-Op Teacher</option>
+                <option value="supervisor">Supervisor</option>
+            </select>
         </fieldset>
+
         <div class="form-group" id="signup-button">
             <button class="btn btn-primary">Log In</button>
         </div>
