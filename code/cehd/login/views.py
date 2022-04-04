@@ -6,13 +6,13 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 def home(request):
     return render(request, 'login/login.html')
 
-def login(request):
+def loginPage(request):
     if request.method == 'POST':
         form = AuthenticationForm(request.POST)
         username = request.POST['username']
@@ -22,9 +22,10 @@ def login(request):
             if user.is_active:
                 login(request,user)
                 userType = request.POST['usertype']
+                print(userType)
                 return redirect('/student/')
         else:
-            messages.error(request,'Please enter a correct username and password. Note that both fields may be case-sensitive. ||||')
+            messages.error(request,'Please enter a correct username and password. Note that both fields may be case-sensitive.')
             return redirect('/login/')
         
                 
