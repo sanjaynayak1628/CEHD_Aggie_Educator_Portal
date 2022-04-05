@@ -100,6 +100,15 @@ def query_sp_uin(uin, semester=None):
     return sp_item_serializer
 
 
+def get_current_week():
+    # add current week dates
+    today = datetime.date.today()
+    dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
+    week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    week_dates = {week_day[i]: dates[i] for i in range(7)}
+    return week_dates
+
+
 class TimeLogViewsUinGet(APIView):
     def get(self, request, uin, start_date=None, end_date=None, semester=None):
         message = ""
@@ -109,8 +118,6 @@ class TimeLogViewsUinGet(APIView):
             start_date = dates[0]
             end_date = dates[6]
             message = "retrieval successful for current week"
-            # week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-            # week_dates = {week_day[i]: dates[i] for i in range(7)}
         elif not end_date:
             end_date = datetime.date.today()
             message = "start date only provided"
@@ -122,6 +129,7 @@ class TimeLogViewsUinGet(APIView):
         sp_data_serializer = query_sp_uin(uin, semester)
         # print(sp_data_serializer)
         sp_data_serializer["timelogs"] = saved_data
+        sp_data_serializer["current_week"] = get_current_week()
         return Response({"status": "success", "message": message, "data": sp_data_serializer}, status=status.HTTP_200_OK)
 
 
@@ -144,4 +152,7 @@ class TimeLogViewsEmailGet(APIView):
         saved_data = query_timelog_email(email, start_date, end_date)
         sp_data_serializer = query_sp_email(email, semester)
         sp_data_serializer["timelogs"] = saved_data
+
+        # add current week dates
+        sp_data_serializer["current_week"] = get_current_week()
         return Response({"status": "success", "message": message, "data": sp_data_serializer}, status=status.HTTP_200_OK)
