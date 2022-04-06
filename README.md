@@ -40,6 +40,6 @@ directory = coverage_html_report
 4. Use the following command to generate the report of coverage
 `coverage report`
 5. Use the following command to generate the html report of coverage
-`coverage html
+`coverage html`
 
 
