@@ -16,12 +16,12 @@ As per the client requirements, the application would be developed in Django fra
 1. Connect Heroku-CLI with gitbash
 2. heroku login (Authenticate and connect to your heroku account)
 3. Go to the folder where you have your github repo set
-5. heroku create
+5. `heroku create`\
 If more than one apps present in your heroku account and you want to use a particular app, use the following command else directly go to step 5
-6. heroku git:remote -a \<app-name\>
-7. heroku config:set DISABLE_COLLECTSTATIC=0
+6. `heroku git:remote -a \<app-name\>`
+7. `heroku config:set DISABLE_COLLECTSTATIC=0`
 To push to heroku from a non-master btranch use the following command
-8. git subtree push --prefix \<sub folder path to Django app\> heroku \<non-master branch-name\>:main
+8. `git subtree push --prefix \<sub folder path to Django app\> heroku \<non-master branch-name\>:main`
 
 
 # Run BDD Test case
