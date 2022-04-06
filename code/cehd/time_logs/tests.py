@@ -8,7 +8,7 @@ from core.models import Person
 from epp_program.models import EPPProgram
 from epp_student.models import EPPStudent
 from student_placements.models import StudentPlacements
-from .models import TimeLogs
+from time_logs.models import TimeLogs
 
 client = Client()
 

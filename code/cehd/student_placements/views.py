@@ -49,7 +49,4 @@ class StudentPlacementsGet(APIView):
             sp_item_serializer = sp_item_serializer[0]
         else:
             sp_item_serializer = None
-        # print(sp_item_serializer)
-        # print(type(sp_item_serializer))
-        # Output: {} if no value is present, data: {model, pk, fields: {}}
         return Response({"status": "success", "data": sp_item_serializer}, status=status.HTTP_200_OK)
