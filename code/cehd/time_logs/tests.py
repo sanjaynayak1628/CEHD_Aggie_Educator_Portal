@@ -8,7 +8,7 @@ from core.models import Person
 from epp_program.models import EPPProgram
 from epp_student.models import EPPStudent
 from student_placements.models import StudentPlacements
-# from .models import TimeLogs
+from time_logs.models import TimeLogs
 
 client = Client()
 
@@ -63,10 +63,31 @@ class StudentviewTest(TestCase):
                                          placement="", beginning_date_experience="2020-01-01", ending_date_experience="2021-01-01",
                                          instructor="")
 
+        TimeLogs.objects.create(student_uin=Person.objects.get(uin=120), student_email="joejonas@xyz.com", log_date="2022-04-07",
+                                notes="get test", hours_submitted=10, hours_approved=True, approval_due_date="2022-04-13",
+                                semester="sprng", start_time="2022-04-07T10:20:10.233-05:30", end_time="2022-04-07T20:20:10.233-05:30",
+                                date_submitted="2022-04-06")
+
         # payload for post
         self.valid_payload = {
             "data": [{
                 "student_uin": 120,
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-04",
+                "notes": "submit entry",
+                "hours_submitted": 10,
+                "hours_approved": False,
+                "approval_due_date": "2020-04-11",
+                "semester": "sprng",
+                "start_time": "2022-04-03T10:20:10.233-05:30",
+                "end_time": "2022-04-03T12:20:10.233-05:30",
+                "date_submitted": "2020-04-04"
+            }]
+        }
+
+        self.invalid_payload = {
+            "data": [{
+                "student_uin": 10,
                 "student_email": "joejonas@xyz.com",
                 "log_date": "2020-04-04",
                 "notes": "submit entry",
@@ -88,3 +109,102 @@ class StudentviewTest(TestCase):
         response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.valid_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_invalid_save(self):
+        """
+        This function is used to check the correctness of Student View APIs
+        return: 400 Error Response
+        """
+        response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.invalid_payload), content_type="application/json")
+        response_dict = response.json()
+        self.assertEqual(response_dict.get("message", ""), "Time entered for dates: 2020-04-04 are not saved/submitted. Please resave/resubmit again!")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_valid_uin_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_uin_get_time_logs", kwargs={"uin": 120}))
+        self.assertEqual(response.json().get("message", "No message"), "retrieval successful for current week")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_uin_sem_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_uin_sem_get_time_logs", kwargs={"uin": 120, "semester": "sprng"}))
+        self.assertEqual(response.json().get("message", "No message"), "retrieval successful for current week")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_uin_start_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_uin_start_get_time_logs", kwargs={"uin": 120, "start_date": "2022-04-01"}))
+        self.assertEqual(response.json().get("message", "No message"), "start date only provided")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_uin_start_end_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_uin_startend_get_time_logs", kwargs={"uin": 120, "start_date": "2022-04-01", "end_date": "2022-04-05"}))
+        self.assertEqual(response.json().get("message", "No message"), "start date and end date provided")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_email_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_email_get_time_logs", kwargs={"email": "joejonas@xyz.com"}))
+        self.assertEqual(response.json().get("message", "No message"), "retrieval successful for current week")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_email_sem_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_email_sem_get_time_logs", kwargs={"email": "joejonas@xyz.com", "semester": "sprng"}))
+        self.assertEqual(response.json().get("message", "No message"), "retrieval successful for current week")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_email_start_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_email_start_get_time_logs", kwargs={"email": "joejonas@xyz.com", "start_date": "2022-04-01"}))
+        self.assertEqual(response.json().get("message", "No message"), "start date only provided")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_email_start_end_get(self):
+        """
+        This function is used to check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("student_email_startend_get_time_logs", kwargs={"email": "joejonas@xyz.com", "start_date": "2022-04-01", "end_date": "2022-04-05"}))
+        self.assertEqual(response.json().get("message", "No message"), "start date and end date provided")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_delete(self):
+        """
+        This function is used the check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.delete(reverse("student_delete_time_logs", kwargs={"student_uin": 120, "log_date": "2022-04-07"}))
+        self.assertEqual(response.json().get("message", "no message"), "Delete successful")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_invalid_delete(self):
+        """
+        This function is used the check the correctness of Student View GET APIs
+        return: 200 Correct Response
+        """
+        response = client.delete(reverse("student_delete_time_logs", kwargs={"student_uin": 120, "log_date": "2022-04-08"}))
+        self.assertEqual(response.json().get("message", "no message"), "Delete unsuccessful")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
