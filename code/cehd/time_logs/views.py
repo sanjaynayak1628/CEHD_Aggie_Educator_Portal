@@ -55,8 +55,7 @@ class TimeLogViewsSave(APIView):
                             status=status.HTTP_200_OK)
         except TimeLogs.DoesNotExist:
             return Response({"status": "not found", "message": "Delete unsuccessful",
-                             "data": {"student_uin": student_uin, "log_date": log_date}},
-                            status=status.HTTP_204_NO_CONTENT)
+                             "data": {"student_uin": student_uin, "log_date": log_date}}, status=status.HTTP_404_NOT_FOUND)
 
 
 def query_timelog_uin(uin, start_date, end_date):
