@@ -24,11 +24,11 @@ To push to heroku from a non-master btranch use the following command
 8. git subtree push --prefix \<sub folder path to Django app\> heroku \<non-master branch-name\>:main
 
 
-# run BDD Test case
+# Run BDD Test case
 1. Download the chrome driver based on the chrome version you have and update the path in the features/environment.py file
 2. In the console, go to the project cehd folder and run `python manage.py behave` allows the print statements to shown in the console during behave execution\>
 
-# run Coverage Report
+# Run Coverage Report
 1. Go to the folder where manage.py is present
 2. Add .coveragerc file with below contents, if not present already
 ```
