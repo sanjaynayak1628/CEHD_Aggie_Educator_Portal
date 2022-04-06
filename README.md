@@ -27,3 +27,17 @@ To push to heroku from a non-master btranch use the following command
 # run BDD Test case
 1. Download the chrome driver based on the chrome version you have and update the path in the features/environment.py file
 2. In the console, go to the project cehd folder and run `python manage.py behave` allows the print statements to shown in the console during behave execution\>
+
+# run Coverage Report
+1. Go to the folder where manage.py is present
+2. Add .coveragerc file with below contents, if not present already
+`[html]`
+`directory = coverage_html_report`
+3. Use the following command to run the coverage
+`coverage run manage.py test`
+4. Use the following command to generate the report of coverage
+`coverage report`
+5. Use the following command to generate the html report of coverage
+`coverage html
+
+
