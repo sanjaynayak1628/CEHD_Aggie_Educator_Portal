@@ -31,8 +31,10 @@ To push to heroku from a non-master btranch use the following command
 # run Coverage Report
 1. Go to the folder where manage.py is present
 2. Add .coveragerc file with below contents, if not present already
-`[html]`
-`directory = coverage_html_report`
+```
+[html]
+directory = coverage_html_report
+```
 3. Use the following command to run the coverage
 `coverage run manage.py test`
 4. Use the following command to generate the report of coverage
