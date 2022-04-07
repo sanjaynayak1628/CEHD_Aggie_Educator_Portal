@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('login.urls')),
     path('timelogs/', include('time_logs.urls')),
     path('sp/', include('student_placements.urls')),
+    path('', include('epp_student.urls')),
 ]
