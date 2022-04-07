@@ -68,24 +68,10 @@ class StudentviewTest(TestCase):
                                 semester="sprng", start_time="2022-04-07T10:20:10.233-05:30", end_time="2022-04-07T20:20:10.233-05:30",
                                 date_submitted="2022-04-06")
 
-        # payload for post
-        self.valid_payload = {
-            "data": [{
-                "student_uin": 120,
-                "student_email": "joejonas@xyz.com",
-                "log_date": "2020-04-04",
-                "notes": "submit entry",
-                "hours_submitted": 10,
-                "hours_approved": False,
-                "approval_due_date": "2020-04-11",
-                "semester": "sprng",
-                "start_time": "2022-04-03T10:20:10.233-05:30",
-                "end_time": "2022-04-03T12:20:10.233-05:30",
-                "date_submitted": "2020-04-04"
-            }]
-        }
-
-        self.invalid_payload = {
+        # payload for post - save
+        self.invalid_save_payload = {
+            "cooperating_teacher_email": "cooperating_teacher@xyz.com",
+            "cooperating_teacher_name": "Andrew George",
             "data": [{
                 "student_uin": 10,
                 "student_email": "joejonas@xyz.com",
@@ -96,27 +82,110 @@ class StudentviewTest(TestCase):
                 "approval_due_date": "2020-04-11",
                 "semester": "sprng",
                 "start_time": "2022-04-03T10:20:10.233-05:30",
-                "end_time": "2022-04-03T12:20:10.233-05:30",
-                "date_submitted": "2020-04-04"
+                "end_time": "2022-04-03T12:20:10.233-05:30"
             }]
         }
 
-    def test_valid_save(self):
+        # payload for post - submit
+        self.valid_submit_save_payload = {
+            "cooperating_teacher_email": "cooperating_teacher@xyz.com",
+            "cooperating_teacher_name": "Andrew George",
+            "data": [{
+                "student_uin": 120,
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-07",
+                "notes": "submit entry",
+                "hours_submitted": 10,
+                "hours_approved": False,
+                "approval_due_date": "2020-04-11",
+                "semester": "sprng",
+                "start_time": "2022-04-07T12:20:10.233-04:30",
+                "end_time": "2022-04-07T20:20:10.233-04:30"
+            }]
+        }
+
+        self.invalid_submit_payload = {
+            "cooperating_teacher_email": "",
+            "cooperating_teacher_name": "Andrew George",
+            "data": [{
+                "student_uin": 120,
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-07",
+                "notes": "submit entry",
+                "hours_submitted": 10,
+                "hours_approved": False,
+                "approval_due_date": "2020-04-11",
+                "semester": "sprng",
+                "start_time": "2022-04-07T12:20:10.233-04:30",
+                "end_time": "2022-04-07T20:20:10.233-04:30"
+            }]
+        }
+
+        self.valid_submit_payload_without_name = {
+            "cooperating_teacher_email": "cooperating_teacher@xyz.com",
+            "cooperating_teacher_name": "",
+            "data": [{
+                "student_uin": 120,
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-07",
+                "notes": "submit entry",
+                "hours_submitted": 10,
+                "hours_approved": False,
+                "approval_due_date": "2020-04-11",
+                "semester": "sprng",
+                "start_time": "2022-04-07T12:20:10.233-04:30",
+                "end_time": "2022-04-07T20:20:10.233-04:30"
+            }]
+        }
+
+    def test_valid_submit(self):
         """
-        This function is used to check the correctness of Student View APIs
+        This function is used to check the correctness of Student View POST APIs - submit
         return: 200 Correct Response
         """
-        response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.valid_payload), content_type="application/json")
+        response = client.post(reverse('student_submit_time_logs'), data=json.dumps(self.valid_submit_save_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_valid_submit_without_name(self):
+        """
+        This function is used to check the correctness of Student View POST APIs - submit
+        return: 200 Correct Response
+        """
+        response = client.post(reverse('student_submit_time_logs'), data=json.dumps(self.valid_submit_payload_without_name), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_invalid_submit(self):
+        """
+        This function is used to check the correctness of Student View POST APIs - submit
+        return: 400 Error Response
+        """
+        response = client.post(reverse('student_submit_time_logs'), data=json.dumps(self.invalid_submit_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_invalid_submit_data(self):
+        """
+        This function is used to check the correctness of Student View POST APIs - submit
+        return: 400 Error Response
+        """
+        response = client.post(reverse('student_submit_time_logs'), data=json.dumps(self.invalid_save_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_valid_save(self):
+        """
+        This function is used to check the correctness of Student View POST APIs - save
+        return: 200 Correct Response
+        """
+        response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.valid_submit_save_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_invalid_save(self):
         """
-        This function is used to check the correctness of Student View APIs
+        This function is used to check the correctness of Student View POST APIs - save
         return: 400 Error Response
         """
-        response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.invalid_payload), content_type="application/json")
+        response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.invalid_save_payload), content_type="application/json")
         response_dict = response.json()
-        self.assertEqual(response_dict.get("message", ""), "Time entered for dates: 2020-04-04 are not saved/submitted. Please resave/resubmit again!")
+        self.assertEqual(response_dict.get("message", ""), "Time entered for dates: 2020-04-04 are not saved. Please resave again!")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_valid_uin_get(self):
