@@ -1,12 +1,15 @@
 from django.urls import path, include
-from .views import TimeLogViewsSave, TimeLogViewsUinGet, TimeLogViewsEmailGet
+from .views import TimeLogViewsSave, TimeLogViewsSubmit, TimeLogViewsUinGet, TimeLogViewsEmailGet
 
 
 urlpatterns = [
-    # Student save/submit time sheet URL
+    # Student save time sheet URL
     path('student/save/', TimeLogViewsSave.as_view(), name='student_save_time_logs'),
-    # Student get URLs from student UIN
+    # student submit time sheet URL
+    path('student/submit/', TimeLogViewsSubmit.as_view(), name="student_submit_time_logs"),
+    # Student delete URLs from student UIN
     path('student/remove/uin/<int:student_uin>/date/<str:log_date>', TimeLogViewsSave.as_view(), name='student_delete_time_logs'),
+    # Student get URLs from student UIN
     path('student/uin/<int:uin>', TimeLogViewsUinGet.as_view(), name='student_uin_get_time_logs'),
     path('student/uin/<int:uin>/semester/<str:semester>', TimeLogViewsUinGet.as_view(), name='student_uin_sem_get_time_logs'),
     path('student/uin/<int:uin>/start/<str:start_date>', TimeLogViewsUinGet.as_view(), name='student_uin_start_get_time_logs'),
