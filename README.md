@@ -16,14 +16,30 @@ As per the client requirements, the application would be developed in Django fra
 1. Connect Heroku-CLI with gitbash
 2. heroku login (Authenticate and connect to your heroku account)
 3. Go to the folder where you have your github repo set
-5. heroku create
+5. `heroku create`\
 If more than one apps present in your heroku account and you want to use a particular app, use the following command else directly go to step 5
-6. heroku git:remote -a \<app-name\>
-7. heroku config:set DISABLE_COLLECTSTATIC=0
+6. `heroku git:remote -a \<app-name\>`
+7. `heroku config:set DISABLE_COLLECTSTATIC=0`
 To push to heroku from a non-master btranch use the following command
-8. git subtree push --prefix \<sub folder path to Django app\> heroku \<non-master branch-name\>:main
+8. `git subtree push --prefix \<sub folder path to Django app\> heroku \<non-master branch-name\>:main`
 
 
-# run BDD Test case
+# Run BDD Test case
 1. Download the chrome driver based on the chrome version you have and update the path in the features/environment.py file
 2. In the console, go to the project cehd folder and run `python manage.py behave` allows the print statements to shown in the console during behave execution\>
+
+# Run Coverage Report
+1. Go to the folder where manage.py is present
+2. Add .coveragerc file with below contents, if not present already
+```
+[html]
+directory = coverage_html_report
+```
+3. Use the following command to run the coverage
+`coverage run manage.py test`
+4. Use the following command to generate the report of coverage
+`coverage report`
+5. Use the following command to generate the html report of coverage
+`coverage html`
+
+
