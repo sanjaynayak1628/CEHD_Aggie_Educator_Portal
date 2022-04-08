@@ -1,0 +1,92 @@
+{% extends 'login/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated%}
+<div class="container body_content" style="margin-top: 30px;">
+    <h1>Submit your Timesheets</h1>
+    <!-- Contains non editable data from database -->
+    <div class="container row" style="border-style: solid; border-width: 0.5px;">
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Student Name:</strong>  
+            </div>
+            <div class="col">
+                <strong>Semester:</strong> {{data.semester}}
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Department:</strong>
+            </div>
+            <div class="col">
+                 <strong>Supervisor:</strong> {{data.university_supervisor}}
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Co Operating Teacher:</strong> {{data.cooperating_teacher}}
+            </div>
+            <div class="col">
+                <button onClick="location.href='#'" class="btn btn-primary">View Previous Timesheets</button>
+            </div>
+        </div>
+    </div>
+
+    <form action="/student/" method="post">
+        {% csrf_token %}
+        <div class="container rowpadding">
+            <table class="table table-bordered" id="timesheet_table">
+                <thead style="background-color: rgb(80, 0, 0); color: white;">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Notes/Comments</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
+                        <th scope="col">Total Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for date in data.current_week %}
+                    <tr>
+                        <td>
+                            <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date" value="2017-06-01">
+                        </td>
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes" value="{{ data.timelogs|get_value:'2022-04-04'|get_value:'notes' }}">
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime">
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime">
+                        </td>
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="container row">
+                <div class="row rowpadding">
+                    <button type="button" onclick='addRow()' class="btn btn-dark">Add another Time Entry</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container row">
+            <button type="submit" class="btn btn-success">Submit Timesheet</button>
+        </div>
+    </form>
+</div>
+{% else %}
+
+<div class="container">
+    <p id="login_msg"> You haven't logged in. To login, press the login button</p>
+    <a href="{% url 'login' %}"><button class="btn btn-danger" style="color: white;">Log In</button></a>
+</div>
+
+{% endif %}
+{% endblock %}

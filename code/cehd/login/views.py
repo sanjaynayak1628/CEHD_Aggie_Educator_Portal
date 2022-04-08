@@ -8,6 +8,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
+from django.template.defaulttags import register
+@register.filter
+def get_value(dictionary, key):
+    return dictionary.get(key)
+
 # Create your views here.
 def home(request):
     return render(request, 'login/login.html')
@@ -23,7 +28,7 @@ def loginPage(request):
                 login(request,user)
                 userType = request.POST['usertype']
                 print(userType)
-                return redirect('/student/')
+                return redirect(f'/timelogs/{userType}/email/{username}')
         else:
             messages.error(request,'Please enter a correct username and password. Note that both fields may be case-sensitive.')
             return redirect('/login/')

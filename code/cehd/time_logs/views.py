@@ -186,5 +186,9 @@ class TimeLogViewsEmailGet(APIView):
 
         # add current week dates
         sp_data_serializer["current_week"] = get_current_week()
-        return Response({"status": "success", "message": message, "data": sp_data_serializer},
-                        status=status.HTTP_200_OK)
+        context = {"status": "success", "message": message, "data": sp_data_serializer}
+        # print(context)
+        # print(list(context['data']['current_week'].values())[0])
+        return render(request, 'time_logs/student.html', context)
+        # return Response({"status": "success", "message": message, "data": sp_data_serializer},
+        #                 status=status.HTTP_200_OK)
