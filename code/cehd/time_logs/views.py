@@ -6,7 +6,7 @@ from django.core import serializers
 from .serializers import TimeLogsSerializer
 from .models import TimeLogs
 from core.models import Person
-from student_placements.views import query_student_placements_email, query_student_placements_uin
+from student_placements.views import query_student_placements_email, query_student_placements_uin, query_student_details
 import json
 import datetime
 
@@ -135,8 +135,13 @@ def get_current_week():
     today = datetime.date.today()
     dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
     week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-    week_dates = {week_day[i]: dates[i] for i in range(7)}
+    week_dates = {week_day[i]: dates[i].strftime("%Y-%m-%d") for i in range(7)}
     return week_dates
+
+
+def get_student_details(email, uin=None):
+    person_serializer = query_student_details(email, uin)
+    return person_serializer
 
 
 class TimeLogViewsUinGet(APIView):
@@ -181,9 +186,10 @@ class TimeLogViewsEmailGet(APIView):
             message = "start date and end date provided"
 
         saved_data = query_timelog_email(email, start_date, end_date)
+        person_serializer = query_student_details(email)
         sp_data_serializer = query_sp_email(email, semester)
         sp_data_serializer["timelogs"] = saved_data
-
+        sp_data_serializer["student"] = person_serializer
         # add current week dates
         sp_data_serializer["current_week"] = get_current_week()
         context = {"status": "success", "message": message, "data": sp_data_serializer}
