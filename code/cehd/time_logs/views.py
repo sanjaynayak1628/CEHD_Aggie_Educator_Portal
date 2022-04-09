@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from time import strptime
+from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,14 +10,23 @@ from core.models import Person
 from student_placements.views import query_student_placements_email, query_student_placements_uin, query_student_details
 import json
 import datetime
-
+from django.views.decorators.csrf import csrf_exempt
 
 def save_time_logs(request):
     request_status_fail = list()
     response_data = list()
     response_status_list = list()
     for request_data in request.data.get("data", []):
-        # print(request_data)
+        print(request_data.get("start_time", None), '  ', request_data.get("end_time", None), ' ::'+ request_data.get("hours_submitted", None).strip()+'::',request_data.get("hours_submitted", None).strip() == '')
+        if request_data.get("notes", None) == None:
+            request_data["notes"] = ""
+        if request_data.get("hours_submitted", None) == None or request_data.get("hours_submitted", None).strip() == '':
+            if request_data.get("start_time", None) != None and request_data.get("end_time", None) != None:
+                timeDiff = datetime.datetime.strptime(request_data["end_time"], '%Y-%m-%dT%H:%M:%S.%fZ') - datetime.datetime.strptime(request_data["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')
+                request_data["hours_submitted"] = timeDiff.total_seconds()//3600
+            else:    
+                request_data["hours_submitted"] = 0
+            
         time_log_serializer = TimeLogsSerializer(data=request_data)
         if time_log_serializer.is_valid():
             try:
@@ -52,7 +62,7 @@ class TimeLogViewsSubmit(APIView):
             status_mode = status.HTTP_400_BAD_REQUEST
         else:
             response_dict["status"] = "success"
-            response_dict["message"] = "Entered {} time entries submitted successfully".format(len(request.data.get("data", [])))
+            response_dict["message"] = "Entered time entries submitted successfully"
             response_dict["data"] = response_data
             # send the email to cooperating teacher
             cooperating_teacher_email = request.data.get("cooperating_teacher_email", "")
@@ -70,9 +80,13 @@ class TimeLogViewsSave(APIView):
         if request_status_fail:
             return Response({"status": "error", "message": "Time entered for dates: {} are not saved. "
                              "Please resave again!".format(", ".join(request_status_fail)), "data": response_data}, status=status.HTTP_400_BAD_REQUEST)
+        # context = dict()
+        # context['status'] = 'success'
+        # context['message'] = "Entered time entries saved successfully"                        
+        # return redirect('/timelogs/student/email/'+request.data['email'], context=context)
         return Response(
             {"status": "success",
-             "message": "Entered {} time entries saved successfully".format(len(request.data.get("data", []))),
+             "message": "Entered time entries saved successfully", "email": request.data['email'],
              "data": response_data}, status=status.HTTP_200_OK)
 
     def delete(self, request, student_uin=None, log_date=None):

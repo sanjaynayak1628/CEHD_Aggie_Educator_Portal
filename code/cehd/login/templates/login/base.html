@@ -13,6 +13,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="shortcut icon" type="image/png" href="{% static 'login/images/favicon.ico' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js">
+    </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js">
+    </script>
+
+    <!-- Include Bootstrap DateTimePicker CDN -->
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+        rel="stylesheet">
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
+        </script>
+
     .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -54,6 +69,132 @@
                     </td>
                 </tr>`
         }
+        window.onload = function () {
+            const form = document.getElementById('timelog_submit_form');
+            if (form != null) {
+                form.addEventListener('submit', handleTimelogSubmit);
+            } else {
+                console.log("Not found")
+            }
+            // console.log(document.getElementById('student_fullname').innerText)
+        };
+
+        function getSemester(semester) {
+            if (semester.toUpperCase() == 'SPRING') {
+                return 'sprng'
+            } else if (semester.toUpperCase() == 'FALL') {
+                return 'fall'
+            } else if (semester.toUpperCase() == 'Summer') {
+                return 'summ'
+            }
+            return 'undefined'
+        }
+
+        function calculateTimeDiff(id) {
+
+            // counter = id.split('_')[0]
+            // let log_date = counter + '_date'
+            // let log_date_date = document.getElementById(log_date)
+
+            // console.log(typeof(log_date_date) + 'date')
+
+
+            // let start_time = counter + '_stime'
+            // let start_time_time = document.getElementById(start_time)
+            // console.log(typeof(start_time_time) + 'stime')
+            // // let sDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(start_time_time.substring(0, 2)), parseInt(start_time_time.substring(3, 5)), parseInt(start_time_time.substring(6, 8))))
+
+            // let end_time = counter + '_etime'
+            // let end_time_time = document.getElementById(end_time)
+            // // let eDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(end_time_time.substring(0, 2)), parseInt(end_time_time.substring(3, 5)), parseInt(end_time_time.substring(6, 8))))
+
+
+            // console.log(Math.abs(new Date(end_time_time) - new Date(start_time_time)))
+        }
+
+        function handleTimelogSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            // const value = data.get('4_date');
+            csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].defaultValue
+            // console.log(csrfToken)
+            var jsonObj = new Object()
+            // jsonObj.csrfmiddlewaretoken = csrfToken
+            jsonObj.cooperating_teacher_email = document.getElementById('coop_teacher_email').innerText
+            jsonObj.cooperating_teacher_name = document.getElementById('coop_teacher_fullname').innerText
+            jsonObj.email = document.getElementById('student_email').innerText
+            jsonObj.data = []
+            var student_email = jsonObj.email
+
+            for (let i = 1; i <= 7; i++) {
+                let dataObj = new Object()
+                dataObj.student_uin = document.getElementById('student_uin').innerText
+                dataObj.student_email = document.getElementById('student_email').innerText
+                let log_date = i + '_date'
+                let log_date_date = formData.get(log_date)
+                dataObj.log_date = log_date_date
+                let notes = i + '_notes'
+                dataObj.notes = formData.get(notes).trim()
+                let hours_submitted = i + '_hours'
+                dataObj.hours_submitted = formData.get(hours_submitted)
+                let hours_approved = i + '_hours_approved'
+                dataObj.hours_approved = formData.get(hours_submitted) == 'Yes'
+                let approval_due_date = '7_date'
+                dataObj.approval_due_date = formData.get(approval_due_date)
+                let semester = document.getElementById('student_semester').innerText
+                dataObj.semester = getSemester(semester)
+                let start_time = i + '_stime'
+                let start_time_time = formData.get(start_time)
+                // console.log(typeof(start_time_time) + '--' + start_time_time)
+                if (start_time_time == '') {
+                    continue
+                }
+                let sDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(start_time_time.substring(0, 2)), parseInt(start_time_time.substring(3, 5))))
+                // console.log(typeof(sDateTime) + ' ' + sDateTime)
+                let sDateTimeStr = sDateTime.toISOString()
+                dataObj.start_time = sDateTimeStr
+                let end_time = i + '_etime'
+                let end_time_time = formData.get(end_time)
+                if (end_time_time == '') {
+                    continue
+                }
+                let eDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(end_time_time.substring(0, 2)), parseInt(end_time_time.substring(3, 5))))
+                let eDateTimeStr = eDateTime.toISOString()
+                dataObj.end_time = eDateTimeStr
+                jsonObj.data.push(dataObj)
+
+                console.log(Math.abs(eDateTime - sDateTime))
+
+            }
+
+            // console.log(JSON.stringify(jsonObj))
+
+
+            var xhr = new XMLHttpRequest()
+            xhr.open("POST", '/timelogs/student/save/', true)
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.setRequestHeader('X-CSRFToken', csrfToken)
+
+            xhr.onreadystatechange = function () { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    // Request finished. Do processing here.
+                    alert(JSON.parse(this.responseText).message)
+                    window.location.href = '/timelogs/student/email/'+student_email
+                }
+            }
+
+            xhr.send(JSON.stringify(jsonObj))
+
+        }
+
+        // Below code sets format to the
+        // datetimepicker having id as
+        // datetime
+        $('#datetime').datetimepicker({
+            format: 'hh:mm:ss a'
+        });
+
     </script>
 
     <link rel="stylesheet" href="{% static 'login/main.css' %}">
