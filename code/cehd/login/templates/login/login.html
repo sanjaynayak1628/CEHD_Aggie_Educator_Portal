@@ -14,15 +14,21 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Sign In</legend>
             {{ form|crispy }}
-            
-            <select id="usertype" name="usertype" class="form-select">
-                <option value="student">Student</option>
-                <option value="coop">Co-Op Teacher</option>
-                <option value="supervisor">Supervisor</option>
-            </select>
+            <center>
+                <div style="padding: 1%;width: 40%;">
+                    <label for="student_type"> Are you a Student, Co-Op Teacher or Supervisor?</label>
+                    <label for="student_type"> Select below <sup><strong>*</strong></sup></label>
+                    <select id="usertype" name="usertype" class="form-select" style="text-align: center;" required>
+                        <option value="student">Student</option>
+                        <option value="coop">Co-Op Teacher</option>
+                        <option value="supervisor">Supervisor</option>
+                    </select>
+                </div>
+            </center>
+
         </fieldset>
 
-        <div class="form-group" id="signup-button">
+        <div class="form-group text-center" id="signup-button" style="padding: 1%;">
             <button class="btn btn-primary">Log In</button>
         </div>
         <!-- <div class="form-group">
