@@ -80,11 +80,11 @@
         };
 
         function getSemester(semester) {
-            if (semester.toUpperCase() == 'SPRING') {
+            if (semester.toUpperCase() === 'SPRING') {
                 return 'sprng'
-            } else if (semester.toUpperCase() == 'FALL') {
+            } else if (semester.toUpperCase() === 'FALL') {
                 return 'fall'
-            } else if (semester.toUpperCase() == 'Summer') {
+            } else if (semester.toUpperCase() === 'SUMMER') {
                 return 'summ'
             }
             return 'undefined'
@@ -139,7 +139,7 @@
                 let hours_submitted = i + '_hours'
                 dataObj.hours_submitted = formData.get(hours_submitted)
                 let hours_approved = i + '_hours_approved'
-                dataObj.hours_approved = formData.get(hours_submitted) == 'Yes'
+                dataObj.hours_approved = formData.get(hours_submitted).toUpperCase() === 'YES'
                 let approval_due_date = '7_date'
                 dataObj.approval_due_date = formData.get(approval_due_date)
                 let semester = document.getElementById('student_semester').innerText
@@ -152,25 +152,19 @@
                 }
                 let sDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(start_time_time.substring(0, 2)), parseInt(start_time_time.substring(3, 5))))
                 // console.log(typeof(sDateTime) + ' ' + sDateTime)
-                let sDateTimeStr = sDateTime.toISOString()
-                dataObj.start_time = sDateTimeStr
+                dataObj.start_time = sDateTime.toISOString()
                 let end_time = i + '_etime'
                 let end_time_time = formData.get(end_time)
                 if (end_time_time == '') {
                     continue
                 }
                 let eDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(end_time_time.substring(0, 2)), parseInt(end_time_time.substring(3, 5))))
-                let eDateTimeStr = eDateTime.toISOString()
-                dataObj.end_time = eDateTimeStr
+                dataObj.end_time = eDateTime.toISOString()
                 jsonObj.data.push(dataObj)
 
                 console.log(Math.abs(eDateTime - sDateTime))
 
             }
-
-            // console.log(JSON.stringify(jsonObj))
-
-
             var xhr = new XMLHttpRequest()
             xhr.open("POST", '/timelogs/student/save/', true)
             xhr.setRequestHeader('Content-Type', 'application/json')
@@ -183,9 +177,7 @@
                     window.location.href = '/timelogs/student/email/'+student_email
                 }
             }
-
             xhr.send(JSON.stringify(jsonObj))
-
         }
 
         // Below code sets format to the
@@ -222,7 +214,7 @@
                     <ul class="navbar-nav ml-auto mb-2 mb-md-0">
                         <div class="container">
                             <div class="col">
-                                <button onClick="location.href='/logout'" class="btn btn-danger">Logout</button>
+                                <button onClick="location.href='/logout'" class="btn btn-danger" id="logout-button">Logout</button>
                             </div>
                         </div>
                         <!-- <li class="nav-item"><a class="nav-link" href="/" target="_blank">certification</a></li>

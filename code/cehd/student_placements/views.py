@@ -69,7 +69,7 @@ def query_student_placements_uin(uin, semester):
 
 class StudentPlacementsGet(APIView):
     def get(self, request, email, semester=None):
-        print("semester: {}, email: {}".format(semester, email))
+        # print("semester: {}, email: {}".format(semester, email))
         sp_item_serializer = query_student_placements_email(email, semester)
         if len(sp_item_serializer) > 0:
             sp_item_serializer = sp_item_serializer[0]

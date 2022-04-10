@@ -22,9 +22,9 @@ def save_time_logs(request):
     response_data = list()
     response_status_list = list()
     for request_data in request.data.get("data", []):
-        print(request_data.get("start_time", None), '  ', request_data.get("end_time", None), ' ::' +
-              request_data.get("hours_submitted", None).strip() + '::',
-              request_data.get("hours_submitted", None).strip() == '')
+        # print(request_data.get("start_time", None), '  ', request_data.get("end_time", None), ' ::' +
+        #       request_data.get("hours_submitted", None).strip() + '::',
+        #       request_data.get("hours_submitted", None).strip() == '')
         if request_data.get("notes", None) is None:
             request_data["notes"] = ""
         if request_data.get("hours_submitted", None) is None or request_data.get("hours_submitted", None).strip() == '':
@@ -48,10 +48,10 @@ def save_time_logs(request):
                 tmp['created'] = created
                 response_data.append(tmp)
             except Exception as e:
-                print("Exception: {}".format(e))
+                # print("Exception: {}".format(e))
                 request_status_fail.append(request_data.get("log_date", None))
         else:
-            print(time_log_serializer.errors)
+            # print(time_log_serializer.errors)
             request_status_fail.append(request_data.get("log_date", None))
     return response_data, request_status_fail
 
@@ -210,7 +210,7 @@ class TimeLogViewsUinGet(APIView):
             end_date = datetime.date.today()
             message = "start date only provided"
         else:
-            print(start_date, end_date)
+            # print(start_date, end_date)
             message = "start date and end date provided"
 
         saved_data = query_timelog_uin(uin, start_date, end_date)
@@ -240,7 +240,7 @@ class TimeLogViewsEmailGet(APIView):
             end_date = datetime.date.today()
             message = "start date only provided"
         else:
-            print(start_date, end_date)
+            # print(start_date, end_date)
             message = "start date and end date provided"
 
         saved_data = query_timelog_email(email, start_date, end_date)
