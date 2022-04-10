@@ -16,3 +16,4 @@ whitenoise
 djangorestframework
 factory_boy
 behave_django
+pylint

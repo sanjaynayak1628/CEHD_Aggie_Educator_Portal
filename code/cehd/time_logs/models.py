@@ -13,7 +13,7 @@ class TimeLogs(models.Model):
     student_email = models.EmailField()
     log_date = models.DateField()
     notes = models.TextField(default="", blank=True)
-    hours_submitted = models.PositiveIntegerField(default=0)
+    hours_submitted = models.DecimalField(max_digits=4, decimal_places=1, default=0.0)
     hours_approved = models.BooleanField()
     approval_due_date = models.DateField()
     semester = models.CharField(max_length=20)
@@ -23,5 +23,3 @@ class TimeLogs(models.Model):
 
     class Meta:
         db_table = "time_logs"
-        # don't use unique_together if using update_or_create in time_logs/views.py
-        # unique_together = (('student_uin', 'log_date'),)

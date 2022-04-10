@@ -1,32 +1,39 @@
-from time import strptime
-from django.shortcuts import redirect, render
+"""
+views file describing the APIs used in student time sheet API
+"""
+import json
+import datetime
+from django.shortcuts import render
+from django.core import serializers
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core import serializers
-from .serializers import TimeLogsSerializer
-from .models import TimeLogs
 from core.models import Person
 from student_placements.views import query_student_placements_email, query_student_placements_uin, query_student_details
-import json
-import datetime
-from django.views.decorators.csrf import csrf_exempt
+from .models import TimeLogs
+from .serializers import TimeLogsSerializer
+
 
 def save_time_logs(request):
+    """
+    Helper function for saving or submitting the time logs into DB
+    """
     request_status_fail = list()
     response_data = list()
     response_status_list = list()
     for request_data in request.data.get("data", []):
-        print(request_data.get("start_time", None), '  ', request_data.get("end_time", None), ' ::'+ request_data.get("hours_submitted", None).strip()+'::',request_data.get("hours_submitted", None).strip() == '')
-        if request_data.get("notes", None) == None:
+        print(request_data.get("start_time", None), '  ', request_data.get("end_time", None), ' ::' +
+              request_data.get("hours_submitted", None).strip() + '::',
+              request_data.get("hours_submitted", None).strip() == '')
+        if request_data.get("notes", None) is None:
             request_data["notes"] = ""
-        if request_data.get("hours_submitted", None) == None or request_data.get("hours_submitted", None).strip() == '':
-            if request_data.get("start_time", None) != None and request_data.get("end_time", None) != None:
-                timeDiff = datetime.datetime.strptime(request_data["end_time"], '%Y-%m-%dT%H:%M:%S.%fZ') - datetime.datetime.strptime(request_data["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')
-                request_data["hours_submitted"] = timeDiff.total_seconds()//3600
-            else:    
+        if request_data.get("hours_submitted", None) is None or request_data.get("hours_submitted", None).strip() == '':
+            if request_data.get("start_time", None) is not None and request_data.get("end_time", None) is not None:
+                timediff = datetime.datetime.strptime(request_data["end_time"], '%Y-%m-%dT%H:%M:%S.%fZ') - datetime.datetime.strptime(request_data["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')
+                request_data["hours_submitted"] = round(timediff.total_seconds() / 3600, 1)
+            else:
                 request_data["hours_submitted"] = 0
-            
+
         time_log_serializer = TimeLogsSerializer(data=request_data)
         if time_log_serializer.is_valid():
             try:
@@ -50,6 +57,9 @@ def save_time_logs(request):
 
 
 class TimeLogViewsSubmit(APIView):
+    """
+    POST function to submit the time sheets
+    """
     def post(self, request):
         response_data, request_status_fail = save_time_logs(request)
         response_dict = dict()
@@ -70,26 +80,31 @@ class TimeLogViewsSubmit(APIView):
             if cooperating_teacher_email == "":
                 response_dict["status"] = "error"
                 status_mode = status.HTTP_403_FORBIDDEN
-                response_dict["message"] = "Entered time not submitted. Co-operating teacher not found. Please save the time entries."
+                response_dict[
+                    "message"] = "Entered time not submitted. Co-operating teacher not found. Please save the time entries."
         return Response(response_dict, status=status_mode)
 
 
 class TimeLogViewsSave(APIView):
+    """
+    POST function to save the time sheets into the DB
+    """
     def post(self, request):
+        """
+        POST function implementation
+        """
         response_data, request_status_fail = save_time_logs(request)
         if request_status_fail:
-            return Response({"status": "error", "message": "Time entered for dates: {} are not saved. "
-                             "Please resave again!".format(", ".join(request_status_fail)), "data": response_data}, status=status.HTTP_400_BAD_REQUEST)
-        # context = dict()
-        # context['status'] = 'success'
-        # context['message'] = "Entered time entries saved successfully"                        
-        # return redirect('/timelogs/student/email/'+request.data['email'], context=context)
+            return Response({"status": "error", "message": "Time entered for dates: {} are not saved. Please resave again!".format(", ".join(request_status_fail)), "data": response_data}, status=status.HTTP_400_BAD_REQUEST)
         return Response(
             {"status": "success",
              "message": "Entered time entries saved successfully", "email": request.data['email'],
              "data": response_data}, status=status.HTTP_200_OK)
 
     def delete(self, request, student_uin=None, log_date=None):
+        """
+        DELETE functionality to delete an entry of time log from DB
+        """
         try:
             item = TimeLogs.objects.get(student_uin=student_uin, log_date=log_date)
             item_serializer = TimeLogsSerializer(item)
@@ -103,6 +118,9 @@ class TimeLogViewsSave(APIView):
 
 
 def query_timelog_uin(uin, start_date, end_date):
+    """
+    Helper function to get the data from time logs DB based on UIN
+    """
     saved_time = TimeLogs.objects.all().filter(student_uin=uin, log_date__lte=end_date,
                                                log_date__gte=start_date).order_by('log_date')
     saved_time_serializer = json.loads(serializers.serialize('json', saved_time))
@@ -115,6 +133,9 @@ def query_timelog_uin(uin, start_date, end_date):
 
 
 def query_timelog_email(email, start_date, end_date):
+    """
+    Helper function to get the data from time logs DB based on Email
+    """
     saved_time = TimeLogs.objects.all().filter(student_email=email, log_date__lte=end_date,
                                                log_date__gte=start_date).order_by('log_date')
     saved_time_serializer = json.loads(serializers.serialize('json', saved_time))
@@ -127,6 +148,9 @@ def query_timelog_email(email, start_date, end_date):
 
 
 def query_sp_email(email, semester=None):
+    """
+    Helper function to get the data from student placements DB based on Email
+    """
     sp_item_serializer = query_student_placements_email(email, semester)
     if len(sp_item_serializer) > 0:
         sp_item_serializer = sp_item_serializer[0]['fields']
@@ -136,6 +160,9 @@ def query_sp_email(email, semester=None):
 
 
 def query_sp_uin(uin, semester=None):
+    """
+    Helper function to get the data from student placements DB based on UIN
+    """
     sp_item_serializer = query_student_placements_uin(uin, semester)
     if len(sp_item_serializer) > 0:
         sp_item_serializer = sp_item_serializer[0]['fields']
@@ -145,6 +172,9 @@ def query_sp_uin(uin, semester=None):
 
 
 def get_current_week():
+    """
+    Helper function to get the current week details
+    """
     # add current week dates
     today = datetime.date.today()
     dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
@@ -154,12 +184,21 @@ def get_current_week():
 
 
 def get_student_details(email, uin=None):
+    """
+    Helper function to get the data from Person DB based on email
+    """
     person_serializer = query_student_details(email, uin)
     return person_serializer
 
 
 class TimeLogViewsUinGet(APIView):
+    """
+    GET function to get the data from time logs DB based on UIN
+    """
     def get(self, request, uin, start_date=None, end_date=None, semester=None):
+        """
+        GET function implementation
+        """
         message = ""
         if not start_date and not end_date:
             today = datetime.date.today()
@@ -176,7 +215,6 @@ class TimeLogViewsUinGet(APIView):
 
         saved_data = query_timelog_uin(uin, start_date, end_date)
         sp_data_serializer = query_sp_uin(uin, semester)
-        # print(sp_data_serializer)
         sp_data_serializer["timelogs"] = saved_data
         sp_data_serializer["current_week"] = get_current_week()
         return Response({"status": "success", "message": message, "data": sp_data_serializer},
@@ -184,7 +222,13 @@ class TimeLogViewsUinGet(APIView):
 
 
 class TimeLogViewsEmailGet(APIView):
+    """
+    GET function to get the data from time logs DB based on Email
+    """
     def get(self, request, email, start_date=None, end_date=None, semester=None):
+        """
+        GET function implementation
+        """
         message = ""
         if not start_date and not end_date:
             today = datetime.date.today()
@@ -207,8 +251,4 @@ class TimeLogViewsEmailGet(APIView):
         # add current week dates
         sp_data_serializer["current_week"] = get_current_week()
         context = {"status": "success", "message": message, "data": sp_data_serializer}
-        # print(context)
-        # print(list(context['data']['current_week'].values())[0])
         return render(request, 'time_logs/student.html', context)
-        # return Response({"status": "success", "message": message, "data": sp_data_serializer},
-        #                 status=status.HTTP_200_OK)
