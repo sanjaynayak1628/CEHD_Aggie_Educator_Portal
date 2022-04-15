@@ -7,10 +7,6 @@ use_step_matcher("re")
 
 @given("we have a student")
 def step_impl(context):
-<<<<<<< HEAD
-    from django.contrib.auth.models import User
-=======
->>>>>>> main
     # Creates a dummy user for our tests (user is not authenticated at this point)
     u = UserFactory(username='foo', email='foo@example.com')
     u.set_password('Password123*')
@@ -37,10 +33,6 @@ def step_impl(context):
     assert "Please enter a correct username and password. Note that both fields may be case-sensitive." == \
            context.browser.find_element_by_xpath("//div[contains(@class, 'alert')]").get_attribute(
                'innerText')
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 
 @when("a student logins with incorrect password")
 def step_impl(context):
@@ -80,10 +72,5 @@ def step_impl(context):
 @then("redirect to student profile submit timesheet")
 def step_impl(context):
     cb = context.browser
-<<<<<<< HEAD
-    print(cb.current_url, '-----------------------')
-    assert cb.current_url.endswith('/accounts/profile/')
-=======
     # print(cb.current_url, '-----------------------')
     assert cb.current_url.endswith('/timelogs/student/email/foo')
->>>>>>> main
