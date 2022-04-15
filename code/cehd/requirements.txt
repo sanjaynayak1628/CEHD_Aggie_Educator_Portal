@@ -13,4 +13,11 @@ gunicorn
 coverage
 selenium
 whitenoise
+<<<<<<< HEAD
 behave_django
+=======
+djangorestframework
+factory_boy
+behave_django
+pylint
+>>>>>>> main

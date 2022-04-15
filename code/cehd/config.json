@@ -1,0 +1,23 @@
+
+{
+  "semester": {
+    "spring": {
+      "start_month": 1,
+      "end_month": 5,
+      "start_day": 1,
+      "end_day": 13
+    },
+    "summer": {
+      "start_month": 5,
+      "end_month": 8,
+      "start_day": 14,
+      "end_day": 22
+    },
+    "fall": {
+      "start_month": 8,
+      "end_month": 12,
+      "start_day": 23,
+      "end_day": 31
+    }
+  }
+}

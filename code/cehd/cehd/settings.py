@@ -52,6 +52,12 @@ INSTALLED_APPS = [
     'epp_program',
     'epp_student',
     'login',
+<<<<<<< HEAD
+=======
+    'rest_framework',
+    'student_placements',
+    'time_logs',
+>>>>>>> main
 ]
 
 MIDDLEWARE = [

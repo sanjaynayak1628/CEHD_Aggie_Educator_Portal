@@ -50,3 +50,6 @@ class EPPProgram(models.Model):
     """
     Can students be admitted to this program or active students in this program?
     """
+
+    class Meta:
+        ordering = ['-active', 'program_name']

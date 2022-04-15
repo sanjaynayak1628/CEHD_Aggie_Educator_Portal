@@ -1,0 +1,136 @@
+{% extends 'login/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated%}
+<div class="container body_content" style="margin-top: 30px;">
+    <h1>Submit your Timesheets</h1>
+    <!-- Contains non editable data from database -->
+    <div class="container row" style="border-style: solid; border-width: 0.5px;">
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Student Name:</strong> <span id="student_fullname">{{data.student.full_name}}</span>
+            </div>
+            <div class="col">
+                <strong>Student UIN:</strong> <span id="student_uin">{{data.uin}}</span>
+            </div>
+            <div class="col">
+                <strong>Student email:</strong> <span id="student_email">{{data.student_email}}</span>
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Semester:</strong> <span id="student_semester">{{data.semester|upper}}</span>
+            </div>
+            <div class="col">
+                <strong>Supervisor:</strong> <span id="supervisor_fullname">{{data.university_supervisor}}</span>
+            </div>
+            <div class="col">
+                <strong>Co-Op Teacher:</strong> <span id="coop_teacher_fullname">{{data.cooperating_teacher}}</span>
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Co-Op Teacher email:</strong> <span id="coop_teacher_email">{{data.cooperating_teacher_email}}</span>
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="text-center">
+                <button onClick="location.href='#'" class="btn btn-primary" id="view_previous_timesheets">View Previous Timesheets</button>
+            </div>
+        </div>
+    </div>
+
+    <form action="/student/" method="post" id="timelog_submit_form">
+        <div id="csrf_token">{% csrf_token %}</div>
+        <div class="container rowpadding text-center">
+            <table class="table table-bordered" id="timesheet_table">
+                <thead style="background-color: rgb(80, 0, 0); color: white;">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Notes/Comments</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
+                        <th scope="col">Total Hours</th>
+                        <th scope="col">Hours Approved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day_, date in data.current_week.items %}
+                    <tr>
+                        <td>
+                            <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date"
+                                value="{{date}}">
+
+                        </td>
+
+                        {% if data.timelogs|get_value:date %}
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes"
+                                value=" {{ data.timelogs|get_value:date|get_value:'notes' }}" class="form-text">
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime"
+                                value="{{ data.timelogs|get_value:date|get_value:'start_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)">
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime"
+                                value="{{ data.timelogs|get_value:date|get_value:'end_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)">
+                        </td>
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours"
+                                value=" {{ data.timelogs|get_value:date|get_value:'hours_submitted' }}" class="form-text">
+                        </td>
+                        {% if data.timelogs|get_value:date|get_value:'hours_approved' %}
+                        <td>
+                            <span id="{{forloop.counter}}_hours_approved">Yes</span>
+                        </td>
+                        {% else %}
+                        <td>
+                            <span id="{{forloop.counter}}_hours_approved">No</span>
+                        </td>
+                        {% endif %}
+                        {% else %}
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes" class="form-text">
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime">
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime">
+                        </td>
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours" class="form-text">
+                        </td>
+                        <td>
+                            <span id="{{forloop.counter}}_hours_approved">N/A</span>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="container row">
+                <div class="row" style="padding: 1%;">
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-success" id="save-timesheet">Save Timesheet</button>
+                    </div>
+                    <div class="col text-center">
+                        <button type="submit" class="btn btn-success" id="submit-timesheet">Submit Timesheet</button>
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
+{% else %}
+
+<div class="container">
+    <p id="login_msg"> You haven't logged in. To login, press the login button</p>
+    <a href="{% url 'login' %}"><button class="btn btn-danger" style="color: white;">Log In</button></a>
+</div>
+
+{% endif %}
+{% endblock %}

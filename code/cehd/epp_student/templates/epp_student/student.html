@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <form action="/accounts/profile/" method="post">
+    <form action="/student/" method="post">
         {% csrf_token %}
         <div class="container rowpadding">
             <table class="table table-bordered" id="timesheet_table">
@@ -48,23 +48,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for i in '01234'|make_list %}
                     <tr>
                         <td>
-                            <input type="date" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                            <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date">
                         </td>
                         <td>
-                            <input type="text" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes">
                         </td>
                         <td>
-                            <input type="time" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime">
                         </td>
                         <td>
-                            <input type="time" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime">
                         </td>
                         <td>
-                            <input type="text" name="{{generate_on_django}}" id="{{generate_on_django}}">
+                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours">
                         </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
             <div class="container row">
