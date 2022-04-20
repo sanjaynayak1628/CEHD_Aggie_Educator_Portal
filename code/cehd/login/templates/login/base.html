@@ -111,6 +111,16 @@
 
             // console.log(Math.abs(new Date(end_time_time) - new Date(start_time_time)))
         }
+        function gettimesheetsbydate(){
+         
+            startdate = document.getElementById('studentstart_date').value;
+            enddate = document.getElementById('studentend_date').value;
+            student_email =  document.getElementById('student_email').innerText
+            console.log(startdate + "   "+ enddate)
+            window.location.href = '/timelogs/student/email/'+student_email+"/start/"+startdate+"/end/"+enddate
+
+
+        }
 
         function handleTimelogSubmit(event) {
             event.preventDefault();

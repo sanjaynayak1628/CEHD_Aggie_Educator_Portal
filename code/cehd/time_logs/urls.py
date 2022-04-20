@@ -19,4 +19,6 @@ urlpatterns = [
     path('student/email/<str:email>/semester/<str:semester>', TimeLogViewsEmailGet.as_view(), name='student_email_sem_get_time_logs'),
     path('student/email/<str:email>/start/<str:start_date>', TimeLogViewsEmailGet.as_view(), name='student_email_start_get_time_logs'),
     path('student/email/<str:email>/start/<str:start_date>/end/<str:end_date>', TimeLogViewsEmailGet.as_view(), name='student_email_startend_get_time_logs'),
+
+    path('student/email/<str:email>/prev/<int:prev>', TimeLogViewsEmailGet.as_view(), name='student_email_get_time_logs_prev'),
 ]
