@@ -225,22 +225,27 @@ class TimeLogViewsEmailGet(APIView):
     """
     GET function to get the data from time logs DB based on Email
     """
-    def get(self, request, email, start_date=None, end_date=None, semester=None):
+    def get(self, request, email, start_date=None, end_date=None, semester=None, prev=0):
         """
         GET function implementation
         """
         message = ""
+        
+        visithtml ="studentview.html"
         if not start_date and not end_date:
+            if prev == 0:
+                visithtml ="student.html"
             today = datetime.date.today()
             dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
             start_date = dates[0]
             end_date = dates[6]
             message = "retrieval successful for current week"
         elif not end_date:
+            # print("start: ", start_date)
             end_date = datetime.date.today()
             message = "start date only provided"
         else:
-            # print(start_date, end_date)
+            # print("start: ", start_date, "end: ", end_date)
             message = "start date and end date provided"
 
         saved_data = query_timelog_email(email, start_date, end_date)
@@ -251,4 +256,10 @@ class TimeLogViewsEmailGet(APIView):
         # add current week dates
         sp_data_serializer["current_week"] = get_current_week()
         context = {"status": "success", "message": message, "data": sp_data_serializer}
-        return render(request, 'time_logs/student.html', context)
+        
+  
+
+        #return render(request, 'time_logs/student.html', context)
+        return render(request, f'time_logs/{visithtml}', context)
+
+    

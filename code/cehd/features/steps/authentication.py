@@ -34,7 +34,6 @@ def step_impl(context):
            context.browser.find_element_by_xpath("//div[contains(@class, 'alert')]").get_attribute(
                'innerText')
 
-
 @when("a student logins with incorrect password")
 def step_impl(context):
     # find the button
