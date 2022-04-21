@@ -23,4 +23,6 @@ urlpatterns = [
     path('timelogs/', include('time_logs.urls')),
     path('sp/', include('student_placements.urls')),
     path('', include('epp_student.urls')),
+    path('coop/', include('cooperating.urls')),
+    path('supervisor/', include('supervisor.urls')),
 ]
