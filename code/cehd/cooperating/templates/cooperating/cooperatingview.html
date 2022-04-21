@@ -1,0 +1,140 @@
+{% extends 'login/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated%}
+<div class="container body_content" style="margin-top: 30px;">
+    <h1>View Your Submitted Timesheets</h1>
+    <!-- Contains non editable data from database -->
+    <div class="container row" style="border-style: solid; border-width: 0.5px;">
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Cooperating Teacher Name: </strong> <span id="coop_fullname">{{data.student.full_name}}</span>
+            </div>
+            <div class="col">
+                <strong>Cooperating Teacher Email:</strong> <span id="coop_email">{{data.uin}}</span>
+            </div>
+            <div class="col">
+                <strong>Supervisor Name:</strong> <span id="supervisor_name">{{data.student_email}}</span>
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Students:</strong> <span id="student_list"><select id="studentlist"><option >--select--</option>></select>></span>
+            </div>
+            <div class="col">
+                <strong>Students UIN:</strong> <span id="studentuin_list"><select id="studentuinlist"><option >--select--</option>></select>></span>
+            </div>
+            <div class="col">
+                <strong>Semester:</strong> <span id="sem"><select id="semester"><option >--select--</option>></select>></span>
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Status:</strong> <span id="status"><select id="stat"><option >--select--</option>></select>></span>
+            </div>
+            <div class="col">
+                <strong>Start Date:</strong> <span id="start_date"><input type="date" name="studentstart_date" id="studentstart_date" ></span>
+            </div>
+            <div class="col">
+                <strong>End Date:</strong> <span id="end_date"><input type="date" name="studentend_date" id="studentend_date" ></span>
+            </div>
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="text-center">
+                <button onClick="gettimesheetsbydate()" class="btn btn-primary" id="view_selected_timesheets">View Selected Timesheets</button>
+            </div>
+
+        </div>
+    </div>
+
+    <form action="/student/" method="post" id="timelog_submit_form">
+        <div id="csrf_token">{% csrf_token %}</div>
+        <div class="container rowpadding text-center">
+            <table class="table table-bordered" id="timesheet_table">
+                <thead style="background-color: rgb(80, 0, 0); color: white;">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Notes/Comments</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
+                        <th scope="col">Total Hours</th>
+                        <th scope="col">Hours Approved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for date, data in data.timelogs.items %}
+                    <tr>
+                        <td>
+                            <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date"
+                                value="{{date}}" disabled>
+
+                        </td>
+
+                        {% if data|get_value:'log_date' %}
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes"
+                                value=" {{ data|get_value:'notes' }}" class="form-text" disabled>
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime"
+                                value="{{ data|get_value:'start_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime"
+                                value="{{ data|get_value:'end_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
+                        </td>
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours"
+                                value=" {{ data|get_value:'hours_submitted' }}" class="form-text" disabled>
+                        </td>
+                        {% if data|get_value:'hours_approved' %}
+                        <td>
+                            <span id="{{forloop.counter}}_hours_approved">Yes</span>
+                        </td>
+                        {% else %}
+                        <td>
+                            <span id="{{forloop.counter}}_hours_approved">No</span>
+                        </td>
+                        {% endif %}
+                        {% else %}
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes" class="form-text" disabled>
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime" disabled>
+                        </td>
+                        <td>
+                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime" disabled>
+                        </td>
+                        <td>
+                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours" class="form-text" disabled>
+                        </td>
+                        <td>
+                            <span id="{{forloop.counter}}_hours_approved">N/A</span>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="container row">
+                <div class="row" style="padding: 1%;">
+                    <div class="col text-center">
+                        <!--<button type="submit" class="btn btn-success" id="save-timesheet">Save Timesheet</button>-->
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
+{% else %}
+
+<div class="container">
+    <p id="login_msg"> You haven't logged in. To login, press the login button</p>
+    <a href="{% url 'login' %}"><button class="btn btn-danger" style="color: white;">Log In</button></a>
+</div>
+
+{% endif %}
+{% endblock %}

@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'student_placements',
     'time_logs',
+    'cooperating',
+    'supervisor',
 ]
 
 MIDDLEWARE = [
