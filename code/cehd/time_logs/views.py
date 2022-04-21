@@ -29,7 +29,9 @@ def save_time_logs(request):
             request_data["notes"] = ""
         if request_data.get("hours_submitted", None) is None or request_data.get("hours_submitted", None).strip() == '':
             if request_data.get("start_time", None) is not None and request_data.get("end_time", None) is not None:
-                timediff = datetime.datetime.strptime(request_data["end_time"], '%Y-%m-%dT%H:%M:%S.%fZ') - datetime.datetime.strptime(request_data["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')
+                timediff = datetime.datetime.strptime(request_data["end_time"],
+                                                      '%Y-%m-%dT%H:%M:%S.%fZ') - datetime.datetime.strptime(
+                    request_data["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')
                 request_data["hours_submitted"] = round(timediff.total_seconds() / 3600, 1)
             else:
                 request_data["hours_submitted"] = 0
@@ -60,6 +62,7 @@ class TimeLogViewsSubmit(APIView):
     """
     POST function to submit the time sheets
     """
+
     def post(self, request):
         response_data, request_status_fail = save_time_logs(request)
         response_dict = dict()
@@ -89,13 +92,17 @@ class TimeLogViewsSave(APIView):
     """
     POST function to save the time sheets into the DB
     """
+
     def post(self, request):
         """
         POST function implementation
         """
         response_data, request_status_fail = save_time_logs(request)
         if request_status_fail:
-            return Response({"status": "error", "message": "Time entered for dates: {} are not saved. Please resave again!".format(", ".join(request_status_fail)), "data": response_data}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "error",
+                             "message": "Time entered for dates: {} are not saved. Please resave again!".format(
+                                 ", ".join(request_status_fail)), "data": response_data},
+                            status=status.HTTP_400_BAD_REQUEST)
         return Response(
             {"status": "success",
              "message": "Entered time entries saved successfully", "email": request.data['email'],
@@ -195,6 +202,7 @@ class TimeLogViewsUinGet(APIView):
     """
     GET function to get the data from time logs DB based on UIN
     """
+
     def get(self, request, uin, start_date=None, end_date=None, semester=None):
         """
         GET function implementation
@@ -225,16 +233,17 @@ class TimeLogViewsEmailGet(APIView):
     """
     GET function to get the data from time logs DB based on Email
     """
+
     def get(self, request, email, start_date=None, end_date=None, semester=None, prev=0):
         """
         GET function implementation
         """
         message = ""
-        
-        visithtml ="studentview.html"
+
+        visithtml = "studentview.html"
         if not start_date and not end_date:
             if prev == 0:
-                visithtml ="student.html"
+                visithtml = "student.html"
             today = datetime.date.today()
             dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
             start_date = dates[0]
@@ -256,10 +265,6 @@ class TimeLogViewsEmailGet(APIView):
         # add current week dates
         sp_data_serializer["current_week"] = get_current_week()
         context = {"status": "success", "message": message, "data": sp_data_serializer}
-        
-  
 
-        #return render(request, 'time_logs/student.html', context)
+        # return render(request, 'time_logs/student.html', context)
         return render(request, f'time_logs/{visithtml}', context)
-
-    
