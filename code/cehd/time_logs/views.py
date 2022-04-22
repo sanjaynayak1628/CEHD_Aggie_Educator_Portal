@@ -12,6 +12,7 @@ from core.models import Person
 from student_placements.views import query_student_placements_email, query_student_placements_uin, query_student_details
 from .models import TimeLogs
 from .serializers import TimeLogsSerializer
+from utils.emails import timesheet_submit
 
 
 def get_approval_due_date(log_date, i):
@@ -108,6 +109,8 @@ class TimeLogViewsSubmit(APIView):
                 status_mode = status.HTTP_403_FORBIDDEN
                 response_dict["message"] = "Entered time not submitted. Co-operating teacher not found. " \
                                            "Please save the time entries."
+            if status_mode == status.HTTP_200_OK:
+                timesheet_submit()
         return Response(response_dict, status=status_mode)
 
 

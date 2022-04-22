@@ -73,7 +73,7 @@
         </div>
         <div class="row" style="padding: 1%;">
             <div class="text-center">
-                <button onClick="gettimesheetsbycoopfilters()" class="btn btn-primary" id="view_selected_timesheets">View Selected Timesheets</button>
+                <button onClick="getTimesheetsByCoopFilters()" class="btn btn-primary" id="view_selected_timesheets">View Selected Timesheets</button>
             </div>
 
         </div>
@@ -99,7 +99,6 @@
                         <td>
                             <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date"
                                 value="{{date}}" disabled>
-
                         </td>
 
                         {% if data|get_value:'log_date' %}
