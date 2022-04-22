@@ -128,8 +128,9 @@
             coop_email="abc@xyz.com"
             approval_status = document.querySelector('input[name="group1"]:checked').value;
             coop_semester = document.getElementById('coop_semester').value;
-            console.log(coop_startdate + "   "+ coop_enddate+"  "+coop_email+"  "+approval_status+"  "+coop_semester);
-            window.location.href = '/coop/cooperatingteacher/view/email/'+coop_email+"/start/"+coop_startdate+"/end/"+coop_enddate+"/status/"+approval_status+"/semester/"+coop_semester;
+            coop_year = document.getElementById('coop_year').value;
+            console.log(coop_startdate + "   "+ coop_enddate+"  "+coop_email+"  "+approval_status+"  "+coop_semester+" "+coop_year);
+            window.location.href = '/coop/cooperatingteacher/view/email/'+coop_email+"/start/"+coop_startdate+"/end/"+coop_enddate+"/status/"+approval_status+"/semester/"+coop_semester+"/year/"+coop_year;
 
         }
         function handleTimelogSubmit(event) {
