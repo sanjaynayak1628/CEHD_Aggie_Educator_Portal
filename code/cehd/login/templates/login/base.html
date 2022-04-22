@@ -120,6 +120,18 @@
                 "/end/"+coopEndDate+"/status/"+approvalStatus+"/semester/"+coopSemester+"/year/"+coopYear;
         }
 
+        function getSupervisorTimesheets(){
+            let semester = document.getElementById('semesters').value;
+            let year = document.getElementById('years').value;
+            let coop_teacher = document.getElementById('coop_teachers').value
+            let startDate = document.getElementById('start_date').value;
+            let endDate = document.getElementById('end_date').value;
+            let supervisor_email = document.getElementById('supervisor_email').value;
+
+            console.log(semester + '-' + year + '-' + coop_teacher + '-' + startDate + '-' + endDate + '-' + supervisor_email)
+            // window.location.href = '';
+        }
+
         function getFormDataSaveSubmit(formData) {
             let jsonObj = {}
             // jsonObj.csrfmiddlewaretoken = csrfToken
