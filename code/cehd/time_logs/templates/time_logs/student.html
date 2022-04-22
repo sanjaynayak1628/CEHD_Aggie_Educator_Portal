@@ -5,7 +5,7 @@
 {% block content %}
 {% if user.is_authenticated%}
 <div class="container body_content" style="margin-top: 30px;">
-    <h1>Submit your Timesheets</h1>
+    <h1>Submit Timesheets</h1>
     <!-- Contains non editable data from database -->
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
@@ -37,7 +37,7 @@
         </div>
         <div class="row" style="padding: 1%;">
             <div class="text-center">
-                <button onClick="location.href='#'" class="btn btn-primary" id="view_previous_timesheets">View Previous Timesheets</button>
+                <button onClick="location.href='/timelogs/student/email/{{data.student_email}}/prev/1'" class="btn btn-primary" id="view_previous_timesheets">View Previous Timesheets</button>
             </div>
         </div>
     </div>

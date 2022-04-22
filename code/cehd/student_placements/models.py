@@ -7,6 +7,7 @@ class StudentPlacements(models.Model):
     """
     This is the model for student placements table that is connected with time logs table
     """
+
     eppstudent = models.ForeignKey(EPPStudent, on_delete=models.PROTECT)
     uin = models.ForeignKey(Person, on_delete=models.PROTECT, to_field='uin', db_index=True, default=0)
     student_email = models.EmailField(default="")
