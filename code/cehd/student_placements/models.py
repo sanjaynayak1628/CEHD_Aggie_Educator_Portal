@@ -19,6 +19,7 @@ class StudentPlacements(models.Model):
     site = models.CharField(max_length=50)
     classroom_type = models.CharField(max_length=50)
     semester = models.CharField(max_length=20)
+    semester_year = models.CharField(max_length=4)
     field_experience_program = models.CharField(max_length=50)
     placement = models.CharField(max_length=50)
     beginning_date_experience = models.DateField()

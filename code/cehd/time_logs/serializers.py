@@ -16,4 +16,4 @@ class TimeLogsSerializer(serializers.ModelSerializer):
         model = TimeLogs
         db_table = "time_logs"
         fields = ("student_uin", "student_email", "log_date", "notes", "hours_submitted", "hours_approved", "approval_due_date",
-                  "semester", "start_time", "end_time", "date_submitted")
+                  "semester", "semester_year", "start_time", "end_time", "date_submitted")
