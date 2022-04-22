@@ -10,10 +10,10 @@
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Cooperating Teacher Name: </strong> <span id="coop_fullname">{{data.student.full_name}}</span>
+                <strong>Coop Teacher Name: </strong> <span id="coop_fullname">{{data.student.full_name}}</span>
             </div>
             <div class="col">
-                <strong>Cooperating Teacher Email:</strong> <span id="coop_email">{{data.uin}}</span>
+                <strong>Coop Teacher Email:</strong> <span id="coop_email">{{data.uin}}</span>
             </div>
             <div class="col">
                 <strong>Supervisor Name:</strong> <span id="supervisor_name">{{data.student_email}}</span>
@@ -21,35 +21,65 @@
         </div>
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Students:</strong> <span id="student_list"><select id="studentlist"><option >--select--</option>></select>></span>
+                <strong>Students:</strong> <span id="students">{{data.uin}}</span>
             </div>
             <div class="col">
-                <strong>Students UIN:</strong> <span id="studentuin_list"><select id="studentuinlist"><option >--select--</option>></select>></span>
+                <strong>Students UIN:</strong> <span id="studentuin">{{data.uin}}</span>
             </div>
             <div class="col">
-                <strong>Semester:</strong> <span id="sem"><select id="semester"><option >--select--</option>></select>></span>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <strong>Semester:</strong> 
+                        <span id="sem">
+                        <select id="coop_semester">
+                            <option value="fall">FALL</option>
+                            <option value="spring">SPRING</option>
+                            <option value="summer">SUMMER</option>
+                        </select></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <strong>Year:</strong> 
+                        <span id="yr">
+                            <input type="number" name="year" id="year">
+                        </span>
+                    </div>
+                </div>
+                
+                
             </div>
         </div>
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Status:</strong> <span id="status"><select id="stat"><option >--select--</option>></select>></span>
+                <strong>Status:</strong> 
+                    <span id="status">
+                    <form>
+                            <fieldset id="group1">
+                                <input type="radio" id="appr" name="group1" value="approved">
+                                <label for="approved">Approved</label>
+                                <input type="radio" id="sub" name="group1" value="submitted">
+                                <label for="submitted">Submitted</label>
+                                <input type="radio" id="All" name="group1" value="all">
+                                <label for="all">Both</label> 
+                            </fieldset>
+                    </form> 
+                    </span>
             </div>
             <div class="col">
-                <strong>Start Date:</strong> <span id="start_date"><input type="date" name="studentstart_date" id="studentstart_date" ></span>
+                <strong>Start Date:</strong> <span id="start_date"><input type="date" name="coopstart_date" id="coopstart_date" ></span>
             </div>
             <div class="col">
-                <strong>End Date:</strong> <span id="end_date"><input type="date" name="studentend_date" id="studentend_date" ></span>
+                <strong>End Date:</strong> <span id="end_date"><input type="date" name="coopend_date" id="coopend_date" ></span>
             </div>
         </div>
         <div class="row" style="padding: 1%;">
             <div class="text-center">
-                <button onClick="gettimesheetsbydate()" class="btn btn-primary" id="view_selected_timesheets">View Selected Timesheets</button>
+                <button onClick="gettimesheetsbycoopfilters()" class="btn btn-primary" id="view_selected_timesheets">View Selected Timesheets</button>
             </div>
 
         </div>
     </div>
 
-    <form action="/student/" method="post" id="timelog_submit_form">
+    <form action="/coop/cooperatingteacher/submit/approve/true/" method="POST" id="coop_submit_form">
         <div id="csrf_token">{% csrf_token %}</div>
         <div class="container rowpadding text-center">
             <table class="table table-bordered" id="timesheet_table">
@@ -123,7 +153,10 @@
             <div class="container row">
                 <div class="row" style="padding: 1%;">
                     <div class="col text-center">
-                        <!--<button type="submit" class="btn btn-success" id="save-timesheet">Save Timesheet</button>-->
+                        <button type="submit" value="approve" class="btn btn-success" id="approve-timesheet" >Approve Timesheet</button>
+                    </div>
+                    <div class="col text-center">
+                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/cooperatingteacher/submit/approve/false/">Reject Timesheet</button>
                     </div>
                 </div>
             </div>

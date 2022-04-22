@@ -13,14 +13,21 @@ from rest_framework.response import Response
 
 
 
-class CoopViewsSave(APIView):
+class CoopViews(APIView):
     """
-    POST function to save the time sheets into the DB
+    GET function to view the coop time sheets from the DB
     """
-    def get(self, request):
+    def get(self, request, email, start_date=None, end_date=None, semester=None, status=None):
         """
-        POST function implementation
+        GET function implementation
         """
+        print(f'{email}--{start_date}--{end_date}--{semester}--{status}')
         return render(request, f'cooperating/cooperatingview.html')
 
-    
+class CoopSubmit(APIView):
+    """
+    POST function to approve/reject the coop time sheets to the DB
+    """
+    def post(self, request, approve):
+        print(approve)
+        return render(request, f'cooperating/cooperatingview.html')
