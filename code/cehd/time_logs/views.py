@@ -19,7 +19,8 @@ def get_approval_due_date(log_date, i):
     Helper function to retrieve the approval due date - next week Monday
     """
 
-    next_week_date = (datetime.datetime.strptime(log_date, "%Y-%m-%d") + datetime.timedelta(days=7-i)).strftime("%Y-%m-%d")
+    next_week_date = (datetime.datetime.strptime(log_date, "%Y-%m-%d") + datetime.timedelta(days=7 - i)).strftime(
+        "%Y-%m-%d")
     return next_week_date
 
 
@@ -39,16 +40,18 @@ def save_time_logs(request):
             if approval_due_date is None:
                 approval_due_date = get_approval_due_date(request_data.get("log_date", None), idx)
         request_data["approval_due_date"] = approval_due_date
+        request_data["semester_year"] = request_data["log_date"][:4]
         if request_data.get("hours_approved", None) is None:
             request_data["hours_approved"] = False
         if request_data.get("notes", None) is None:
             request_data["notes"] = ""
-        if (request_data.get("hours_submitted", None) is None or request_data.get("hours_submitted", None).strip() == '') \
+        if (request_data.get("hours_submitted", None) is None or request_data.get("hours_submitted",
+                                                                                  None).strip() == '') \
                 or ((float(request_data.get("hours_submitted", "0").strip())) < 0.0):
             if request_data.get("start_time", None) is not None and request_data.get("end_time", None) is not None:
                 timediff = (datetime.datetime.strptime(request_data["end_time"],
-                                                      '%Y-%m-%dT%H:%M:%S.%fZ') - datetime.datetime.strptime(
-                    request_data["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')).total_seconds()/3600
+                                                       '%Y-%m-%dT%H:%M:%S.%fZ') - datetime.datetime.strptime(
+                    request_data["start_time"], '%Y-%m-%dT%H:%M:%S.%fZ')).total_seconds() / 3600
                 if round(timediff, 1) < 0:
                     timediff = 0
                 request_data["hours_submitted"] = str(round(timediff, 1))
@@ -168,7 +171,6 @@ def query_timelog_email(email, start_date, end_date):
     saved_time = TimeLogs.objects.all().filter(student_email=email, log_date__lte=end_date,
                                                log_date__gte=start_date).order_by('log_date')
     saved_time_serializer = json.loads(serializers.serialize('json', saved_time))
-    # print("Data: {}".format(saved_time_serializer))
     saved_data = dict()
     for sv_data in saved_time_serializer:
         if sv_data.get('fields', None):
@@ -184,6 +186,9 @@ def query_sp_email(email, semester=None):
     sp_item_serializer = query_student_placements_email(email, semester)
     if len(sp_item_serializer) > 0:
         sp_item_serializer = sp_item_serializer[0]['fields']
+        with open("config.json") as json_config_file:
+            config = json.load(json_config_file)
+        sp_item_serializer["semester"] = config["semester"][sp_item_serializer["semester"]]["name"]
     else:
         sp_item_serializer = dict()
     return sp_item_serializer
@@ -197,6 +202,9 @@ def query_sp_uin(uin, semester=None):
     sp_item_serializer = query_student_placements_uin(uin, semester)
     if len(sp_item_serializer) > 0:
         sp_item_serializer = sp_item_serializer[0]['fields']
+        with open("config.json") as json_config_file:
+            config = json.load(json_config_file)
+        sp_item_serializer["semester"] = config["semester"][sp_item_serializer["semester"]]["name"]
     else:
         sp_item_serializer = dict()
     return sp_item_serializer
@@ -290,3 +298,9 @@ class TimeLogViewsEmailGet(APIView):
         sp_data_serializer["end_date"] = end_date
         context = {"status": "success", "message": message, "data": sp_data_serializer}
         return render(request, f'time_logs/{visithtml}', context)
+
+
+def get_time_logs_supervisor(kwargs):
+    time_logs = TimeLogs.objects.all().filter(**kwargs)
+    time_logs_serializer = json.loads(serializers.serialize('json', time_logs))
+    return time_logs_serializer

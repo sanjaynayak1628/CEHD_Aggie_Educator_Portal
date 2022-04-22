@@ -17,6 +17,7 @@ class TimeLogs(models.Model):
     hours_approved = models.BooleanField()
     approval_due_date = models.DateField()
     semester = models.CharField(max_length=20)
+    semester_year = models.CharField(max_length=4)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     date_submitted = models.DateField(default=datetime.date.today)
