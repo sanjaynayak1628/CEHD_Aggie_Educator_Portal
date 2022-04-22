@@ -5,7 +5,7 @@
 {% block content %}
 {% if user.is_authenticated%}
 <div class="container body_content" style="margin-top: 30px;">
-    <h1>View Your Submitted Timesheets</h1>
+    <h1>View Submitted Timesheets</h1>
     <!-- Contains non editable data from database -->
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
@@ -34,18 +34,33 @@
             <div class="col">
                 <strong>Co-Op Teacher email:</strong> <span id="coop_teacher_email">{{data.cooperating_teacher_email}}</span>
             </div>
-            <div class="col">
-                <strong>Start Date:</strong> <span id="start_date"><input type="date" name="studentstart_date" id="studentstart_date" ></span>
-            </div>
-            <div class="col">
-                <strong>End Date:</strong> <span id="end_date"><input type="date" name="studentend_date" id="studentend_date" ></span>
-            </div>
+            {% if data|get_value:'start_date' %}
+                <div class="col">
+                    <strong>Start Date:</strong> <span id="start_date"><input type="date" name="studentstart_date" id="studentstart_date" value="{{ data|get_value:'start_date' }}"></span>
+                </div>
+            {% else %}
+                <div class="col">
+                    <strong>Start Date:</strong> <span id="start_date"><input type="date" name="studentstart_date" id="studentstart_date" ></span>
+                </div>
+            {% endif %}
+
+            {% if data|get_value:'end_date' %}
+                <div class="col">
+                    <strong>End Date:</strong> <span id="end_date"><input type="date" name="studentend_date" id="studentend_date" value="{{ data|get_value:'end_date' }}"></span>
+                </div>
+            {% else %}
+                <div class="col">
+                    <strong>End Date:</strong> <span id="end_date"><input type="date" name="studentend_date" id="studentend_date" ></span>
+                </div>
+            {% endif %}
         </div>
         <div class="row" style="padding: 1%;">
-            <div class="text-center">
+            <div class="col" style="margin: 0 auto;text-align:center;">
                 <button onClick="gettimesheetsbydate()" class="btn btn-primary" id="view_selected_timesheets">View Selected Timesheets</button>
             </div>
-
+            <div class="col" style="margin: 0 auto;text-align:center;">
+                <button onClick="location.href='/timelogs/student/email/{{data.student_email}}'" class="btn btn-primary" id="submit_timesheets">Submit Timesheets</button>
+            </div>
         </div>
     </div>
 

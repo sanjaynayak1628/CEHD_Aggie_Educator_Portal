@@ -161,7 +161,7 @@
                 let hours_approved = i + '_hours_approved'
                 dataObj.hours_approved = formData.get(hours_submitted).toUpperCase() === 'YES'
                 let approval_due_date = '7_date'
-                dataObj.approval_due_date = formData.get(approval_due_date)
+                // dataObj.approval_due_date = formData.get(approval_due_date)
                 let semester = document.getElementById('student_semester').innerText
                 dataObj.semester = getSemester(semester)
                 let start_time = i + '_stime'
