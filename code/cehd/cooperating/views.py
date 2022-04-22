@@ -1,38 +1,34 @@
 """
 views file describing the APIs used in student time sheet API
 """
-import json
-import datetime
 from django.shortcuts import render
-from django.core import serializers
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.response import Response
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email import encoders
-import os
-
-
 
 
 class CoopViews(APIView):
     """
     GET function to view the coop time sheets from the DB
     """
+
     def get(self, request, email, start_date=None, end_date=None, semester=None, status=None, year=None):
         """
         GET function implementation
         """
         print(f'{email}--{start_date}--{end_date}--{semester}--{status}--{year}')
-        return render(request, f'cooperating/cooperatingview.html')
+        return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
+
 
 class CoopSubmit(APIView):
     """
     POST function to approve/reject the coop time sheets to the DB
     """
+
     def post(self, request, approve):
         print(approve)
         smtpHost = "smtp.gmail.com"
@@ -40,34 +36,28 @@ class CoopSubmit(APIView):
         mailUname = 'seprojtestemail@gmail.com'
         mailPwd = 'khwdhcmpdpkdrfmt'
         fromEmail = 'seprojtestemail@gmail.com'
-            # mail body, recepients, attachment files
+        # mail body, recepients, attachment files
         # mailSubject = "test subject"
         # mailContentHtml = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an awesome library called <b>smtplib</b>"
-        recepientsMailList = ["manisha1@tamu.edu","maniii.dixit@gmail.com"]
-        if approve=="true":
-        # mail server parameters
+        recepientsMailList = ["manisha1@tamu.edu", "maniii.dixit@gmail.com"]
+        if approve == "true":
+            # mail server parameters
             mailSubject = "Timesheet Approved"
             mailContentHtml = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an awesome library called <b>smtplib</b>"
         else:
-        # mail server parameters
+            # mail server parameters
             mailSubject = "Timesheet Rejected"
             mailContentHtml = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an awesome library called <b>smtplib</b>"
-                 
+
             # attachmentFpaths = ["smtp.png", "poster.png"]
         sendEmail(smtpHost, smtpPort, mailUname, mailPwd, fromEmail,
-                    mailSubject, mailContentHtml, recepientsMailList)#, attachmentFpaths)
+                  mailSubject, mailContentHtml, recepientsMailList)  # , attachmentFpaths)
         print("execution complete...")
+        return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
 
 
-        return render(request, f'cooperating/cooperatingview.html')
-
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email.mime.multipart import MIMEMultipart
-from email import encoders
-import os
-def sendEmail(smtpHost, smtpPort, mailUname, mailPwd, fromEmail, mailSubject, mailContentHtml, recepientsMailList):#, attachmentFpaths):
+def sendEmail(smtpHost, smtpPort, mailUname, mailPwd, fromEmail, mailSubject, mailContentHtml, recepientsMailList):
+    # , attachmentFpaths):
     # create message object
     msg = MIMEMultipart()
     msg['From'] = fromEmail
@@ -76,14 +66,14 @@ def sendEmail(smtpHost, smtpPort, mailUname, mailPwd, fromEmail, mailSubject, ma
     # msg.attach(MIMEText(mailContentText, 'plain'))
     msg.attach(MIMEText(mailContentHtml, 'html'))
     # create file attachments
-#     for aPath in attachmentFpaths:
-#         # check if file exists
-#         part = MIMEBase('application', "octet-stream")
-#         part.set_payload(open(aPath, "rb").read())
-#         encoders.encode_base64(part)
-#         part.add_header('Content-Disposition',
-#                         'attachment; filename="{0}"'.format(os.path.basename(aPath)))
-#         msg.attach(part)
+    #     for aPath in attachmentFpaths:
+    #         # check if file exists
+    #         part = MIMEBase('application', "octet-stream")
+    #         part.set_payload(open(aPath, "rb").read())
+    #         encoders.encode_base64(part)
+    #         part.add_header('Content-Disposition',
+    #                         'attachment; filename="{0}"'.format(os.path.basename(aPath)))
+    #         msg.attach(part)
     # Send message object as email using smptplib
     s = smtplib.SMTP(smtpHost, smtpPort)
     s.starttls()
