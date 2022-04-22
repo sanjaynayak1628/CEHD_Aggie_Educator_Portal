@@ -25,8 +25,10 @@ class CoopSubmit(APIView):
     """
 
     def post(self, request, approve):
-        if approve == "true":
-            timesheet_approve()
-        else:
-            timesheet_reject()
+        print(request.data)
+        # uncomment later after completion
+        # if approve == "true":
+        #     timesheet_approve()
+        # else:
+        #     timesheet_reject()
         return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)

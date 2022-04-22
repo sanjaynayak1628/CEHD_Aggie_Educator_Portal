@@ -5,7 +5,7 @@
 {% block content %}
 {% if user.is_authenticated%}
 <div class="container body_content" style="margin-top: 30px;">
-    <h1>View Your Submitted Timesheets</h1>
+    <h1>Timesheets</h1>
     <!-- Contains non editable data from database -->
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
@@ -31,7 +31,7 @@
                     <div class="col-sm-6">
                         <strong>Semester:</strong> 
                         <span id="sem">
-                        <select id="coop_semester">
+                        <select id="coop_semester" style="width: 100%; box-sizing: border-box; height: 50%">
                             <option value="fall">FALL</option>
                             <option value="spring">SPRING</option>
                             <option value="summer">SUMMER</option>
@@ -40,7 +40,7 @@
                     <div class="col-sm-6">
                         <strong>Year:</strong> 
                         <span id="yr">
-                            <input type="number" name="year" id="coop_year">
+                            <input type="number" name="year" id="coop_year" style="width: 100%; box-sizing: border-box; height: 50%">
                         </span>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <form action="/coop/cooperatingteacher/submit/approve/true/" method="POST" id="coop_submit_form">
+    <form action="/coop/submit/approve/true/" method="POST" id="coop_submit_form">
         <div id="csrf_token">{% csrf_token %}</div>
         <div class="container rowpadding text-center">
             <table class="table table-bordered" id="timesheet_table">
@@ -155,10 +155,11 @@
                         <button type="submit" value="approve" class="btn btn-success" id="approve-timesheet" >Approve Timesheet</button>
                     </div>
                     <div class="col text-center">
-                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/cooperatingteacher/submit/approve/false/">Reject Timesheet</button>
+                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/submit/approve/false/">Reject Timesheet</button>
                     </div>
                 </div>
             </div>
+        </div>
     </form>
 </div>
 {% else %}
