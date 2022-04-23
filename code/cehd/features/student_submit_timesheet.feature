@@ -1,5 +1,9 @@
 # Created by Sanjay at 02-04-2022
 Feature: Student Timesheet Submit View
+  # As a student,
+  # so that a record of my attendance can be maintained
+  # I want to be able to submit timesheet
+
   Scenario: Student time log save
     Given I am a registered student
     When I click on the log in
