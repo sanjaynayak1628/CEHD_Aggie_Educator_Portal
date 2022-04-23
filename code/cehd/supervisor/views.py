@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from student_placements.views import query_supervisor_email, get_student_super_coop
-from time_logs.views import get_time_logs_supervisor
+from time_logs.views import get_time_logs_generic
 
 
 def query_sp_supervisor_coop(email, semester):
@@ -71,7 +71,7 @@ class SupervisorGet(APIView):
             kwargs["{}__gte".format(start_date)] = start_date
         if end_date:
             kwargs["{}__lte".format(end_date)] = end_date
-        time_logs_serializer = get_time_logs_supervisor(kwargs)
+        time_logs_serializer = get_time_logs_generic(kwargs)
         print(time_logs_serializer)
         context = {"status": "success", "message": "data retrieved", "data": time_logs_serializer}
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)

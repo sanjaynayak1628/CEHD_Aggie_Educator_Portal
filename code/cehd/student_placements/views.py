@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django.core import serializers
 from .models import StudentPlacements
 from core.models import Person
+from utils.utility import get_current_semester, get_current_year
 
 
 def query_student_details(email, uin=None):
@@ -116,3 +117,29 @@ def get_student_super_coop(supervisor_email, cooperating_teacher_email):
     for data in student_serializer:
         student_list_serializer.append(data["fields"]["student_email"])
     return student_list_serializer
+
+
+def get_coop_student_current(cooperating_teacher_email):
+    """
+    GET
+    """
+    semester, semester_ui = get_current_semester()
+    semester_year = get_current_year()
+    student_list = StudentPlacements.objects.all().filter(cooperating_teacher_email=cooperating_teacher_email,
+                                                        semester_year=semester_year,semester=semester).distinct("student_email")
+    student_serializer = json.loads(serializers.serialize('json', student_list))
+    student_current_serializer = dict()
+    student_current_serializer["cooperating_teacher_email"] = cooperating_teacher_email
+    student_current_serializer["semester"] = semester_ui
+    student_current_serializer["semester_year"] = semester_year
+    student_current_serializer["students"] = list()
+    for data in student_serializer:
+        if student_current_serializer.get("university_supervisor_email", None) is None:
+            student_current_serializer["university_supervisor_email"] = data["fields"]["university_supervisor_email"]
+        if student_current_serializer.get("university_supervisor", None) is None:
+            student_current_serializer["university_supervisor"] = data["fields"]["university_supervisor"]
+        if student_current_serializer.get("cooperating_teacher", None) is None:
+            student_current_serializer["cooperating_teacher"] = data["fields"]["cooperating_teacher"]
+        student_current_serializer["students"].append(query_student_details(data["fields"]["student_email"]))
+    return student_current_serializer, semester
+

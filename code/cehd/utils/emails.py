@@ -66,3 +66,13 @@ def timesheet_submit():
     mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \
                         "awesome library called <b>smtplib</b> "
     send_email(mail_subject, mail_content_html, recipients_mail_list)
+
+
+def timesheet_approve():
+    # mail server parameters
+    print("Inside timesheet approve email")
+    mail_subject = "Timesheet Approved!"
+    recipients_mail_list = RECIPIENTS_MAIL_LIST_SUBMIT
+    mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \
+                        "awesome library called <b>smtplib</b> "
+    send_email(mail_subject, mail_content_html, recipients_mail_list)

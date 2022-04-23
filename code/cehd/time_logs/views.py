@@ -13,6 +13,7 @@ from student_placements.views import query_student_placements_email, query_stude
 from .models import TimeLogs
 from .serializers import TimeLogsSerializer
 from utils.emails import timesheet_submit
+from utils.utility import get_current_week
 
 
 def get_approval_due_date(log_date, i):
@@ -213,19 +214,6 @@ def query_sp_uin(uin, semester=None):
     return sp_item_serializer
 
 
-def get_current_week():
-    """
-    Helper function to get the current week details
-    """
-
-    # add current week dates
-    today = datetime.date.today()
-    dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
-    week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-    week_dates = {week_day[i]: dates[i].strftime("%Y-%m-%d") for i in range(7)}
-    return week_dates
-
-
 def get_student_details(email, uin=None):
     """
     Helper function to get the data from Person DB based on email
@@ -303,7 +291,7 @@ class TimeLogViewsEmailGet(APIView):
         return render(request, f'time_logs/{visithtml}', context)
 
 
-def get_time_logs_supervisor(kwargs):
+def get_time_logs_generic(kwargs):
     time_logs = TimeLogs.objects.all().filter(**kwargs)
     time_logs_serializer = json.loads(serializers.serialize('json', time_logs))
     return time_logs_serializer
