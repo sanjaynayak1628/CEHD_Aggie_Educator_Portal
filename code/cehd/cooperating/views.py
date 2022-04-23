@@ -5,7 +5,6 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from utils.emails import timesheet_approve, timesheet_reject
 from student_placements.views import get_coop_student_current
 from time_logs.views import get_time_logs_generic
 from time_logs.serializers import TimeLogsSerializer
@@ -23,21 +22,6 @@ class CoopViews(APIView):
         """
         GET function implementation
         """
-        return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
-
-
-class CoopSubmit(APIView):
-    """
-    POST function to approve/reject the coop time sheets to the DB
-    """
-
-    def post(self, request, approve):
-        print(request.data)
-        # uncomment later after completion
-        # if approve == "true":
-        #     timesheet_approve()
-        # else:
-        #     timesheet_reject()
         return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
 
 
@@ -100,7 +84,7 @@ def save_time_logs(request):
 
 class CoopTimeLogSubmit(APIView):
     """
-    POST function to submit the time sheets
+    POST function to approve/reject the coop time sheets to the DB
     """
 
     def post(self, request):
@@ -109,22 +93,21 @@ class CoopTimeLogSubmit(APIView):
         status_mode = status.HTTP_200_OK
         if request_status_fail:
             response_dict["status"] = "error"
-            response_dict["message"] = "Time entered for dates: {} are not submitted. Please resubmit " \
+            response_dict["message"] = "Time entries for dates: {} are not approved. Please reapprove " \
                                        "again!".format(", ".join(request_status_fail))
             response_dict["data"] = response_data
             status_mode = status.HTTP_400_BAD_REQUEST
         else:
             response_dict["status"] = "success"
-            response_dict["message"] = "Entered time entries submitted successfully"
+            response_dict["message"] = "Time entries approved successfully"
             response_dict["data"] = response_data
-            # send the email to cooperating teacher
             cooperating_teacher_email = request.data.get("cooperating_teacher_email", "")
             cooperating_teacher_name = request.data.get("cooperating_teacher_name", "")
             if cooperating_teacher_email == "":
                 response_dict["status"] = "error"
                 status_mode = status.HTTP_403_FORBIDDEN
-                response_dict["message"] = "Entered time not submitted. Co-operating teacher not found. " \
-                                           "Please save the time entries."
+                response_dict["message"] = "Entered time not approved. Co-operating teacher not found."
+            # send email notification to student regarding approval of timesheets
             if status_mode == status.HTTP_200_OK:
                 timesheet_approve()
         return Response(response_dict, status=status_mode)

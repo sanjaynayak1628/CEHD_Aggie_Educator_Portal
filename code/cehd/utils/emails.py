@@ -6,7 +6,6 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
 from dotenv import load_dotenv
 
 # load environment variables from .env
@@ -23,6 +22,9 @@ RECIPIENTS_MAIL_LIST_SUBMIT = json.loads(os.getenv('RECIPIENTS_MAIL_LIST_SUBMIT'
 
 
 def send_email(mail_subject, mail_content_html, recipients_mail_list):
+    """
+    Helper function to send the email as per the recipients
+    """
     # create message object
     msg = MIMEMultipart()
     msg['From'] = FROM_EMAIL
@@ -41,6 +43,9 @@ def send_email(mail_subject, mail_content_html, recipients_mail_list):
 
 
 def timesheet_approve():
+    """
+    Send email to student if time sheets are approved by the cooperating teacher
+    """
     # mail server parameters
     mail_subject = "Timesheet Approved"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_APPROVE
@@ -50,6 +55,9 @@ def timesheet_approve():
 
 
 def timesheet_reject():
+    """
+    Send email to student if time sheets are rejected by the cooperating teacher
+    """
     # mail server parameters
     mail_subject = "Timesheet Rejected"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_REJECT
@@ -59,19 +67,12 @@ def timesheet_reject():
 
 
 def timesheet_submit():
+    """
+    Send email to cooperating teacher if time sheets are submitted by the student
+    """
     # mail server parameters
     print("Inside timesheet submit email")
     mail_subject = "Timesheet Submitted"
-    recipients_mail_list = RECIPIENTS_MAIL_LIST_SUBMIT
-    mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \
-                        "awesome library called <b>smtplib</b> "
-    send_email(mail_subject, mail_content_html, recipients_mail_list)
-
-
-def timesheet_approve():
-    # mail server parameters
-    print("Inside timesheet approve email")
-    mail_subject = "Timesheet Approved!"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_SUBMIT
     mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \
                         "awesome library called <b>smtplib</b> "

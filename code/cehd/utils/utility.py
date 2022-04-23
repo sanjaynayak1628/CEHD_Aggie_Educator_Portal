@@ -6,7 +6,6 @@ def get_current_week():
     """
     Helper function to get the current week details
     """
-
     # add current week dates
     today = datetime.date.today()
     dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
@@ -19,7 +18,6 @@ def get_current_semester():
     """
     Helper function to get the current semester details
     """
-
     with open("config.json") as json_config_file:
         config = json.load(json_config_file)
     semester = None

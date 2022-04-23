@@ -85,10 +85,13 @@ def save_time_logs(request):
 
 class TimeLogViewsSubmit(APIView):
     """
-    POST function to submit the time sheets
+    Submit the time sheets entered by the student
     """
 
     def post(self, request):
+        """
+        POST function to submit the time sheets
+        """
         response_data, request_status_fail = save_time_logs(request)
         response_dict = dict()
         status_mode = status.HTTP_200_OK
@@ -117,12 +120,12 @@ class TimeLogViewsSubmit(APIView):
 
 class TimeLogViewsSave(APIView):
     """
-    POST function to save the time sheets into the DB
+    Save time sheets to the DB
     """
 
     def post(self, request):
         """
-        POST function implementation
+        POST function implementation to save the time sheets into the DB
         """
         response_data, request_status_fail = save_time_logs(request)
         if request_status_fail:
@@ -225,12 +228,12 @@ def get_student_details(email, uin=None):
 
 class TimeLogViewsUinGet(APIView):
     """
-    GET function to get the data from time logs DB based on UIN
+    Get the data from time logs DB based on UIN
     """
 
     def get(self, request, uin, start_date=None, end_date=None, semester=None):
         """
-        GET function implementation
+        GET function implementation to get the data from time logs DB based on UIN
         """
         message = ""
         if not start_date and not end_date:
@@ -255,18 +258,18 @@ class TimeLogViewsUinGet(APIView):
 
 class TimeLogViewsEmailGet(APIView):
     """
-    GET function to get the data from time logs DB based on Email
+    Get the data from time logs DB based on email
     """
 
     def get(self, request, email, start_date=None, end_date=None, semester=None, prev=0):
         """
-        GET function implementation
+        GET function implementation to get the time logs data based on email
         """
         message = ""
-        visithtml = "studentview.html"
+        visit_html = "studentview.html"
         if not start_date and not end_date:
             if prev == 0:
-                visithtml = "student.html"
+                visit_html = "student.html"
             today = datetime.date.today()
             dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
             start_date = dates[0].strftime("%Y-%m-%d")
@@ -288,7 +291,7 @@ class TimeLogViewsEmailGet(APIView):
         sp_data_serializer["start_date"] = start_date
         sp_data_serializer["end_date"] = end_date
         context = {"status": "success", "message": message, "data": sp_data_serializer}
-        return render(request, f'time_logs/{visithtml}', context)
+        return render(request, f'time_logs/{visit_html}', context)
 
 
 def get_time_logs_generic(kwargs):

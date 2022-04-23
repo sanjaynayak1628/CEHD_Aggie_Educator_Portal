@@ -1,6 +1,5 @@
 import datetime
 import json
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,6 +10,9 @@ from utils.utility import get_current_semester, get_current_year
 
 
 def query_student_details(email, uin=None):
+    """
+    Helper function to get the student details from email or UIN
+    """
     if not email and not uin:
         pass
     person_details = None
@@ -37,6 +39,9 @@ def query_student_details(email, uin=None):
 
 
 def query_student_placements_email(email, semester):
+    """
+    Helper function to query the student placements table for information based on student email and/or semester
+    """
     with open("config.json") as json_config_file:
         config = json.load(json_config_file)
     if not semester:
@@ -47,12 +52,16 @@ def query_student_placements_email(email, semester):
             if sem_start <= today_date <= sem_end:
                 semester = k
                 break
-    sp_items = StudentPlacements.objects.all().filter(student_email=email, semester=semester).distinct("student_email", "semester")
+    sp_items = StudentPlacements.objects.all().filter(student_email=email, semester=semester).distinct("student_email",
+                                                                                                       "semester")
     sp_item_serializer = json.loads(serializers.serialize('json', sp_items))
     return sp_item_serializer
 
 
 def query_student_placements_uin(uin, semester):
+    """
+    Helper function to query the student placements table for information based on student UIN and/or semester
+    """
     with open("config.json") as json_config_file:
         config = json.load(json_config_file)
     if not semester:
@@ -69,13 +78,16 @@ def query_student_placements_uin(uin, semester):
 
 
 def query_supervisor_email(email, semester):
+    """
+    Helper function to query the student placements table for information based on supervisor email and/or semester
+    """
     kwargs = dict()
     with open("config.json") as json_config_file:
         config = json.load(json_config_file)
     kwargs["university_supervisor_email"] = email
     if semester:
         kwargs["semester"] = config["reverse_semester"][semester]
-    sp_items = StudentPlacements.objects.all().filter(**kwargs)\
+    sp_items = StudentPlacements.objects.all().filter(**kwargs) \
         .distinct("university_supervisor_email", "cooperating_teacher_email")
     sp_item_serializer = json.loads(serializers.serialize('json', sp_items))
     return sp_item_serializer
@@ -83,9 +95,13 @@ def query_supervisor_email(email, semester):
 
 class StudentPlacementsGet(APIView):
     """
-    GET
+    Query the student placements table for information based on student email and/or semester
     """
+
     def get(self, request, email, semester=None):
+        """
+        GET function to query the student placements table for information based on student email and/or semester
+        """
         sp_item_serializer = query_student_placements_email(email, semester)
         if len(sp_item_serializer) > 0:
             sp_item_serializer = sp_item_serializer[0]
@@ -96,9 +112,13 @@ class StudentPlacementsGet(APIView):
 
 class SupervisorGet(APIView):
     """
-    GET
+    Query the student placements table for information based on supervisor email and/or semester
     """
+
     def get(self, request, email, semester=None):
+        """
+        GET function to query the student placements table for information based on supervisor email and/or semester
+        """
         sp_item_serializer = query_supervisor_email(email, semester)
         if len(sp_item_serializer) < 0:
             sp_item_serializer = None
@@ -107,10 +127,10 @@ class SupervisorGet(APIView):
 
 def get_student_super_coop(supervisor_email, cooperating_teacher_email):
     """
-    GET
+    Helper function to query the student placements table for information based on supervisor email and cooperating teacher email
     """
     student_list = StudentPlacements.objects.all().filter(university_supervisor_email=supervisor_email,
-                                                          cooperating_teacher_email=cooperating_teacher_email)\
+                                                          cooperating_teacher_email=cooperating_teacher_email) \
         .distinct("student_email")
     student_serializer = json.loads(serializers.serialize('json', student_list))
     student_list_serializer = list()
@@ -121,12 +141,13 @@ def get_student_super_coop(supervisor_email, cooperating_teacher_email):
 
 def get_coop_student_current(cooperating_teacher_email):
     """
-    GET
+    Helper function to query the student placements table for students information based on cooperating teacher email and
+    semester
     """
     semester, semester_ui = get_current_semester()
     semester_year = get_current_year()
     student_list = StudentPlacements.objects.all().filter(cooperating_teacher_email=cooperating_teacher_email,
-                                                        semester_year=semester_year,semester=semester).distinct("student_email")
+                                                          semester_year=semester_year, semester=semester).distinct("student_email")
     student_serializer = json.loads(serializers.serialize('json', student_list))
     student_current_serializer = dict()
     student_current_serializer["cooperating_teacher_email"] = cooperating_teacher_email
@@ -142,4 +163,3 @@ def get_coop_student_current(cooperating_teacher_email):
             student_current_serializer["cooperating_teacher"] = data["fields"]["cooperating_teacher"]
         student_current_serializer["students"].append(query_student_details(data["fields"]["student_email"]))
     return student_current_serializer, semester
-

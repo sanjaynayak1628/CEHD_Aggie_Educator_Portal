@@ -7,6 +7,6 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
         django_get_or_create = ('username', 'email')
 
-    # Defaults (can be overrided)
+    # Defaults (can be override)
     username = 'john.doe'
     email = 'john.doe@example.com'

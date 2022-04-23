@@ -34,11 +34,11 @@ def query_sp_supervisor_coop(email, semester):
 
 class SupervisorCoopView(APIView):
     """
-    Get function to view the time sheets with co op and student view
+    Get the list of cooperating teachers under the supervisor
     """
     def get(self, request, email, semester=None):
         """
-        GET function implementation
+        GET function implementation to get the list of cooperating teachers under the supervisor
         """
 
         coop_all = query_sp_supervisor_coop(email, semester)
@@ -49,9 +49,12 @@ class SupervisorCoopView(APIView):
 
 class SupervisorGet(APIView):
     """
-    Class to get the time logs for each selected cooperating teacher under the supervisor
+    Get the time logs for each selected cooperating teacher under the supervisor
     """
     def get(self, request, super_email, coop_email, semester=None, year=None, start_date=None, end_date=None):
+        """
+        GET function to get the time logs for each selected cooperating teacher under the supervisor
+        """
         context = {"status": "success", "message": ""}
         if semester is None and year is None and start_date is None and end_date is None:
             message = "Please enter valid filters!"
