@@ -13,6 +13,18 @@ from time_logs.models import TimeLogs
 from utils.emails import timesheet_approve
 
 
+class CoopViews(APIView):
+    """
+    GET function to view the coop time sheets from the DB
+    """
+
+    def get(self, request, email, start_date=None, end_date=None, semester=None, approved=None, year=None):
+        """
+        GET function implementation
+        """
+        return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
+
+
 class CoopStudentCurrent(APIView):
     """
     GET function to get current semester student details of Cooperating View
@@ -32,6 +44,9 @@ class CoopStudentCurrent(APIView):
         student_current_serializer["timelogs"] = list()
         for tl in time_logs_serializer:
             student_current_serializer["timelogs"].append(tl["fields"])
+
+        # enable or disable the approve/reject button
+        student_current_serializer["approve"] = "true"
         print(student_current_serializer)
         context = dict()
         context['data'] = student_current_serializer
