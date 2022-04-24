@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from student_placements.views import get_coop_student_current
 from time_logs.views import get_time_logs_generic
-from time_logs.serializers import TimeLogsSerializer
+from time_logs.serializers import TimeLogsSerializerApprove
 from core.models import Person
 from time_logs.models import TimeLogs
 from utils.emails import timesheet_approve
@@ -90,7 +90,7 @@ def save_time_logs(request):
     for request_data in request.data.get("data", []):
         idx += 1
         request_data["hours_approved"] = True
-        time_log_serializer = TimeLogsSerializer(data=request_data)
+        time_log_serializer = TimeLogsSerializerApprove(data=request_data)
         if time_log_serializer.is_valid():
             try:
                 # update the entries, if UIN and log date present or create a new one
@@ -107,6 +107,7 @@ def save_time_logs(request):
                 # print("Exception: {}".format(e))
                 request_status_fail.append(request_data.get("log_date", None))
         else:
+            # print("Error: ")
             # print(time_log_serializer.errors)
             request_status_fail.append(request_data.get("log_date", None))
     return response_data, request_status_fail
@@ -117,7 +118,7 @@ class CoopTimeLogSubmit(APIView):
     POST function to approve/reject the coop time sheets to the DB
     """
 
-    def post(self, request):
+    def post(self, request, email, approve):
         response_data, request_status_fail = save_time_logs(request)
         response_dict = dict()
         status_mode = status.HTTP_200_OK

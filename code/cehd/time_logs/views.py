@@ -41,7 +41,7 @@ def save_time_logs(request):
     for request_data in request.data.get("data", []):
         idx += 1
         # change the semester to reverse semester values
-        request_data["semester"] = config["reverse_semester"][request_data["semester"]]
+        request_data["semester"] = config["reverse_semester"][request_data["semester"].lower()]
         if request_data.get("approval_due_date", None) is None:
             if approval_due_date is None:
                 approval_due_date = get_approval_due_date(request_data.get("log_date", None), idx)
