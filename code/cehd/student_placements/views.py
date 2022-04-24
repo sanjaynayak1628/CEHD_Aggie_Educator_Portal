@@ -9,6 +9,32 @@ from core.models import Person
 from utils.utility import get_current_semester, get_current_year
 
 
+def query_student_list_details(email):
+    """
+    Helper function to get the student details from list of emails
+    """
+    if not email:
+        pass
+    person_tmp = Person.objects.all().filter(primary_email__in=email)
+    person_tmp = json.loads(serializers.serialize('json', person_tmp))
+    person_details_list = list()
+    person_details = dict()
+    for pd in person_tmp:
+        tmp = dict()
+        tmp["first_name"] = pd["fields"]["first_name"]
+        tmp["middle_name"] = pd["fields"]["middle_name"]
+        tmp["last_name"] = pd["fields"]["last_name"]
+        tmp["primary_email"] = pd["fields"]["primary_email"]
+        if pd["fields"].get("middle_name", "").strip() == "":
+            tmp["full_name"] = pd["fields"]["first_name"] + " " + pd["fields"]["last_name"]
+        else:
+            tmp["full_name"] = pd["fields"]["first_name"] + " " + pd["fields"]["middle_name"].strip() \
+                               + " " + pd["fields"]["last_name"]
+        person_details_list.append(pd)
+        person_details[pd["fields"]["primary_email"]] = tmp["full_name"]
+    return person_details, person_details_list
+
+
 def query_student_details(email, uin=None):
     """
     Helper function to get the student details from email or UIN

@@ -73,8 +73,8 @@ class CoopStudentCurrent(APIView):
             student_current_serializer["approve"] = "true"
         context = dict()
         context['data'] = student_current_serializer
-        print("Student time serializer")
-        print(student_current_serializer)
+        # print("Student time serializer")
+        # print(student_current_serializer)
         return render(request, f'cooperating/cooperatinginitial.html', status=status.HTTP_200_OK, context=context)
 
 
