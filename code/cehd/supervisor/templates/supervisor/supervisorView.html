@@ -7,7 +7,6 @@
     <h1>View Timesheets of Cooperating Teachers under you</h1>
     <!-- Contains non editable data from database -->
 
-    {{data}}
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
             <div class="col">
@@ -109,7 +108,7 @@
 
     </div>
 
-    <form action="/coop/cooperatingteacher/submit/approve/true/" method="POST" id="coop_submit_form">
+    <form action="" method="POST" id="supervisor_form">
         <div id="csrf_token">{% csrf_token %}</div>
         <div class="container rowpadding text-center">
             <table class="table table-bordered" id="timesheet_table">

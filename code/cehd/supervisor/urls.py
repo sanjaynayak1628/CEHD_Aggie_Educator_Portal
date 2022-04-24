@@ -16,4 +16,6 @@ urlpatterns = [
          SupervisorCoopGet.as_view(), name='supervisor_coop_st_end_get_time_logs'),
     path('email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/year/<str:year>/start/<str:start_date>/end/<str:end_date>',
          SupervisorCoopGet.as_view(), name='supervisor_get_time_logs_all'),
+    path('email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/start/<str:start_date>/end/<str:end_date>',
+         SupervisorCoopGet.as_view(), name='supervisor_coop_sem__dates_get_time_logs'),
 ]
