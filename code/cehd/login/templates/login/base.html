@@ -79,7 +79,8 @@
             } else {
                 console.log("Not found")
             }
-
+            
+            supStartEndDateChange()
             
         };
 
@@ -164,6 +165,9 @@
 
         function supStartEndDateChange() {
             let getButton = document.getElementById('view_selected_timesheets');
+            if(getButton == null){
+                return
+            }
             let startDate = document.getElementById('start_date').value;
             let endDate = document.getElementById('end_date').value;
 
@@ -239,7 +243,7 @@
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                     // Request finished. Do processing here.
                     alert(JSON.parse(this.responseText).message)
-                    window.location.href = '/timelogs/student/email/' + document.getElementById('student_email').innerText
+                    window.location.href = '/student/email/' + document.getElementById('student_email').innerText
                 }
             }
             xhr.send(JSON.stringify(jsonObj))
@@ -252,15 +256,18 @@
 
             let submitId = event.submitter.id;
             console.log(submitId)
-            let submitUrl = '/timelogs/student/save/';
+            let submitUrl = '/student/save/';
             if (submitId === "submit-timesheet") {
-                submitUrl = '/timelogs/student/submit/';
+                submitUrl = '/student/submit/';
                 let jsonObj = getFormDataSaveSubmit(formData);
                 refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
             } else if (submitId === "approve-timesheet") {
                 // submitUrl = '/timelogs/student/submit/';
                 // let jsonObj = getFormDataSaveSubmit(formData);
                 // refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
+            } else if (submitId = "save-timesheet") {
+                let jsonObj = getFormDataSaveSubmit(formData);
+                refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
             }
         }
 

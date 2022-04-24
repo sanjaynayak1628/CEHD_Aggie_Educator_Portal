@@ -48,8 +48,13 @@
                         required>
                         <option value="" disabled selected>Select Cooperating Teacher</option>
                         {% for teacher in data.cooperating_teachers %}
+                        {% if data.cooperating_teacher_email_selected == teacher.cooperating_teacher_email%}
+                        <option value="{{ teacher.cooperating_teacher_email }}" selected>
+                            {{ teacher.cooperating_teacher }} ({{teacher.cooperating_teacher_email}})</option>
+                        {% else %}
                         <option value="{{ teacher.cooperating_teacher_email }}">
                             {{ teacher.cooperating_teacher }} ({{teacher.cooperating_teacher_email}})</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                 </span>
