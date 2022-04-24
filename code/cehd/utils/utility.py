@@ -14,6 +14,25 @@ def get_current_week():
     return week_dates
 
 
+def get_previous_current_week():
+    """
+    Helper function to get the current and previous week details
+    """
+    # get current week dates
+    dates = dict()
+    today = datetime.date.today()
+    week_day = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    current_dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
+    current_week_dates = {week_day[i]: current_dates[i].strftime("%Y-%m-%d") for i in range(7)}
+    dates["current"] = current_week_dates
+
+    # get previous week dates
+    previous_dates = [dt - datetime.timedelta(days=7) for dt in current_dates]
+    previous_week_dates = {week_day[i]: previous_dates[i].strftime("%Y-%m-%d") for i in range(7)}
+    dates["previous"] = previous_week_dates
+    return dates
+
+
 def get_current_semester():
     """
     Helper function to get the current semester details
