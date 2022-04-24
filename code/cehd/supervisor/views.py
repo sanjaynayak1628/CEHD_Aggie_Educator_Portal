@@ -45,7 +45,7 @@ class SupervisorCoopView(APIView):
         """
 
         coop_all = query_sp_supervisor_coop(super_email, semester)
-        print(coop_all)
+        # print(coop_all)
         context = {"status": "success", "message": "data retrieved", "data": coop_all}
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)
 
@@ -64,8 +64,26 @@ class SupervisorCoopGet(APIView):
         super_coop_data = dict()
         super_coop_data["university_supervisor_email"] = super_email
         super_coop_data["cooperating_teacher_email"] = coop_email
-        super_coop_data["university_supervisor"] = details[0]["university_supervisor"]
-        super_coop_data["cooperating_teacher"] = details[0]["cooperating_teacher"]
+        super_coop_data["cooperating_teachers"] = list()
+        super_coop_data["years"] = list()
+        sp_item_serializer = query_supervisor_email(super_email, None)
+        if len(sp_item_serializer) > 0:
+            years = set()
+            for d in sp_item_serializer:
+                data = d["fields"]
+                coop = dict()
+                if coop.get("university_supervisor_name", None) is None:
+                    super_coop_data["university_supervisor_name"] = data["university_supervisor"]
+                coop["cooperating_teacher"] = data["cooperating_teacher"]
+                coop["cooperating_teacher_email"] = data["cooperating_teacher_email"]
+                if data["cooperating_teacher_email"] == coop_email:
+                    super_coop_data["cooperating_teacher_selected"] = data["cooperating_teacher"]
+                    super_coop_data["cooperating_teacher_email_selected"] = data["cooperating_teacher_email"]
+                super_coop_data["cooperating_teachers"].append(coop)
+                years.add(data["semester_year"])
+            years = sorted(years)
+            super_coop_data["years"] = list(years)
+
         kwargs = dict()
         student_list = get_student_super_coop(super_email, coop_email)
         kwargs["student_email__in"] = student_list
@@ -90,5 +108,5 @@ class SupervisorCoopGet(APIView):
             super_coop_data["timelogs"].append(tl["fields"])
 
         print(super_coop_data)
-        context = {"status": "success", "message": "data retrieved", "data": time_logs_serializer}
+        context = {"status": "success", "message": "data retrieved", "data": super_coop_data}
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)

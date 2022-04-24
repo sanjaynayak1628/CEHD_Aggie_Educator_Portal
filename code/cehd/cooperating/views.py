@@ -13,30 +13,6 @@ from time_logs.models import TimeLogs
 from utils.emails import timesheet_approve
 
 
-class CoopViews(APIView):
-    """
-    GET function to view the coop time sheets from the DB
-    """
-
-    def get(self, request, email, start_date=None, end_date=None, semester=None, approved=None, year=None):
-        """
-        GET function implementation
-        """
-        return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
-
-
-class CoopApprove(APIView):
-    """
-    GET function to view the coop time sheets from the DB
-    """
-
-    def get(self, request):
-        """
-        GET function implementation
-        """
-        return render(request, f'cooperating/cooperatinginitial.html', status=status.HTTP_200_OK)
-
-
 class CoopStudentCurrent(APIView):
     """
     GET function to get current semester student details of Cooperating View
