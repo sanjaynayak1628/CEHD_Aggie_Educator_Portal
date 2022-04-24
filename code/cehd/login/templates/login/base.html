@@ -71,11 +71,16 @@
         }
         window.onload = function () {
             const form = document.getElementById('timelog_submit_form');
+            const form1 = document.getElementById('coop_submit_form');
             if (form != null) {
                 form.addEventListener('submit', handleTimelogSubmit);
+            } else if (form1 != null) {
+                form1.addEventListener('submit', handleTimelogSubmit);
             } else {
                 console.log("Not found")
             }
+
+            
         };
 
         function calculateTimeDiff(id) {
@@ -246,12 +251,17 @@
             let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].defaultValue
 
             let submitId = event.submitter.id;
+            console.log(submitId)
             let submitUrl = '/timelogs/student/save/';
             if (submitId === "submit-timesheet") {
                 submitUrl = '/timelogs/student/submit/';
+                let jsonObj = getFormDataSaveSubmit(formData);
+                refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
+            } else if (submitId === "approve-timesheet") {
+                // submitUrl = '/timelogs/student/submit/';
+                // let jsonObj = getFormDataSaveSubmit(formData);
+                // refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
             }
-            let jsonObj = getFormDataSaveSubmit(formData);
-            refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
         }
 
         // Below code sets format to the datetimepicker having id as datetime
