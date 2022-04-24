@@ -5,44 +5,54 @@
 {% block content %}
 {% if user.is_authenticated%}
 <div class="container body_content" style="margin-top: 30px;">
-    <h1>Submit Timesheets</h1>
+    <h1>Approve Timesheets</h1>
     <!-- Contains non editable data from database -->
+    
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Student Name:</strong> <span id="student_fullname">{{data.student.full_name}}</span>
+                <strong>Student Name: </strong> <span id="student_coopappr_fullname">{{data.students.0.full_name}}</span>
+            </div>
+            
+            <div class="col">
+                <strong>Supervisor Name:</strong> <span id="supervisor_coopappr_name">{{data.university_supervisor}}</span>
             </div>
             <div class="col">
-                <strong>Student UIN:</strong> <span id="student_uin">{{data.uin}}</span>
-            </div>
-            <div class="col">
-                <strong>Student email:</strong> <span id="student_email">{{data.student_email}}</span>
-            </div>
-        </div>
-        <div class="row" style="padding: 1%;">
-            <div class="col">
-                <strong>Semester:</strong> <span id="student_semester">{{data.semester|upper}}</span>
-            </div>
-            <div class="col">
-                <strong>Supervisor:</strong> <span id="supervisor_fullname">{{data.university_supervisor}}</span>
-            </div>
-            <div class="col">
-                <strong>Co-Op Teacher:</strong> <span id="coop_teacher_fullname">{{data.cooperating_teacher}}</span>
+                <strong>Coop Teacher Name:</strong> <span id="coop_coopappr_name">{{data.cooperating_teacher}}</span>        
             </div>
         </div>
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Co-Op Teacher email:</strong> <span id="coop_teacher_email">{{data.cooperating_teacher_email}}</span>
+                <strong>Student Email:</strong> <span id="student_coopappr_email">{{data.students.0.primary_email}}</span>
+            </div>
+            <div class="col">
+                <strong>Supervisor Email:</strong> <span id="supervisor_coopappr_email">{{data.university_supervisor_email}}</span>
+            </div>
+            <div class="col">
+                <strong>Coop Teacher Email:</strong> <span id="coop_coopappr_email">{{data.cooperating_teacher_email}}</span>
+            </div>
+                   
+        </div>
+        <div class="row" style="padding: 1%;">
+            <div class="col">
+                <strong>Semester:</strong> <span id="sem_coopappr">{{data.semester}}</span>        
+            </div>
+            <div class="col">
+                <strong>Year:</strong> <span id="year_coopappr">{{data.semester_year}}</span>
+            </div>
+            <div class="col">
+                       
             </div>
         </div>
         <div class="row" style="padding: 1%;">
             <div class="text-center">
-                <button onClick="location.href='/timelogs/student/email/{{data.student_email}}/prev/1'" class="btn btn-primary" id="view_previous_timesheets">View Previous Timesheets</button>
+                <button onClick="getTimesheetsByCoopFilters()" class="btn btn-primary" id="view_selected_timesheets">View Previous Timesheets</button>
             </div>
+
         </div>
     </div>
 
-    <form action="" method="post" id="timelog_submit_form">
+    <form action="/coop/submit/approve/true/" method="POST" id="coop_submit_form">
         <div id="csrf_token">{% csrf_token %}</div>
         <div class="container rowpadding text-center">
             <table class="table table-bordered" id="timesheet_table">
@@ -53,36 +63,37 @@
                         <th scope="col">Start Time</th>
                         <th scope="col">End Time</th>
                         <th scope="col">Total Hours</th>
-                        <th scope="col">Approved</th>
+                        <th scope="col">Hours To Approve</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for day_, date in data.current_week.items %}
+                    {% for d in data.timelogs %}
+                    
                     <tr>
                         <td>
+                            
                             <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date"
-                                value="{{date}}">
-
+                                value="{{d.log_date}}" disabled>
                         </td>
 
-                        {% if data.timelogs|get_value:date %}
+                        {% if d|get_value:'log_date' %}
                         <td>
                             <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes"
-                                value=" {{ data.timelogs|get_value:date|get_value:'notes' }}" class="form-text">
+                                value=" {{ d|get_value:'notes' }}" class="form-text" disabled>
                         </td>
                         <td>
                             <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime"
-                                value="{{ data.timelogs|get_value:date|get_value:'start_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)">
+                                value="{{ d|get_value:'start_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
                         </td>
                         <td>
                             <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime"
-                                value="{{ data.timelogs|get_value:date|get_value:'end_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)">
+                                value="{{ d|get_value:'end_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
                         </td>
                         <td>
                             <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours"
-                                value=" {{ data.timelogs|get_value:date|get_value:'hours_submitted' }}" class="form-text">
+                                value=" {{ d|get_value:'hours_submitted' }}" class="form-text" disabled>
                         </td>
-                        {% if data.timelogs|get_value:date|get_value:'hours_approved' %}
+                        {% if d|get_value:'hours_approved' %}
                         <td>
                             <span id="{{forloop.counter}}_hours_approved">Yes</span>
                         </td>
@@ -93,16 +104,16 @@
                         {% endif %}
                         {% else %}
                         <td>
-                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes" class="form-text">
+                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes" class="form-text" disabled>
                         </td>
                         <td>
-                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime">
+                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime" disabled>
                         </td>
                         <td>
-                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime">
+                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime" disabled>
                         </td>
                         <td>
-                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours" class="form-text">
+                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours" class="form-text" disabled>
                         </td>
                         <td>
                             <span id="{{forloop.counter}}_hours_approved">N/A</span>
@@ -116,13 +127,14 @@
             <div class="container row">
                 <div class="row" style="padding: 1%;">
                     <div class="col text-center">
-                        <button type="submit" class="btn btn-success" id="save-timesheet">Save Timesheet</button>
+                        <button type="submit" value="approve" class="btn btn-success" id="approve-timesheet" >Approve Timesheet</button>
                     </div>
                     <div class="col text-center">
-                        <button type="submit" class="btn btn-success" id="submit-timesheet">Submit Timesheet</button>
+                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/submit/approve/false/">Reject Timesheet</button>
                     </div>
                 </div>
             </div>
+        </div>
     </form>
 </div>
 {% else %}
