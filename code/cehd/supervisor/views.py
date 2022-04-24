@@ -39,12 +39,12 @@ class SupervisorCoopView(APIView):
     """
     Get the list of cooperating teachers under the supervisor
     """
-    def get(self, request, email, semester=None):
+    def get(self, request, super_email, semester=None):
         """
         GET function implementation to get the list of cooperating teachers under the supervisor
         """
 
-        coop_all = query_sp_supervisor_coop(email, semester)
+        coop_all = query_sp_supervisor_coop(super_email, semester)
         print(coop_all)
         context = {"status": "success", "message": "data retrieved", "data": coop_all}
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)
