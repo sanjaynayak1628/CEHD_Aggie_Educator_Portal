@@ -25,6 +25,18 @@ class CoopViews(APIView):
         return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
 
 
+class CoopApprove(APIView):
+    """
+    GET function to view the coop time sheets from the DB
+    """
+
+    def get(self, request):
+        """
+        GET function implementation
+        """
+        return render(request, f'cooperating/cooperatinginitial.html', status=status.HTTP_200_OK)
+
+
 class CoopStudentCurrent(APIView):
     """
     GET function to get current semester student details of Cooperating View
@@ -44,8 +56,10 @@ class CoopStudentCurrent(APIView):
         student_current_serializer["timelogs"] = list()
         for tl in time_logs_serializer:
             student_current_serializer["timelogs"].append(tl["fields"])
-        # print(student_current_serializer)
-        return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK, context=student_current_serializer)
+        print(student_current_serializer)
+        context = dict()
+        context['data'] = student_current_serializer
+        return render(request, f'cooperating/cooperatinginitial.html', status=status.HTTP_200_OK, context=context)
 
 
 def save_time_logs(request):
