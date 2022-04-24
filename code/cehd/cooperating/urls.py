@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CoopViews, CoopTimeLogSubmit, CoopStudentCurrent,CoopApprove
+from .views import CoopViews, CoopTimeLogSubmit, CoopStudentCurrent
 
 
 urlpatterns = [
