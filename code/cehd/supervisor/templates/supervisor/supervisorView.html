@@ -82,11 +82,11 @@
         <div class="row">
             <div class="col">
                 <strong>Start Date:</strong> <span id="start_date_"><input type="date" name="start_date" id="start_date"
-                        onchange="supStartEndDateChange()"></span>
+                        onchange="supStartEndDateChange()" value="{{data.start_date}}"></span>
             </div>
             <div class="col">
                 <strong>End Date:</strong> <span id="end_date_"><input type="date" name="end_date" id="end_date"
-                        onchange="supStartEndDateChange()"></span>
+                        onchange="supStartEndDateChange()" value="{{data.end_date}}"></span>
             </div>
         </div>
 
@@ -146,7 +146,7 @@
                         </td>
                         <td>
                             <p>
-                                Student Name
+                                {{data_i.student_name}}
                             </p>
                         </td>
                         <td>
@@ -160,8 +160,7 @@
                             </p>
                         </td>
                         <td>
-                            <!-- <input type="time" value="{{ data_i.start_time|slice:'11:16' }}" disabled> -->
-                            <p>{{ data_i.start_time|slice:'11:16' }}</p>
+                            <input type="time" value="{{ data_i.start_time|slice:'11:16' }}" disabled>
                         </td>
                         <td>
                             <input type="time" value="{{ data_i.end_time|slice:'11:16' }}" disabled>

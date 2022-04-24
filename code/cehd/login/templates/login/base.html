@@ -108,9 +108,9 @@
 
         function getTimesheetsByDate() {
             let startdate = document.getElementById('studentstart_date').value;
-            let enddate = document.getElementById('studentend_date').value;
+            let endDate = document.getElementById('studentend_date').value;
             let student_email = document.getElementById('student_email').innerText
-            window.location.href = '/student/email/' + student_email + "/start/" + startdate + "/end/" + enddate
+            window.location.href = '/student/email/' + student_email + "/start/" + startdate + "/end/" + endDate
         }
 
         function getTimesheetsByCoopFilters() {
@@ -148,7 +148,7 @@
                 } else if (semester == '' && year == '' && startDate != '' && endDate != '') {
                     window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/start/' + startDate + '/end/' + endDate;
                 } else if (semester != '' && year != '' && startDate != '' && endDate != '') {
-                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/start/' + startDate + '/end/' + enddate;
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
                 }
             }
             // window.location.href = '';
