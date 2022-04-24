@@ -90,7 +90,7 @@ class SupervisorCoopGet(APIView):
         if semester:
             with open("config.json") as json_config_file:
                 config = json.load(json_config_file)
-            kwargs["semester"] = config["reverse_semester"][semester]
+            kwargs["semester"] = config["reverse_semester"][semester.lower()]
             super_coop_data["semester"] = semester
         if year:
             kwargs["semester_year"] = year
