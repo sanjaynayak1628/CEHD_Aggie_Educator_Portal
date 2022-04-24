@@ -6,10 +6,13 @@ from student_placements.views import query_supervisor_email, get_student_super_c
 from time_logs.views import get_time_logs_generic
 
 
-def query_sp_supervisor_coop(email, semester):
-    sp_item_serializer = query_supervisor_email(email, semester)
+def query_sp_supervisor_coop(super_email, semester):
+    """
+    Helper function to get the list of cooperating teachers under the supervisor
+    """
+    sp_item_serializer = query_supervisor_email(super_email, semester)
     coop_dict = dict()
-    coop_dict["university_supervisor_email"] = email
+    coop_dict["university_supervisor_email"] = super_email
     coop_dict["cooperating_teachers"] = list()
     coop_dict["years"] = list()
     if len(sp_item_serializer) > 0:
@@ -28,7 +31,7 @@ def query_sp_supervisor_coop(email, semester):
         years = sorted(years)
         coop_dict["years"] = list(years)
     else:
-        coop_dict[email] = list()
+        coop_dict[super_email] = list()
     return coop_dict
 
 
@@ -47,7 +50,7 @@ class SupervisorCoopView(APIView):
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)
 
 
-class SupervisorGet(APIView):
+class SupervisorCoopGet(APIView):
     """
     Get the time logs for each selected cooperating teacher under the supervisor
     """
@@ -56,11 +59,11 @@ class SupervisorGet(APIView):
         GET function to get the time logs for each selected cooperating teacher under the supervisor
         """
         context = {"status": "success", "message": ""}
-        if semester is None and year is None and start_date is None and end_date is None:
-            message = "Please enter valid filters!"
-            context["message"] = message
-            context["data"] = list()
-            return render(request, f'supervisor/supervisorView.html', context)
+        # if semester is None and year is None and start_date is None and end_date is None:
+        #     message = "Please enter valid filters!"
+        #     context["message"] = message
+        #     context["data"] = list()
+        #     return render(request, f'supervisor/supervisorView.html', context)
         kwargs = dict()
         student_list = get_student_super_coop(super_email, coop_email)
         kwargs["student_email__in"] = student_list
