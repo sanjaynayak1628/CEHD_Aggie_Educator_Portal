@@ -147,7 +147,8 @@ def get_coop_student_current(cooperating_teacher_email):
     semester, semester_ui = get_current_semester()
     semester_year = get_current_year()
     student_list = StudentPlacements.objects.all().filter(cooperating_teacher_email=cooperating_teacher_email,
-                                                          semester_year=semester_year, semester=semester).distinct("student_email")
+                                                          semester_year=semester_year, semester=semester).distinct(
+        "student_email")
     student_serializer = json.loads(serializers.serialize('json', student_list))
     student_current_serializer = dict()
     student_current_serializer["cooperating_teacher_email"] = cooperating_teacher_email
@@ -163,3 +164,14 @@ def get_coop_student_current(cooperating_teacher_email):
             student_current_serializer["cooperating_teacher"] = data["fields"]["cooperating_teacher"]
         student_current_serializer["students"].append(query_student_details(data["fields"]["student_email"]))
     return student_current_serializer, semester
+
+
+def get_super_coop_details(supervisor_email, coop_email):
+    """
+    helper function to retrieve the supervisor and cooperating teacher details
+    """
+    detail = StudentPlacements.objects.all().filter(university_supervisor_email=supervisor_email,
+                                                    cooperating_teacher_email=coop_email)\
+        .distinct("university_supervisor_email", "cooperating_teacher_email")
+    detail_serializer = json.loads(serializers.serialize('json', detail))
+    return detail_serializer

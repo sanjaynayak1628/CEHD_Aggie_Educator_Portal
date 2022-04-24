@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
-from student_placements.views import query_supervisor_email, get_student_super_coop
+from student_placements.views import query_supervisor_email, get_student_super_coop, get_super_coop_details
 from time_logs.views import get_time_logs_generic
 
 
@@ -59,11 +59,13 @@ class SupervisorCoopGet(APIView):
         GET function to get the time logs for each selected cooperating teacher under the supervisor
         """
         context = {"status": "success", "message": ""}
-        # if semester is None and year is None and start_date is None and end_date is None:
-        #     message = "Please enter valid filters!"
-        #     context["message"] = message
-        #     context["data"] = list()
-        #     return render(request, f'supervisor/supervisorView.html', context)
+        details = get_super_coop_details(super_email, coop_email)
+        # create the data to be consumed by frontend
+        super_coop_data = dict()
+        super_coop_data["university_supervisor_email"] = super_email
+        super_coop_data["cooperating_teacher_email"] = coop_email
+        super_coop_data["university_supervisor"] = details[0]["university_supervisor"]
+        super_coop_data["cooperating_teacher"] = details[0]["cooperating_teacher"]
         kwargs = dict()
         student_list = get_student_super_coop(super_email, coop_email)
         kwargs["student_email__in"] = student_list
@@ -71,13 +73,22 @@ class SupervisorCoopGet(APIView):
             with open("config.json") as json_config_file:
                 config = json.load(json_config_file)
             kwargs["semester"] = config["reverse_semester"][semester]
+            super_coop_data["semester"] = semester
         if year:
             kwargs["semester_year"] = year
+            super_coop_data["semester_year"] = year
         if start_date:
             kwargs["{}__gte".format(start_date)] = start_date
+            super_coop_data["start_date"] = start_date
         if end_date:
             kwargs["{}__lte".format(end_date)] = end_date
+            super_coop_data["end_date"] = end_date
         time_logs_serializer = get_time_logs_generic(kwargs)
-        print(time_logs_serializer)
+
+        super_coop_data["timelogs"] = list()
+        for tl in time_logs_serializer:
+            super_coop_data["timelogs"].append(tl["fields"])
+
+        print(super_coop_data)
         context = {"status": "success", "message": "data retrieved", "data": time_logs_serializer}
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)
