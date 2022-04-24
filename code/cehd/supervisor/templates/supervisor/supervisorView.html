@@ -25,9 +25,23 @@
                 <span id="sem">
                     <select id="semesters" class="form-select">
                         <option value="" disabled selected>Select Semester</option>
+                        {% if data.semester == 'fall' %}
+                        <option value="fall" selected>FALL</option>
+                        {% else %}
                         <option value="fall">FALL</option>
+                        {% endif %}
+
+                        {% if data.semester == 'spring' %}
+                        <option value="spring" selected>SPRING</option>
+                        {% else %}
                         <option value="spring">SPRING</option>
+                        {% endif %}
+
+                        {% if data.semester == 'summer' %}
+                        <option value="summer" selected>SUMMER</option>
+                        {% else %}
                         <option value="summer">SUMMER</option>
+                        {% endif %}
                     </select></span>
             </div>
             <div class="col">
@@ -36,7 +50,11 @@
                     <select name="years" id="years" class="form-select">
                         <option value="" disabled selected>Select Year</option>
                         {% for year in data.years %}
+                        {% if year == data.semester_year %}
+                        <option value="{{year}}" selected>{{year}}</option>
+                        {% else %}
                         <option value="{{year}}">{{year}}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                 </span>
@@ -110,60 +128,59 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for date, data in data.timelogs.items %}
+                    {% for data_i in data.timelogs %}
                     <tr>
                         <td>
                             <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date"
-                                value="{{date}}" disabled>
+                                value="{{data_i.log_date}}" disabled>
+                        </td>
+                        <td hidden>
+                            <p>
+                                {{data.cooperating_teacher_selected}}
+                            </p>
+                        </td>
+                        <td hidden>
+                            <p>
+                                {{data.cooperating_teacher_email_selected}}
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                Student Name
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                {{data_i.student_email}}
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                {{data_i.notes}}
+                            </p>
+                        </td>
+                        <td>
+                            <!-- <input type="time" value="{{ data_i.start_time|slice:'11:16' }}" disabled> -->
+                            <p>{{ data_i.start_time|slice:'11:16' }}</p>
+                        </td>
+                        <td>
+                            <input type="time" value="{{ data_i.end_time|slice:'11:16' }}" disabled>
+                        </td>
+                        <td>
+                            <p>
+                                {{data_i.hours_submitted}}
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                {% if data_i.hours_approved %}
+                                Yes
+                                {% else %}
+                                No
+                                {% endif %}
+                            </p>
                         </td>
 
-                        {% if data|get_value:'log_date' %}
-                        <td>
-                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes"
-                                value=" {{ data|get_value:'notes' }}" class="form-text" disabled>
-                        </td>
-                        <td>
-                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime"
-                                value="{{ data|get_value:'start_time'|slice:'11:16' }}"
-                                onblur="calculateTimeDiff(this.id)" disabled>
-                        </td>
-                        <td>
-                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime"
-                                value="{{ data|get_value:'end_time'|slice:'11:16' }}"
-                                onblur="calculateTimeDiff(this.id)" disabled>
-                        </td>
-                        <td>
-                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours"
-                                value=" {{ data|get_value:'hours_submitted' }}" class="form-text" disabled>
-                        </td>
-                        {% if data|get_value:'hours_approved' %}
-                        <td>
-                            <span id="{{forloop.counter}}_hours_approved">Yes</span>
-                        </td>
-                        {% else %}
-                        <td>
-                            <span id="{{forloop.counter}}_hours_approved">No</span>
-                        </td>
-                        {% endif %}
-                        {% else %}
-                        <td>
-                            <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes"
-                                class="form-text" disabled>
-                        </td>
-                        <td>
-                            <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime" disabled>
-                        </td>
-                        <td>
-                            <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime" disabled>
-                        </td>
-                        <td>
-                            <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours"
-                                class="form-text" disabled>
-                        </td>
-                        <td>
-                            <span id="{{forloop.counter}}_hours_approved">N/A</span>
-                        </td>
-                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
