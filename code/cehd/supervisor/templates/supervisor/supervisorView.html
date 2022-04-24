@@ -21,7 +21,7 @@
         </div>
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Semester:<sup style="color: red;">*</sup></strong>
+                <strong>Semester:</strong>
                 <span id="sem">
                     <select id="semesters" class="form-select">
                         <option value="" disabled selected>Select Semester</option>
@@ -31,7 +31,7 @@
                     </select></span>
             </div>
             <div class="col">
-                <strong>Year:<sup style="color: red;">*</sup></strong>
+                <strong>Year:</strong>
                 <span id="years_list">
                     <select name="years" id="years" class="form-select">
                         <option value="" disabled selected>Select Year</option>
@@ -44,10 +44,11 @@
             <div class="col">
                 <strong>Cooperating Teachers:<sup style="color: red;">*</sup></strong>
                 <span id="coop_teachers_list">
-                    <select name="coop_teachers" id="coop_teachers" class="form-select" required>
+                    <select name="coop_teachers" id="coop_teachers" class="form-select" onchange="supCoopSelect()"
+                        required>
                         <option value="" disabled selected>Select Cooperating Teacher</option>
                         {% for teacher in data.cooperating_teachers %}
-                        <option value=" {{ teacher.cooperating_teacher_email }}">
+                        <option value="{{ teacher.cooperating_teacher_email }}">
                             {{ teacher.cooperating_teacher }} ({{teacher.cooperating_teacher_email}})</option>
                         {% endfor %}
                     </select>
@@ -57,17 +58,19 @@
 
         <div class="row">
             <div class="col">
-                <strong>Start Date:</strong> <span id="start_date"><input type="date" name="start_date"
-                        id="start_date"></span>
+                <strong>Start Date:</strong> <span id="start_date_"><input type="date" name="start_date" id="start_date"
+                        onchange="supStartEndDateChange()"></span>
             </div>
             <div class="col">
-                <strong>End Date:</strong> <span id="end_date"><input type="date" name="end_date" id="end_date"></span>
+                <strong>End Date:</strong> <span id="end_date_"><input type="date" name="end_date" id="end_date"
+                        onchange="supStartEndDateChange()"></span>
             </div>
         </div>
 
         <div class="row" style="padding: 1%;">
             <div class="text-center">
-                <button onClick="getSupervisorTimesheets()" class="btn btn-primary" id="view_selected_timesheets">View
+                <button onClick="getSupervisorTimesheets()" class="btn btn-primary" id="view_selected_timesheets"
+                    disabled>View
                     Selected Timesheets</button>
             </div>
 
@@ -92,8 +95,8 @@
                         <th scope="col">Date</th>
                         <th scope="col" hidden>Coop Name</th>
                         <th scope="col" hidden>Coop Email</th>
-                        <th scope="col" >Student Name</th>
-                        <th scope="col" >Student Email</th>
+                        <th scope="col">Student Name</th>
+                        <th scope="col">Student Email</th>
                         <th scope="col">Notes/Comments</th>
                         <th scope="col">Start Time</th>
                         <th scope="col">End Time</th>

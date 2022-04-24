@@ -100,36 +100,81 @@
             // console.log(Math.abs(new Date(end_time_time) - new Date(start_time_time)))
         }
 
-        function getTimesheetsByDate(){
+        function getTimesheetsByDate() {
             let startdate = document.getElementById('studentstart_date').value;
             let enddate = document.getElementById('studentend_date').value;
             let student_email = document.getElementById('student_email').innerText
-            window.location.href = '/timelogs/student/email/'+student_email+"/start/"+startdate+"/end/"+enddate
+            window.location.href = '/timelogs/student/email/' + student_email + "/start/" + startdate + "/end/" + enddate
         }
 
-        function getTimesheetsByCoopFilters(){
+        function getTimesheetsByCoopFilters() {
             let coopStartDate = document.getElementById('coopstart_date').value;
             let coopEndDate = document.getElementById('coopend_date').value;
-            let coopEmail =  document.getElementById('coop_email').innerText;
+            let coopEmail = document.getElementById('coop_email').innerText;
             // let coopEmail="abc@xyz.com"
             let approvalStatus = document.querySelector('input[name="group1"]:checked').value;
             let coopSemester = document.getElementById('coop_semester').value;
             let coopYear = document.getElementById('coop_year').value;
-            console.log(coopStartDate + "   "+ coopEndDate+"  "+coopEmail+"  "+approvalStatus+"  "+coopSemester+" "+coopYear);
-            window.location.href = '/coop/cooperatingteacher/view/email/'+coopEmail+"/start/"+coopStartDate+
-                "/end/"+coopEndDate+"/status/"+approvalStatus+"/semester/"+coopSemester+"/year/"+coopYear;
+            console.log(coopStartDate + "   " + coopEndDate + "  " + coopEmail + "  " + approvalStatus + "  " + coopSemester + " " + coopYear);
+            window.location.href = '/coop/cooperatingteacher/view/email/' + coopEmail + "/start/" + coopStartDate +
+                "/end/" + coopEndDate + "/status/" + approvalStatus + "/semester/" + coopSemester + "/year/" + coopYear;
         }
 
-        function getSupervisorTimesheets(){
+        function getSupervisorTimesheets() {
             let semester = document.getElementById('semesters').value;
             let year = document.getElementById('years').value;
-            let coop_teacher = document.getElementById('coop_teachers').value
+            let coop_email = document.getElementById('coop_teachers').value.trim()
             let startDate = document.getElementById('start_date').value;
             let endDate = document.getElementById('end_date').value;
-            let supervisor_email = document.getElementById('supervisor_email').value;
+            let supervisor_email = document.getElementById('supervisor_email').innerText.trim();
+            console.log(supervisor_email + year);
 
-            console.log(semester + '-' + year + '-' + coop_teacher + '-' + startDate + '-' + endDate + '-' + supervisor_email)
+            console.log(semester + '-' + year + '-' + coop_email + '-' + startDate + '-' + endDate + '-' + supervisor_email);
+
+            if (coop_email != '') {
+                if (semester == '' && year == '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email;
+                } else if (semester != '' && year == '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester;
+                } else if (semester == '' && year != '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/year/' + year;
+                } else if (semester != '' && year != '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/year/' + year;
+                } else if (semester == '' && year == '' && startDate != '' && endDate != '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/start/' + startDate + '/end/' + endDate;
+                } else if (semester != '' && year != '' && startDate != '' && endDate != '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/start/' + startDate + '/end/' + enddate;
+                }
+            }
+
+
             // window.location.href = '';
+        }
+
+        function supCoopSelect() {
+            let getButton = document.getElementById('view_selected_timesheets');
+            getButton.disabled = false;
+            supStartEndDateChange();
+        }
+
+        function supStartEndDateChange() {
+            let getButton = document.getElementById('view_selected_timesheets');
+            let startDate = document.getElementById('start_date').value;
+            let endDate = document.getElementById('end_date').value;
+
+            if (endDate == '' && startDate != '') {
+                alert("Please enter end date to view timesheets");
+                getButton.disabled = true;
+            }
+            else if (startDate == '' && endDate != '') {
+                alert("Please enter start date to view timesheets");
+                getButton.disabled = true;
+            } else {
+                let coop = document.getElementById('coop_teachers').value;
+                if (coop != '')
+                    getButton.disabled = false;
+            }
+
         }
 
         function getFormDataSaveSubmit(formData) {
@@ -189,7 +234,7 @@
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                     // Request finished. Do processing here.
                     alert(JSON.parse(this.responseText).message)
-                    window.location.href = '/timelogs/student/email/'+document.getElementById('student_email').innerText
+                    window.location.href = '/timelogs/student/email/' + document.getElementById('student_email').innerText
                 }
             }
             xhr.send(JSON.stringify(jsonObj))
@@ -241,7 +286,8 @@
                     <ul class="navbar-nav ml-auto mb-2 mb-md-0">
                         <div class="container">
                             <div class="col">
-                                <button onClick="location.href='/logout'" class="btn btn-danger" id="logout-button">Logout</button>
+                                <button onClick="location.href='/logout'" class="btn btn-danger"
+                                    id="logout-button">Logout</button>
                             </div>
                         </div>
                         <!-- <li class="nav-item"><a class="nav-link" href="/" target="_blank">certification</a></li>
