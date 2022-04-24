@@ -11,6 +11,7 @@
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
             <div class="col">
+                
                 <strong>Student Name: </strong> <span id="student_coopappr_fullname">{{data.students.0.full_name}}</span>
             </div>
             
@@ -73,7 +74,7 @@
                         <td>
                             
                             <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date"
-                                value="{{d.log_date}}" disabled>
+                                data-uin="{{d.student_uin}}" data-approvaldate="{{d.approval_due_date}}" value="{{d.log_date}}" disabled>
                         </td>
 
                         {% if d|get_value:'log_date' %}
