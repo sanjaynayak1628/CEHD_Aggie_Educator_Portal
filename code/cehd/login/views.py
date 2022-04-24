@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.template.defaulttags import register
 
 
@@ -26,7 +26,7 @@ def loginPage(request):
                 login(request, user)
                 user_type = request.POST['usertype']
                 print(user_type)
-                return redirect(f'/timelogs/{user_type}/email/{username}')
+                return redirect(f'/{user_type}/email/{username}')
         else:
             messages.error(request,
                            'Please enter a correct username and password. Note that both fields may be case-sensitive.')
@@ -34,6 +34,10 @@ def loginPage(request):
     else:
         form = AuthenticationForm()
     return render(request, 'login/login.html', {'form': form})
+
+def logoutPage(request):
+    logout(request)
+    return redirect('/login/')
 
 
 def register(request):
@@ -48,7 +52,7 @@ def register(request):
             if error_msg_dict.get('password_mismatch'):
                 messages.error(request, error_msg_dict['password_mismatch'])
             return redirect('register')
-        return redirect('home')
+        return redirect('/login/')
     else:
         form = UserCreationForm()
     return render(request, 'login/register.html', {'form': form})

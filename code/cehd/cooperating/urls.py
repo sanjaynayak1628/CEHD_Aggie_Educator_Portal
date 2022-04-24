@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import CoopViews, CoopSubmit, CoopStudentCurrent
+from .views import CoopViews, CoopTimeLogSubmit, CoopStudentCurrent
 
 
 urlpatterns = [
-    path('view/email/<str:email>', CoopViews.as_view(), name='coop_view'),
-    path('view/email/<str:email>/start/<str:start_date>/end/<str:end_date>/status/<str:approved>/semester/<str:semester>/year/<str:year>', CoopViews.as_view(), name='coop_reload'),
-    path('submit/approve/<str:approve>/', CoopSubmit.as_view(), name='coop_appr'),
-    path('view/current/email/<str:coop_email>', CoopStudentCurrent.as_view(), name='coop_appr'),
+    path('email/<str:email>', CoopViews.as_view(), name='coop_view'),
+    path('email/<str:email>/start/<str:start_date>/end/<str:end_date>/status/<str:approved>/semester/<str:semester>/year/<str:year>', CoopViews.as_view(), name='coop_reload'),
+    path('submit/approve/<str:approve>/', CoopTimeLogSubmit.as_view(), name='coop_appr'),
+    path('current/email/<str:coop_email>', CoopStudentCurrent.as_view(), name='coop_appr'),
 ]
