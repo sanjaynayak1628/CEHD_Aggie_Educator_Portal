@@ -1,16 +1,19 @@
 """
 views file describing the APIs used in coop time sheet API
 """
+import datetime
+
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from student_placements.views import get_coop_student_current
 from time_logs.views import get_time_logs_generic
-from time_logs.serializers import TimeLogsSerializer
+from time_logs.serializers import TimeLogsSerializerApprove
 from core.models import Person
 from time_logs.models import TimeLogs
 from utils.emails import timesheet_approve
+from utils.utility import get_previous_current_week
 
 
 class CoopViews(APIView):
@@ -25,6 +28,10 @@ class CoopViews(APIView):
         return render(request, f'cooperating/cooperatingview.html', status=status.HTTP_200_OK)
 
 
+def add_missing_log_dates():
+    pass
+
+
 class CoopStudentCurrent(APIView):
     """
     GET function to get current semester student details of Cooperating View
@@ -32,24 +39,42 @@ class CoopStudentCurrent(APIView):
 
     def get(self, request, coop_email):
         student_current_serializer, semester = get_coop_student_current(coop_email)
-        semester_year = student_current_serializer["semester_year"]
         student_list = list()
         for student in student_current_serializer["students"]:
             student_list.append(student["primary_email"])
         kwargs = dict()
         kwargs["student_email__in"] = student_list
-        kwargs["semester"] = semester
-        kwargs["semester_year"] = semester_year
+
+        # get the previous and current weeks time logs
+        prev_cur_dates = get_previous_current_week()
+        current = False
+        if datetime.date.today().strftime("%Y-%m-%d") > prev_cur_dates["current"]["monday"]:
+            current = True
+        if current:
+            kwargs["log_date__gte"] = prev_cur_dates["current"]["monday"]
+            kwargs["log_date__lte"] = prev_cur_dates["current"]["sunday"]
+            dates_tmp = dict(prev_cur_dates["current"])
+        else:
+            kwargs["log_date__gte"] = prev_cur_dates["previous"]["monday"]
+            kwargs["log_date__lte"] = prev_cur_dates["previous"]["sunday"]
+            dates_tmp = dict(prev_cur_dates["previous"])
+
         time_logs_serializer = get_time_logs_generic(kwargs)
-        student_current_serializer["timelogs"] = list()
+        student_current_serializer["current_week"] = dates_tmp
+        date_data = dict()
         for tl in time_logs_serializer:
-            student_current_serializer["timelogs"].append(tl["fields"])
+            date_data[tl["fields"]["log_date"]] = tl["fields"]
+        student_current_serializer["timelogs"] = date_data
 
         # enable or disable the approve/reject button
-        student_current_serializer["approve"] = "true"
-        print(student_current_serializer)
+        if current:
+            student_current_serializer["approve"] = "false"
+        else:
+            student_current_serializer["approve"] = "true"
         context = dict()
         context['data'] = student_current_serializer
+        # print("Student time serializer")
+        # print(student_current_serializer)
         return render(request, f'cooperating/cooperatinginitial.html', status=status.HTTP_200_OK, context=context)
 
 
@@ -65,7 +90,7 @@ def save_time_logs(request):
     for request_data in request.data.get("data", []):
         idx += 1
         request_data["hours_approved"] = True
-        time_log_serializer = TimeLogsSerializer(data=request_data)
+        time_log_serializer = TimeLogsSerializerApprove(data=request_data)
         if time_log_serializer.is_valid():
             try:
                 # update the entries, if UIN and log date present or create a new one
@@ -82,6 +107,7 @@ def save_time_logs(request):
                 # print("Exception: {}".format(e))
                 request_status_fail.append(request_data.get("log_date", None))
         else:
+            # print("Error: ")
             # print(time_log_serializer.errors)
             request_status_fail.append(request_data.get("log_date", None))
     return response_data, request_status_fail
@@ -92,7 +118,7 @@ class CoopTimeLogSubmit(APIView):
     POST function to approve/reject the coop time sheets to the DB
     """
 
-    def post(self, request):
+    def post(self, request, email, approve):
         response_data, request_status_fail = save_time_logs(request)
         response_dict = dict()
         status_mode = status.HTTP_200_OK

@@ -11,6 +11,7 @@
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
             <div class="col">
+                
                 <strong>Student Name: </strong> <span id="student_coopappr_fullname">{{data.students.0.full_name}}</span>
             </div>
             
@@ -52,48 +53,51 @@
         </div>
     </div>
 
-    <form action="/coop/email/abc@xyz.com/approve/true" method="POST" id="coop_submit_form">
+    <form action="" method="POST" id="coop_submit_form">
         <div id="csrf_token">{% csrf_token %}</div>
         <div class="container rowpadding text-center">
             <table class="table table-bordered" id="timesheet_table">
                 <thead style="background-color: rgb(80, 0, 0); color: white;">
                     <tr>
                         <th scope="col">Date</th>
+                        <th scope="col" hidden>Student UIN</th>
+                        <th scope="col" hidden>Student Email</th>
                         <th scope="col">Notes/Comments</th>
                         <th scope="col">Start Time</th>
                         <th scope="col">End Time</th>
                         <th scope="col">Total Hours</th>
-                        <th scope="col">Hours To Approve</th>
+                        <th scope="col">Approve</th>
+                        <th scope="col" hidden>Approval Due Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for d in data.timelogs %}
-                    
+                    {% for day_, date in data.current_week.items %}
                     <tr>
                         <td>
-                            
                             <input type="date" name="{{forloop.counter}}_date" id="{{forloop.counter}}_date"
-                                value="{{d.log_date}}" disabled>
+                                   value="{{date}}" disabled>
                         </td>
 
-                        {% if d|get_value:'log_date' %}
+                        {% if data.timelogs|get_value:date %}
                         <td>
                             <input type="text" name="{{forloop.counter}}_notes" id="{{forloop.counter}}_notes"
-                                value=" {{ d|get_value:'notes' }}" class="form-text" disabled>
+                                   data-uin="{{ data.timelogs|get_value:date|get_value:'student_uin' }}"
+                                   data-approvaldate="{{ data.timelogs|get_value:date|get_value:'approval_due_date' }}"
+                                value="{{ data.timelogs|get_value:date|get_value:'notes' }}" class="form-text" disabled>
                         </td>
                         <td>
                             <input type="time" name="{{forloop.counter}}_stime" id="{{forloop.counter}}_stime"
-                                value="{{ d|get_value:'start_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
+                                value="{{ data.timelogs|get_value:date|get_value:'start_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
                         </td>
                         <td>
                             <input type="time" name="{{forloop.counter}}_etime" id="{{forloop.counter}}_etime"
-                                value="{{ d|get_value:'end_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
+                                value="{{ data.timelogs|get_value:date|get_value:'end_time'|slice:'11:16' }}" onblur="calculateTimeDiff(this.id)" disabled>
                         </td>
                         <td>
                             <input type="text" name="{{forloop.counter}}_hours" id="{{forloop.counter}}_hours"
-                                value=" {{ d|get_value:'hours_submitted' }}" class="form-text" disabled>
+                                value="{{ data.timelogs|get_value:date|get_value:'hours_submitted' }}" class="form-text" disabled>
                         </td>
-                        {% if d|get_value:'hours_approved' %}
+                        {% if data.timelogs|get_value:date|get_value:'hours_approved' %}
                         <td>
                             <span id="{{forloop.counter}}_hours_approved">Yes</span>
                         </td>
@@ -130,7 +134,7 @@
                         <button type="submit" value="approve" class="btn btn-success" id="approve-timesheet" >Approve Timesheet</button>
                     </div>
                     <div class="col text-center">
-                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/submit/approve/false/">Reject Timesheet</button>
+                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/email/{{ data.cooperating_teacher_email }}/submit/approve/false/">Reject Timesheet</button>
                     </div>
                 </div>
             </div>
