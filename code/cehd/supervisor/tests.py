@@ -78,3 +78,87 @@ class SupervisorTest(TestCase):
                                 approval_due_date="2022-04-13", semester="sprng",
                                 start_time="2022-04-07T10:20:10.233-05:30", end_time="2022-04-07T20:20:10.233-05:30",
                                 date_submitted="2022-04-06")
+
+    def test_supervisor_home(self):
+        """
+        This function is used to check the correctness of Supervisor home page
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_view", kwargs={"super_email": "emily@xyz.com"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop", kwargs={"super_email": "emily@xyz.com",
+                                                                 "coop_email": "clark@xyz.com"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop_semester(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher and email
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_sem", kwargs={"super_email": "emily@xyz.com",
+                                                                     "coop_email": "clark@xyz.com",
+                                                                     "semester": "spring"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop_semester_year(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_sem_year", kwargs={"super_email": "emily@xyz.com",
+                                                                          "coop_email": "clark@xyz.com",
+                                                                          "semester": "spring",
+                                                                          "year": "2022"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop_year(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_year", kwargs={"super_email": "emily@xyz.com",
+                                                                      "coop_email": "clark@xyz.com",
+                                                                      "year": "2022"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop_dates(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_dates", kwargs={"super_email": "emily@xyz.com",
+                                                                       "coop_email": "clark@xyz.com",
+                                                                       "start_date": "2022-04-18",
+                                                                       "end_date": "2022-04-25"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop_sem_dates_year(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_sem_dates_year", kwargs={"super_email": "emily@xyz.com",
+                                                                                "coop_email": "clark@xyz.com",
+                                                                                "semester": "spring",
+                                                                                "year": "2022",
+                                                                                "start_date": "2022-04-18",
+                                                                                "end_date": "2022-04-25"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop_sem_dates(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_sem_dates", kwargs={"super_email": "emily@xyz.com",
+                                                                           "coop_email": "clark@xyz.com",
+                                                                           "semester": "spring",
+                                                                           "start_date": "2022-04-18",
+                                                                           "end_date": "2022-04-25"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -17,7 +17,7 @@ urlpatterns = [
          SupervisorCoopGet.as_view(), name='supervisor_coop_year'),
 
     path('email/<str:super_email>/coop/<str:coop_email>/start/<str:start_date>/end/<str:end_date>',
-         SupervisorCoopGet.as_view(), name='supervisor_coop_st_end'),
+         SupervisorCoopGet.as_view(), name='supervisor_coop_dates'),
 
     path('email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/year/<str:year>/start/<str:start_date>/end/<str:end_date>',
          SupervisorCoopGet.as_view(), name='supervisor_coop_sem_dates_year'),
