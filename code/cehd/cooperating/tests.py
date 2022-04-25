@@ -101,8 +101,49 @@ class CoopTest(TestCase):
                 "hours_submitted": "10",
                 "approval_due_date": "2020-04-11",
                 "semester": "spring",
+                "semester_year": "2022",
                 "start_time": "2022-04-03T10:20:10.233-05:30",
-                "end_time": "2022-04-03T12:20:10.233-05:30"
+                "end_time": "2022-04-03T12:20:10.233-05:30",
+                "date_submitted": "2022-04-03"
+            }]
+        }
+
+        # missing column
+        self.missing_submit_approve_payload = {
+            "cooperating_teacher_email": "cclark@xyz.com",
+            "cooperating_teacher_name": "Kent Clark Jr. 1",
+            "email": "abc1@xyz.com",
+            "data": [{
+                "student_uin": "10",
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-04",
+                "notes": "submit entry",
+                "approval_due_date": "2020-04-11",
+                "semester": "spring",
+                "semester_year": "2022",
+                "start_time": "2022-04-03T10:20:10.233-05:30",
+                "end_time": "2022-04-03T12:20:10.233-05:30",
+                "date_submitted": "2022-04-03"
+            }]
+        }
+
+        # coop email missing payload for post
+        self.invalid_approve_coop_miss_payload = {
+            "cooperating_teacher_email": "",
+            "cooperating_teacher_name": "",
+            "email": "joejonas@xyz.com",
+            "data": [{
+                "student_uin": "120",
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-04",
+                "notes": "submit entry",
+                "hours_submitted": "10",
+                "approval_due_date": "2020-04-11",
+                "semester": "spring",
+                "semester_year": "2022",
+                "start_time": "2022-04-03T10:20:10.233-05:30",
+                "end_time": "2022-04-03T12:20:10.233-05:30",
+                "date_submitted": "2022-04-03"
             }]
         }
 
@@ -110,17 +151,19 @@ class CoopTest(TestCase):
         self.valid_submit_approve_payload = {
             "cooperating_teacher_email": "clark@xyz.com",
             "cooperating_teacher_name": "Kent Clarke",
-            "email": "student@xyz.com",
+            "email": "joejonas@xyz.com",
             "data": [{
                 "student_uin": "120",
                 "student_email": "joejonas@xyz.com",
-                "log_date": "2020-04-07",
+                "log_date": "2020-04-04",
                 "notes": "submit entry",
                 "hours_submitted": "10",
                 "approval_due_date": "2020-04-11",
                 "semester": "spring",
-                "start_time": "2022-04-07T12:20:10.233-04:30",
-                "end_time": "2022-04-07T20:20:10.233-04:30"
+                "semester_year": "2022",
+                "start_time": "2022-04-03T10:20:10.233-05:30",
+                "end_time": "2022-04-03T12:20:10.233-05:30",
+                "date_submitted": "2022-04-03"
             }]
         }
 
@@ -148,13 +191,29 @@ class CoopTest(TestCase):
                                data=json.dumps(self.valid_submit_approve_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_coop_submit_approve_invalid(self):
+    def test_coop_submit_approve_true_invalid(self):
         """
         This function is used to check the correctness of API when the post contains invalid data
         """
-        response = client.post(reverse('coop_appr', kwargs={"email": "clark@xyz.com", "approve": "false"}),
+        response = client.post(reverse('coop_appr', kwargs={"email": "clark@xyz.com", "approve": "true"}),
                                data=json.dumps(self.invalid_submit_approve_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_coop_submit_approve_true_missing(self):
+        """
+        This function is used to check the correctness of API when the post contains invalid data
+        """
+        response = client.post(reverse('coop_appr', kwargs={"email": "clark@xyz.com", "approve": "true"}),
+                               data=json.dumps(self.missing_submit_approve_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_coop_submit_approve_coop_email_miss(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher approves the time sheets
+        """
+        response = client.post(reverse('coop_appr', kwargs={"email": "clark@xyz.com", "approve": "true"}),
+                               data=json.dumps(self.invalid_approve_coop_miss_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_coop_view(self):
         """
@@ -168,7 +227,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student", kwargs={"coop_email": "clark@xyz.com",
-                                                              "student_email": "abc@xyz.com"}))
+                                                              "student_email": "joejonas@xyz.com"}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_coop_view_student_sem(self):
@@ -176,7 +235,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student_sem", kwargs={"coop_email": "clark@xyz.com",
-                                                                  "student_email": "abc1@xyz.com",
+                                                                  "student_email": "joejonas@xyz.com",
                                                                   "semester": "spring"}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -185,7 +244,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student_sem_year", kwargs={"coop_email": "clark@xyz.com",
-                                                                       "student_email": "abc2@xyz.com",
+                                                                       "student_email": "joejonas@xyz.com",
                                                                        "semester": "spring", "year": "2022"}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -194,7 +253,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student_year", kwargs={"coop_email": "clark@xyz.com",
-                                                                   "student_email": "ab3c@xyz.com", "year": "2022"}))
+                                                                   "student_email": "joejonas@xyz.com", "year": "2022"}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_coop_view_student_dates(self):
@@ -202,7 +261,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student_dates", kwargs={"coop_email": "clark@xyz.com",
-                                                                    "student_email": "abc4@xyz.com",
+                                                                    "student_email": "joejonas@xyz.com",
                                                                     "start_date": "2022-04-18",
                                                                     "end_date": "2022-04-25"}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -212,7 +271,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student_sem_dates", kwargs={"coop_email": "clark@xyz.com",
-                                                                        "student_email": "abc5@xyz.com",
+                                                                        "student_email": "joejonas@xyz.com",
                                                                         "semester": "spring",
                                                                         "start_date": "2022-04-18",
                                                                         "end_date": "2022-04-25"}))
@@ -223,7 +282,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student_sem_dates_year", kwargs={"coop_email": "clark@xyz.com",
-                                                                             "student_email": "abc6@xyz.com",
+                                                                             "student_email": "joejonas@xyz.com",
                                                                              "semester": "spring",
                                                                              "year": "2022",
                                                                              "start_date": "2022-04-18",
@@ -236,7 +295,7 @@ class CoopTest(TestCase):
         This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
         """
         response = client.get(reverse("coop_student_year_dates", kwargs={"coop_email": "clark@xyz.com",
-                                                                         "student_email": "abc7@xyz.com",
+                                                                         "student_email": "joejonas@xyz.com",
                                                                          "year": "2022",
                                                                          "start_date": "2022-04-18",
                                                                          "end_date": "2022-04-25"
