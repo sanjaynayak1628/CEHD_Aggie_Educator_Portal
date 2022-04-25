@@ -185,6 +185,9 @@
             if(getButton == null){
                 return
             }
+            if(document.getElementById('start_date') == null)
+                return
+
             let startDate = document.getElementById('start_date').value;
             let endDate = document.getElementById('end_date').value;
 
