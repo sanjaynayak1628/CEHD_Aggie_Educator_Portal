@@ -196,4 +196,34 @@ class CoopViewGet(APIView):
         """
 
         # create the data to be consumed by API
-
+        student_coop_all = query_sp_coop_student(coop_email, None)
+        student_coop_all["student_email_selected"] = student_email
+        st_list = student_coop_all["students"]
+        student_list = set()
+        for st in st_list:
+            student_list.add(st["student_email"])
+            if st["student_email"] == student_email:
+                student_coop_all["student_full_name_selected"] = st["student_full_name"]
+        kwargs = dict()
+        kwargs["student_email__in"] = list(student_list)
+        if semester:
+            with open("config.json") as json_config_file:
+                config = json.load(json_config_file)
+            kwargs["semester"] = config["reverse_semester"][semester.lower()]
+            student_coop_all["semester"] = semester
+        if year:
+            kwargs["semester_year"] = year
+            student_coop_all["semester_year"] = year
+        if start_date:
+            kwargs["log_date__gte"] = start_date
+            student_coop_all["start_date"] = start_date
+        if end_date:
+            kwargs["log_date__lte"] = end_date
+            student_coop_all["end_date"] = end_date
+        time_logs_serializer = get_time_logs_generic(kwargs)
+        student_coop_all["timelogs"] = list()
+        for tl in time_logs_serializer:
+            tmp = dict(tl["fields"])
+            student_coop_all["timelogs"].append(tmp)
+        print(student_coop_all)
+        return render(request, f'cooperating/cooperatingview.html', context=student_coop_all, status=status.HTTP_200_OK)
