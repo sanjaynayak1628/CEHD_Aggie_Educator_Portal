@@ -5,7 +5,7 @@ from .views import CoopView, CoopTimeLogSubmit, CoopStudentCurrent, CoopViewGet
 urlpatterns = [
     path('email/<str:coop_email>/approve', CoopStudentCurrent.as_view(), name='coop'),
     path('email/<str:email>/submit/approve/<str:approve>', CoopTimeLogSubmit.as_view(), name='coop_appr'),
-    path('email/<str:coop_email>/prev', CoopStudentCurrent.as_view(), name='coop_appr'),
+    # path('email/<str:coop_email>/prev', CoopStudentCurrent.as_view(), name='coop_appr'),
 
     path('email/<str:coop_email>/view', CoopView.as_view(), name='coop_view_initial'),
     path('email/<str:coop_email>/view/student/<str:student_email>', CoopViewGet.as_view(), name='coop_student'),
@@ -19,7 +19,7 @@ urlpatterns = [
          CoopViewGet.as_view(), name='coop_student_year'),
 
     path('email/<str:coop_email>/view/student/<str:student_email>/start/<str:start_date>/end/<str:end_date>',
-         CoopViewGet.as_view(), name='coop_student_st_end'),
+         CoopViewGet.as_view(), name='coop_student_dates'),
 
     path('email/<str:coop_email>/view/student/<str:student_email>/semester/<str:semester>/start/<str:start_date>/end/<str:end_date>',
          CoopViewGet.as_view(), name='coop_student_sem_dates'),

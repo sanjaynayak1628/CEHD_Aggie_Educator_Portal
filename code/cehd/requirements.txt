@@ -15,5 +15,5 @@ selenium
 whitenoise
 djangorestframework
 factory_boy
-behave_django
+behave-django
 pylint

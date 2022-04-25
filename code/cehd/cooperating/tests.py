@@ -45,7 +45,7 @@ class CoopTest(TestCase):
                               last_updated_by=None, is_active=True, is_admin=False, is_superuser=False,
                               last_login_ip="10.0.0.21")
 
-        Person.objects.create(person_id=99, uin=99, netid="brucewayne", campus="CS", first_name="Bruce", middle_name="",
+        Person.objects.create(person_id=98, uin=98, netid="brucewayne", campus="CS", first_name="Bruce", middle_name="",
                               last_name="Wayne",
                               use_middle_name=False, generation="", primary_email="brucewayne@xyz.com",
                               secondary_email="wayneb@xyz.com", primary_ethnicity="X", latino=False,
@@ -87,3 +87,158 @@ class CoopTest(TestCase):
                                 approval_due_date="2022-04-13", semester="sprng",
                                 start_time="2022-04-07T10:20:10.233-05:30", end_time="2022-04-07T20:20:10.233-05:30",
                                 date_submitted="2022-04-06")
+
+        # invalid payload for post
+        self.invalid_submit_approve_payload = {
+            "cooperating_teacher_email": "cclark@xyz.com",
+            "cooperating_teacher_name": "Kent Clark Jr.",
+            "email": "abc@xyz.com",
+            "data": [{
+                "student_uin": "10",
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-04",
+                "notes": "submit entry",
+                "hours_submitted": "10",
+                "approval_due_date": "2020-04-11",
+                "semester": "spring",
+                "start_time": "2022-04-03T10:20:10.233-05:30",
+                "end_time": "2022-04-03T12:20:10.233-05:30"
+            }]
+        }
+
+        # valid payload for post
+        self.valid_submit_approve_payload = {
+            "cooperating_teacher_email": "clark@xyz.com",
+            "cooperating_teacher_name": "Kent Clarke",
+            "email": "student@xyz.com",
+            "data": [{
+                "student_uin": "120",
+                "student_email": "joejonas@xyz.com",
+                "log_date": "2020-04-07",
+                "notes": "submit entry",
+                "hours_submitted": "10",
+                "approval_due_date": "2020-04-11",
+                "semester": "spring",
+                "start_time": "2022-04-07T12:20:10.233-04:30",
+                "end_time": "2022-04-07T20:20:10.233-04:30"
+            }]
+        }
+
+    def test_coop_initial(self):
+        """
+        This function is used to check the correctness of Cooperating teacher home page
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("coop", kwargs={"coop_email": "clark@xyz.com"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_submit_approve_true(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher approves the time sheets
+        """
+        response = client.post(reverse('coop_appr', kwargs={"email": "clark@xyz.com", "approve": "true"}),
+                               data=json.dumps(self.valid_submit_approve_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_submit_approve_false(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher rejects the time sheets
+        """
+        response = client.post(reverse('coop_appr', kwargs={"email": "clark@xyz.com", "approve": "false"}),
+                               data=json.dumps(self.valid_submit_approve_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_submit_approve_invalid(self):
+        """
+        This function is used to check the correctness of API when the post contains invalid data
+        """
+        response = client.post(reverse('coop_appr', kwargs={"email": "clark@xyz.com", "approve": "false"}),
+                               data=json.dumps(self.invalid_submit_approve_payload), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_coop_view(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_view_initial", kwargs={"coop_email": "clark@xyz.com"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student", kwargs={"coop_email": "clark@xyz.com",
+                                                              "student_email": "abc@xyz.com"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student_sem(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student_sem", kwargs={"coop_email": "clark@xyz.com",
+                                                                  "student_email": "abc1@xyz.com",
+                                                                  "semester": "spring"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student_sem_year(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student_sem_year", kwargs={"coop_email": "clark@xyz.com",
+                                                                       "student_email": "abc2@xyz.com",
+                                                                       "semester": "spring", "year": "2022"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student_year(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student_year", kwargs={"coop_email": "clark@xyz.com",
+                                                                   "student_email": "ab3c@xyz.com", "year": "2022"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student_dates(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student_dates", kwargs={"coop_email": "clark@xyz.com",
+                                                                    "student_email": "abc4@xyz.com",
+                                                                    "start_date": "2022-04-18",
+                                                                    "end_date": "2022-04-25"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student_semester_dates(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student_sem_dates", kwargs={"coop_email": "clark@xyz.com",
+                                                                        "student_email": "abc5@xyz.com",
+                                                                        "semester": "spring",
+                                                                        "start_date": "2022-04-18",
+                                                                        "end_date": "2022-04-25"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student_semester_dates_year(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student_sem_dates_year", kwargs={"coop_email": "clark@xyz.com",
+                                                                             "student_email": "abc6@xyz.com",
+                                                                             "semester": "spring",
+                                                                             "year": "2022",
+                                                                             "start_date": "2022-04-18",
+                                                                             "end_date": "2022-04-25"
+                                                                             }))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_coop_view_student_year_dates(self):
+        """
+        This function is used to check the correctness of API when the cooperating teacher views the previous time sheets
+        """
+        response = client.get(reverse("coop_student_year_dates", kwargs={"coop_email": "clark@xyz.com",
+                                                                         "student_email": "abc7@xyz.com",
+                                                                         "year": "2022",
+                                                                         "start_date": "2022-04-18",
+                                                                         "end_date": "2022-04-25"
+                                                                         }))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
