@@ -3,10 +3,10 @@
 {% load static %}
 
 {% block content %}
+{% if user.is_authenticated%}
 <div class="container body_content" style="margin-top: 30px;">
-    <h1>View Timesheets of Cooperating Teachers under you</h1>
+    <h1>Review Timesheets</h1>
     <!-- Contains non editable data from database -->
-
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
             <div class="col">
@@ -91,13 +91,11 @@
 
         <div class="row" style="padding: 1%;">
             <div class="text-center">
-                <button onClick="getSupervisorTimesheets()" class="btn btn-primary" id="view_selected_timesheets"
+                <button onClick="getSupervisorTimesheets()" class="btn btn-outline-primary" id="view_selected_timesheets"
                     disabled>View
                     Selected Timesheets</button>
             </div>
-
         </div>
-
 
         <div class="row" style="padding: 1%;">
             <div class="text-right">
@@ -178,10 +176,19 @@
                                 {% endif %}
                             </p>
                         </td>
-
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </form>
+</div>
+{% else %}
 
-            {% endblock %}
+<div class="container">
+    <p id="login_msg"> You haven't logged in. To login, press the login button</p>
+    <a href="{% url 'login' %}"><button class="btn btn-danger" style="color: white;">Log In</button></a>
+</div>
+
+{% endif %}
+{% endblock %}

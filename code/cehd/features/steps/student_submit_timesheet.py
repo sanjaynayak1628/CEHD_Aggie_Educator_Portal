@@ -33,7 +33,7 @@ def step_impl(context):
 
 @then("I am able to see my time sheet page")
 def step_impl(context):
-    assert context.browser.current_url.endswith('/timelogs/student/email/abc@xyz.com')
+    assert context.browser.current_url.endswith('/student/email/abc@xyz.com')
 
 
 @then("I will add the time for the days")
@@ -64,13 +64,13 @@ def step_impl(context):
 
 @then("the timesheet is saved in the database")
 def step_impl(context):
-    assert context.browser.current_url.endswith('/timelogs/student/email/abc@xyz.com')
+    assert context.browser.current_url.endswith('/student/email/abc@xyz.com')
 
 
 @then("I click on the log out button")
 def step_impl(context):
     context.browser.find_element_by_id("logout-button").click()
-    assert context.browser.current_url.endswith('/logout/')
+    assert context.browser.current_url.endswith('/login/')
 
 
 @then("I will update the time for the days")
@@ -100,4 +100,4 @@ def step_impl(context):
 
 @then("the timesheet is submitted in the database")
 def step_impl(context):
-    assert context.browser.current_url.endswith('/timelogs/student/email/abc@xyz.com')
+    assert context.browser.current_url.endswith('/student/email/abc@xyz.com')
