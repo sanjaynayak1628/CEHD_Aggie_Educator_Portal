@@ -82,6 +82,7 @@ def save_time_logs(request):
                 # print("Exception: {}".format(e))
                 request_status_fail.append(request_data.get("log_date", None))
         else:
+            # print("Errors")
             # print(time_log_serializer.errors)
             request_status_fail.append(request_data.get("log_date", None))
     return response_data, request_status_fail
@@ -134,7 +135,7 @@ class TimeLogViewsSave(APIView):
         response_data, request_status_fail = save_time_logs(request)
         if request_status_fail:
             return Response({"status": "error",
-                             "message": "Time entered for dates: {} are not saved. Please resave again!".format(
+                             "message": "Time entered for dates: {} are not saved. Please re-save again!".format(
                                  ", ".join(request_status_fail)), "data": response_data},
                             status=status.HTTP_400_BAD_REQUEST)
         return Response(

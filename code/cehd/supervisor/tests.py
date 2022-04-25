@@ -75,7 +75,7 @@ class SupervisorTest(TestCase):
 
         TimeLogs.objects.create(student_uin=Person.objects.get(uin=120), student_email="joejonas@xyz.com",
                                 log_date="2022-04-07", notes="get test", hours_submitted=10, hours_approved=True,
-                                approval_due_date="2022-04-13", semester="sprng",
+                                approval_due_date="2022-04-13", semester="sprng", semester_year="2022",
                                 start_time="2022-04-07T10:20:10.233-05:30", end_time="2022-04-07T20:20:10.233-05:30",
                                 date_submitted="2022-04-06")
 

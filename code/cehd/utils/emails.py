@@ -71,7 +71,7 @@ def timesheet_submit():
     Send email to cooperating teacher if time sheets are submitted by the student
     """
     # mail server parameters
-    print("Inside timesheet submit email")
+    # print("Inside timesheet submit email")
     mail_subject = "Timesheet Submitted"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_SUBMIT
     mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \

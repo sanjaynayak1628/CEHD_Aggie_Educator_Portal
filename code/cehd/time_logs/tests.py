@@ -68,14 +68,14 @@ class StudentViewTest(TestCase):
                                          university_supervisor_email="emily@xyz.com",
                                          university_supervisor="Emily Blake",
                                          cooperating_teacher_email="clark@xyz.com", cooperating_teacher="Clark Kent",
-                                         principal="", site="", classroom_type="", semester="spring",
+                                         principal="", site="", classroom_type="", semester="sprng",
                                          field_experience_program="", placement="",
                                          beginning_date_experience="2020-01-01", ending_date_experience="2021-01-01",
                                          instructor="")
 
         TimeLogs.objects.create(student_uin=Person.objects.get(uin=120), student_email="joejonas@xyz.com",
                                 log_date="2022-04-07", notes="get test", hours_submitted=10, hours_approved=True,
-                                approval_due_date="2022-04-13", semester="sprng",
+                                approval_due_date="2022-04-13", semester="sprng", semester_year="2022",
                                 start_time="2022-04-07T10:20:10.233-05:30", end_time="2022-04-07T20:20:10.233-05:30",
                                 date_submitted="2022-04-06")
 
@@ -91,8 +91,8 @@ class StudentViewTest(TestCase):
                 "notes": "submit entry",
                 "hours_submitted": "10",
                 "hours_approved": False,
-                "approval_due_date": "2020-04-11",
-                "semester": "sprng",
+                "semester": "spring",
+                "semester_year": "2022",
                 "start_time": "2022-04-03T10:20:10.233-05:30",
                 "end_time": "2022-04-03T12:20:10.233-05:30"
             }]
@@ -110,8 +110,8 @@ class StudentViewTest(TestCase):
                 "notes": "submit entry",
                 "hours_submitted": "10",
                 "hours_approved": False,
-                "approval_due_date": "2020-04-11",
-                "semester": "sprng",
+                "semester": "spring",
+                "semester_year": "2022",
                 "start_time": "2022-04-07T12:20:10.233-04:30",
                 "end_time": "2022-04-07T20:20:10.233-04:30"
             }]
@@ -128,8 +128,8 @@ class StudentViewTest(TestCase):
                 "notes": "submit entry",
                 "hours_submitted": "10",
                 "hours_approved": False,
-                "approval_due_date": "2020-04-11",
-                "semester": "sprng",
+                "semester": "spring",
+                "semester_year": "2022",
                 "start_time": "2022-04-07T12:20:10.233-04:30",
                 "end_time": "2022-04-07T20:20:10.233-04:30"
             }]
@@ -146,8 +146,8 @@ class StudentViewTest(TestCase):
                 "notes": "submit entry",
                 "hours_submitted": "10",
                 "hours_approved": False,
-                "approval_due_date": "2020-04-11",
-                "semester": "sprng",
+                "semester": "spring",
+                "semester_year": "2022",
                 "start_time": "2022-04-07T12:20:10.233-04:30",
                 "end_time": "2022-04-07T20:20:10.233-04:30"
             }]
@@ -224,7 +224,7 @@ class StudentViewTest(TestCase):
         This function is used to check the correctness of Student View GET APIs
         return: 200 Correct Response
         """
-        response = client.get(reverse("student_uin_sem_get_time_logs", kwargs={"uin": 120, "semester": "sprng"}))
+        response = client.get(reverse("student_uin_sem_get_time_logs", kwargs={"uin": 120, "semester": "spring"}))
         # self.assertEqual(response.json().get("message", "No message"), "retrieval successful for current week")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -262,7 +262,7 @@ class StudentViewTest(TestCase):
         return: 200 Correct Response
         """
         response = client.get(reverse("student_email_sem_get_time_logs",
-                                      kwargs={"email": "joejonas@xyz.com", "semester": "sprng"}))
+                                      kwargs={"email": "joejonas@xyz.com", "semester": "spring"}))
         # self.assertEqual(response.json().get("message", "No message"), "retrieval successful for current week")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

@@ -4,12 +4,11 @@ from rest_framework import serializers
 from .models import TimeLogs
 
 
-def get_date_submitted(obj):
-    return datetime.date.today()
-
-
 class TimeLogsSerializer(serializers.ModelSerializer):
     date_submitted = serializers.SerializerMethodField('get_date_submitted')
+
+    def get_date_submitted(self, obj):
+        return datetime.date.today()
 
     class Meta:
         model = TimeLogs

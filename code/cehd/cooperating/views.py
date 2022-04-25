@@ -66,7 +66,7 @@ class CoopStudentCurrent(APIView):
             hours_approved_check.add(tl["fields"]["hours_approved"])
         student_current_serializer["timelogs"] = date_data
 
-        print(hours_approved_check)
+        # print(hours_approved_check)
         approved = True
         if False in hours_approved_check:
             approved = False
@@ -101,7 +101,7 @@ def save_time_logs(request):
         request_data["hours_approved"] = True
         request_data["semester"] = config["reverse_semester"][request_data["semester"].lower()]
         time_log_serializer = TimeLogsSerializerApprove(data=request_data)
-        print(request_data)
+        # print(request_data)
         if time_log_serializer.is_valid():
             try:
                 # update the entries, if UIN and log date present or create a new one
