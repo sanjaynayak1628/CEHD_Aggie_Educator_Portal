@@ -131,10 +131,10 @@
             <div class="container row">
                 <div class="row" style="padding: 1%;">
                     <div class="col text-center">
-                        <button type="submit" value="approve" class="btn btn-success" id="approve-timesheet" >Approve Timesheet</button>
+                        <button type="submit" value="approve" class="btn btn-success" id="approve-timesheet" {{ data.approve }}>Approve Timesheet</button>
                     </div>
                     <div class="col text-center">
-                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/email/{{ data.cooperating_teacher_email }}/submit/approve/false/">Reject Timesheet</button>
+                        <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" {{ data.approve }} >Reject Timesheet</button>
                     </div>
                 </div>
             </div>

@@ -201,3 +201,21 @@ def get_super_coop_details(supervisor_email, coop_email):
         .distinct("university_supervisor_email", "cooperating_teacher_email")
     detail_serializer = json.loads(serializers.serialize('json', detail))
     return detail_serializer
+
+
+def query_coop_email(coop_email, semester):
+    """
+    helper function to get the list of students based on cooperating teacher email
+    """
+    kwargs = dict()
+    with open("config.json") as json_config_file:
+        config = json.load(json_config_file)
+    kwargs["cooperating_teacher_email"] = coop_email
+    if semester:
+        kwargs["semester"] = config["reverse_semester"][semester]
+    students_list = StudentPlacements.objects.all().filter(**kwargs).distinct("student_email")
+    students_list_serializer = json.loads(serializers.serialize('json', students_list))
+    students = set()
+    for st in students_list_serializer:
+        students.add(st["fields"]["student_email"])
+    return students_list_serializer, list(students)

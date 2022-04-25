@@ -45,7 +45,6 @@ class SupervisorCoopView(APIView):
         """
 
         coop_all = query_sp_supervisor_coop(super_email, semester)
-        # print(coop_all)
         context = {"status": "success", "message": "data retrieved", "data": coop_all}
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)
 

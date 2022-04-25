@@ -334,6 +334,11 @@
             } else if (submitId === "save-timesheet") {
                 let jsonObj = getFormDataSaveSubmit(formData);
                 refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
+            } else if (submitId === "reject-timesheet") {
+                let jsonObj = {};
+                let fetch_email = (document.getElementById('coop_coopappr_email').innerText).trim()
+                let submitUrl = '/coop/email/' + fetch_email + '/submit/approve/false';
+                refreshSaveSubmitCoop(jsonObj, submitUrl, csrfToken);
             }
         }
 
