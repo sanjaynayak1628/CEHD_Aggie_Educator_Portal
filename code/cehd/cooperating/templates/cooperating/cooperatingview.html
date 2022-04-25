@@ -10,44 +10,77 @@
     <div class="container row" style="border-style: solid; border-width: 0.5px;">
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Coop Teacher Name: </strong> <span id="coop_fullname">{{data.student.full_name}}</span>
+                <strong>Cooperating Teacher Name: </strong> <span
+                    id="coop_fullname">{{data.cooperating_teacher_name}}</span>
             </div>
             <div class="col">
-                <strong>Coop Teacher Email:</strong> <span id="coop_email">{{data.uin}}</span>
-            </div>
-            <div class="col">
-                <strong>Supervisor Name:</strong> <span id="supervisor_name">{{data.student_email}}</span>
+                <strong>Cooperating Teacher Email:</strong> <span
+                    id="coop_email">{{data.cooperating_teacher_email}}</span>
             </div>
         </div>
+
         <div class="row" style="padding: 1%;">
             <div class="col">
-                <strong>Students:</strong> <span id="students">{{data.uin}}</span>
+                <strong>Semester:</strong>
+                <span id="sem">
+                    <select id="coop_semesters" class="form-select">
+                        <option value="" disabled selected>Select Semester</option>
+                        {% if data.semester == 'fall' %}
+                        <option value="fall" selected>FALL</option>
+                        {% else %}
+                        <option value="fall">FALL</option>
+                        {% endif %}
+
+                        {% if data.semester == 'spring' %}
+                        <option value="spring" selected>SPRING</option>
+                        {% else %}
+                        <option value="spring">SPRING</option>
+                        {% endif %}
+
+                        {% if data.semester == 'summer' %}
+                        <option value="summer" selected>SUMMER</option>
+                        {% else %}
+                        <option value="summer">SUMMER</option>
+                        {% endif %}
+                    </select></span>
             </div>
             <div class="col">
-                <strong>Students UIN:</strong> <span id="studentuin">{{data.uin}}</span>
+                <strong>Year:</strong>
+                <span id="years_list">
+                    <select name="years" id="years" class="form-select">
+                        <option value="" disabled selected>Select Year</option>
+                        {% for year in data.years %}
+                        {% if year == data.semester_year %}
+                        <option value="{{year}}" selected>{{year}}</option>
+                        {% else %}
+                        <option value="{{year}}">{{year}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </span>
             </div>
             <div class="col">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <strong>Semester:</strong> 
-                        <span id="sem">
-                        <select id="coop_semester" style="width: 100%; box-sizing: border-box; height: 50%">
-                            <option value="fall">FALL</option>
-                            <option value="spring">SPRING</option>
-                            <option value="summer">SUMMER</option>
-                        </select></span>
-                    </div>
-                    <div class="col-sm-6">
-                        <strong>Year:</strong> 
-                        <span id="yr">
-                            <input type="number" name="year" id="coop_year" style="width: 100%; box-sizing: border-box; height: 50%">
-                        </span>
-                    </div>
-                </div>
-                
-                
+                <strong>Students:<sup style="color: red;">*</sup></strong>
+                <span id="coop_student_list">
+                    <select name="coop_student" id="coop_student" class="form-select" onchange="supCoopSelect()"
+                        required>
+                        <option value="" disabled selected>Select Student</option>
+
+                        {% for student in data.students %}
+                        <!-- {% if data.cooperating_teacher_email_selected == student.cooperating_teacher_email%} -->
+                        <option value="{{ student.student_email }}" >
+                            {{ student.student_full_name }} ({{student.student_email}})</option>
+                        <!-- {% else %} -->
+                        <!-- <option value="{{ teacher.cooperating_teacher_email }}">
+                            {{ student.cooperating_teacher }} ({{student.cooperating_teacher_email}})</option> -->
+                        <!-- {% endif %} -->
+                        {% endfor %}
+                    </select>
+                </span>
             </div>
         </div>
+
+        
         <div class="row" style="padding: 1%;">
             <div class="col">
                 <strong>Status:</strong> 
@@ -65,15 +98,15 @@
                     </span>
             </div>
             <div class="col">
-                <strong>Start Date:</strong> <span id="start_date"><input type="date" name="coopstart_date" id="coopstart_date" ></span>
+                <strong>Start Date:</strong> <span id="start_date_"><input type="date" name="start_date" id="start_date" onchange="supStartEndDateChange()"></span>
             </div>
             <div class="col">
-                <strong>End Date:</strong> <span id="end_date"><input type="date" name="coopend_date" id="coopend_date" ></span>
+                <strong>End Date:</strong> <span id="end_date_"><input type="date" name="end_date" id="end_date" onchange="supStartEndDateChange()"></span>
             </div>
         </div>
         <div class="row" style="padding: 1%;">
             <div class="text-center">
-                <button onClick="getTimesheetsByCoopFilters()" class="btn btn-primary" id="view_selected_timesheets">View Selected Timesheets</button>
+                <button onClick="getTimesheetsByCoopFilters()" class="btn btn-primary" id="view_selected_timesheets" disabled>View Selected Timesheets</button>
             </div>
 
         </div>
@@ -149,7 +182,7 @@
                 </tbody>
             </table>
 
-            <div class="container row">
+            <!-- <div class="container row">
                 <div class="row" style="padding: 1%;">
                     <div class="col text-center">
                         <button type="submit" value="approve" class="btn btn-success" id="approve-timesheet" >Approve Timesheet</button>
@@ -158,7 +191,7 @@
                         <button type="submit" value="reject" class="btn btn-danger" id="reject-timesheet" formaction="/coop/submit/approve/false/">Reject Timesheet</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </form>
 </div>

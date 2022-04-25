@@ -114,15 +114,33 @@
         }
 
         function getTimesheetsByCoopFilters() {
-            let coopStartDate = document.getElementById('coopstart_date').value;
-            let coopEndDate = document.getElementById('coopend_date').value;
-            let coopEmail = document.getElementById('coop_email').innerText;
-            let approvalStatus = document.querySelector('input[name="group1"]:checked').value;
-            let coopSemester = document.getElementById('coop_semester').value;
-            let coopYear = document.getElementById('coop_year').value;
-            console.log(coopStartDate + "   " + coopEndDate + "  " + coopEmail + "  " + approvalStatus + "  " + coopSemester + " " + coopYear);
-            window.location.href = '/coop/view/email/' + coopEmail + "/start/" + coopStartDate +
-                "/end/" + coopEndDate + "/status/" + approvalStatus + "/semester/" + coopSemester + "/year/" + coopYear;
+            let startDate = document.getElementById('start_date').value;
+            let endDate = document.getElementById('end_date').value;
+            let coop_email = document.getElementById('coop_email').innerText;
+            let student = document.getElementById('coop_student').value
+            // let approvalStatus = document.querySelector('input[name="group1"]:checked').value;
+            let semester = document.getElementById('coop_semesters').value;
+            let year = document.getElementById('years').value;
+            // console.log(coopStartDate + "   " + coopEndDate + "  " + coopEmail + "  " + approvalStatus + "  " + coopSemester + " " + coopYear);
+            if (student != '') {
+                if (semester == '' && year == '' && startDate == '' && endDate == '') {
+                    window.location.href = '/coop/email/' + coop_email + '/view/student/' + student;
+                } else if (semester != '' && year == '' && startDate == '' && endDate == '') {
+                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student + '/semester/' + semester;
+                } else if (semester == '' && year != '' && startDate == '' && endDate == '') {
+                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student  + '/year/' + year;
+                } else if (semester != '' && year != '' && startDate == '' && endDate == '') {
+                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student + '/semester/' + semester + '/year/' + year;
+                } else if (semester == '' && year == '' && startDate != '' && endDate != '') {
+                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student + '/start/' + startDate + '/end/' + endDate;
+                } else if (semester != '' && year != '' && startDate != '' && endDate != '') {
+                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
+                } else if (semester != '' && year == '' && startDate != '' && endDate != '') {
+                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate;
+                }
+            }
+            // window.location.href = '/coop/view/email/' + coopEmail + "/start/" + coopStartDate +
+            //     "/end/" + coopEndDate + "/status/" + approvalStatus + "/semester/" + coopSemester + "/year/" + coopYear;
         }
 
         function getSupervisorTimesheets() {
@@ -178,9 +196,16 @@
                 alert("Please enter start date to view timesheets");
                 getButton.disabled = true;
             } else {
-                let coop = document.getElementById('coop_teachers').value;
-                if (coop != '')
-                    getButton.disabled = false;
+                let coop = document.getElementById('coop_teachers');
+                if (coop != null){
+                    if(coop.value != '')
+                        getButton.disabled = false;
+                }
+                let student = document.getElementById('coop_student');
+                if (student != null){
+                    if(student.value != '')
+                        getButton.disabled = false;
+                }
             }
         }
 
