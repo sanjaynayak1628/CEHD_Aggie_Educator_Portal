@@ -34,6 +34,7 @@ def step_impl(context):
            context.browser.find_element_by_xpath("//div[contains(@class, 'alert')]").get_attribute(
                'innerText')
 
+
 @when("a student logins with incorrect password")
 def step_impl(context):
     # find the button
@@ -73,4 +74,4 @@ def step_impl(context):
 def step_impl(context):
     cb = context.browser
     # print(cb.current_url, '-----------------------')
-    assert cb.current_url.endswith('/timelogs/student/email/foo')
+    assert cb.current_url.endswith('/student/email/foo')

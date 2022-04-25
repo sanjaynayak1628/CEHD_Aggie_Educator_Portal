@@ -19,10 +19,13 @@ from utils.utility import get_previous_current_week
 
 class CoopStudentCurrent(APIView):
     """
-    GET function to get current semester student details of Cooperating View
+    Get current semester student details of Cooperating View
     """
 
     def get(self, request, coop_email):
+        """
+        GET function to get current semester student details of Cooperating View
+        """
         student_current_serializer, semester = get_coop_student_current(coop_email)
         student_list = list()
         for student in student_current_serializer["students"]:
@@ -35,6 +38,16 @@ class CoopStudentCurrent(APIView):
         current = False
         if datetime.date.today().strftime("%Y-%m-%d") > prev_cur_dates["current"]["monday"]:
             current = True
+            # get approval due date
+            # get next week Monday
+            nxt_wk_monday = datetime.datetime.strptime(prev_cur_dates["current"]["sunday"], "%Y-%m-%d").date() + \
+                            datetime.timedelta(days=1)
+            student_current_serializer["approval_by_date"] = nxt_wk_monday
+        else:
+            # get approval due date
+            student_current_serializer["approval_by_date"] = \
+                datetime.datetime.strptime(prev_cur_dates["current"]["monday"], "%Y-%m-%d").date()
+
         if current:
             kwargs["log_date__gte"] = prev_cur_dates["current"]["monday"]
             kwargs["log_date__lte"] = prev_cur_dates["current"]["sunday"]
@@ -67,8 +80,8 @@ class CoopStudentCurrent(APIView):
             student_current_serializer["approve"] = ""
         context = dict()
         context['data'] = student_current_serializer
-        print("Student time serializer")
-        print(student_current_serializer)
+        # print("Student time serializer")
+        # print(student_current_serializer)
         return render(request, f'cooperating/cooperatinginitial.html', status=status.HTTP_200_OK, context=context)
 
 
@@ -112,10 +125,13 @@ def save_time_logs(request):
 
 class CoopTimeLogSubmit(APIView):
     """
-    POST function to approve/reject the coop time sheets to the DB
+    Approve/reject the coop time sheets to the DB
     """
 
     def post(self, request, email, approve):
+        """
+        POST function to approve/reject the coop time sheets to the DB
+        """
         if approve.lower() == "true":
             response_data, request_status_fail = save_time_logs(request)
             response_dict = dict()
@@ -174,22 +190,22 @@ class CoopView(APIView):
     """
     Get the list of students under the cooperating teacher
     """
+
     def get(self, request, coop_email, semester=None):
         """
         GET function implementation to get the list of students under the cooperating teachers
         """
 
         students_all = query_sp_coop_student(coop_email, semester)
-        print("students")
-        print(students_all)
         context = {"status": "success", "message": "data retrieved", "data": students_all}
-        return render(request, f'cooperating/cooperatingview.html', context, status=status.HTTP_200_OK)
+        return render(request, f'cooperating/cooperatingView.html', context, status=status.HTTP_200_OK)
 
 
 class CoopViewGet(APIView):
     """
     Get the list of time logs based on conditions
     """
+
     def get(self, request, coop_email, student_email, semester=None, year=None, start_date=None, end_date=None):
         """
         GET function to get the list of time logs based on the conditions
@@ -225,5 +241,6 @@ class CoopViewGet(APIView):
         for tl in time_logs_serializer:
             tmp = dict(tl["fields"])
             student_coop_all["timelogs"].append(tmp)
-        print(student_coop_all)
-        return render(request, f'cooperating/cooperatingview.html', context=student_coop_all, status=status.HTTP_200_OK)
+        context = dict()
+        context["data"] = student_coop_all
+        return render(request, f'cooperating/cooperatingView.html', context=context, status=status.HTTP_200_OK)

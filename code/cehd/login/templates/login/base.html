@@ -79,30 +79,21 @@
             } else {
                 console.log("Not found")
             }
-            
             supStartEndDateChange()
-            
         };
 
         function calculateTimeDiff(id) {
-
             // counter = id.split('_')[0]
             // let log_date = counter + '_date'
             // let log_date_date = document.getElementById(log_date)
-
             // console.log(typeof(log_date_date) + 'date')
-
-
             // let start_time = counter + '_stime'
             // let start_time_time = document.getElementById(start_time)
             // console.log(typeof(start_time_time) + 'stime')
             // // let sDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(start_time_time.substring(0, 2)), parseInt(start_time_time.substring(3, 5)), parseInt(start_time_time.substring(6, 8))))
-
             // let end_time = counter + '_etime'
             // let end_time_time = document.getElementById(end_time)
             // // let eDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(end_time_time.substring(0, 2)), parseInt(end_time_time.substring(3, 5)), parseInt(end_time_time.substring(6, 8))))
-
-
             // console.log(Math.abs(new Date(end_time_time) - new Date(start_time_time)))
         }
 
@@ -118,29 +109,25 @@
             let endDate = document.getElementById('end_date').value;
             let coop_email = document.getElementById('coop_email').innerText;
             let student = document.getElementById('coop_student').value
-            // let approvalStatus = document.querySelector('input[name="group1"]:checked').value;
             let semester = document.getElementById('coop_semesters').value;
             let year = document.getElementById('years').value;
-            // console.log(coopStartDate + "   " + coopEndDate + "  " + coopEmail + "  " + approvalStatus + "  " + coopSemester + " " + coopYear);
             if (student != '') {
                 if (semester == '' && year == '' && startDate == '' && endDate == '') {
                     window.location.href = '/coop/email/' + coop_email + '/view/student/' + student;
                 } else if (semester != '' && year == '' && startDate == '' && endDate == '') {
-                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student + '/semester/' + semester;
+                    window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student + '/semester/' + semester;
                 } else if (semester == '' && year != '' && startDate == '' && endDate == '') {
-                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student  + '/year/' + year;
+                    window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student  + '/year/' + year;
                 } else if (semester != '' && year != '' && startDate == '' && endDate == '') {
-                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student + '/semester/' + semester + '/year/' + year;
+                    window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student + '/semester/' + semester + '/year/' + year;
                 } else if (semester == '' && year == '' && startDate != '' && endDate != '') {
-                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student + '/start/' + startDate + '/end/' + endDate;
+                    window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student + '/start/' + startDate + '/end/' + endDate;
                 } else if (semester != '' && year != '' && startDate != '' && endDate != '') {
-                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
+                    window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
                 } else if (semester != '' && year == '' && startDate != '' && endDate != '') {
-                    window.location.href = '/coop/email/view/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate;
+                    window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate;
                 }
             }
-            // window.location.href = '/coop/view/email/' + coopEmail + "/start/" + coopStartDate +
-            //     "/end/" + coopEndDate + "/status/" + approvalStatus + "/semester/" + coopSemester + "/year/" + coopYear;
         }
 
         function getSupervisorTimesheets() {
@@ -150,10 +137,6 @@
             let startDate = document.getElementById('start_date').value;
             let endDate = document.getElementById('end_date').value;
             let supervisor_email = document.getElementById('supervisor_email').innerText.trim();
-            console.log(supervisor_email + year);
-
-            console.log(semester + '-' + year + '-' + coop_email + '-' + startDate + '-' + endDate + '-' + supervisor_email);
-
             if (coop_email != '') {
                 if (semester == '' && year == '' && startDate == '' && endDate == '') {
                     window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email;
@@ -171,7 +154,6 @@
                     window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate;
                 }
             }
-            // window.location.href = '';
         }
 
         function supCoopSelect() {
