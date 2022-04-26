@@ -314,11 +314,11 @@
             
             xhr.onreadystatechange = function () {
                 // Call a function when the state changes.
-                console.log('/coop/email/'+document.getElementById('coop_coopappr_email').innerText+'/approve')
+                console.log('/coop/email/'+document.getElementById('coop_coopappr_email').innerText)
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                     // Request finished. Do processing here.
                     alert(JSON.parse(this.responseText).message)
-                    window.location.href = '/coop/email/'+document.getElementById('coop_coopappr_email').innerText+'/approve'
+                    window.location.href = '/coop/email/'+document.getElementById('coop_coopappr_email').innerText
                 }
             }
             xhr.send(JSON.stringify(jsonObj))

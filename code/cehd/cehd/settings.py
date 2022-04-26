@@ -99,8 +99,6 @@ PASSWORD = str(os.getenv('POSTGRES_PASSWORD'))
 HOST = str(os.getenv('POSTGRES_HOSTNAME'))
 PORT = str(os.getenv('POSTGRES_PORT'))
 
-print("Successfully retrieved settings for Postgres database.")
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
