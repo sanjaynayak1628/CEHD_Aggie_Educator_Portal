@@ -12,11 +12,3 @@ def before_all(context):
 
 def after_all(context):
     context.browser.close()
-
-
-def before_feature(context, feature):
-    pass
-
-
-def before_scenario(context, scenario):
-    context.databases = '__all__'

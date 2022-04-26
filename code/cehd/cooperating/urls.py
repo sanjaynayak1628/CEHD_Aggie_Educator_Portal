@@ -3,7 +3,7 @@ from .views import CoopView, CoopTimeLogSubmit, CoopStudentCurrent, CoopViewGet
 
 
 urlpatterns = [
-    path('email/<str:coop_email>/approve', CoopStudentCurrent.as_view(), name='coop'),
+    path('email/<str:coop_email>', CoopStudentCurrent.as_view(), name='coop'),
     path('email/<str:email>/submit/approve/<str:approve>', CoopTimeLogSubmit.as_view(), name='coop_appr'),
     # path('email/<str:coop_email>/prev', CoopStudentCurrent.as_view(), name='coop_appr'),
 

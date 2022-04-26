@@ -1,0 +1,100 @@
+Feature: User Authentication # features/authentication.feature:2
+
+  Scenario: student authentication fails                      # features/authentication.feature:7
+    Given we have a student                                   # features/steps/authentication.py:8
+    When a student logins with incorrect password             # features/steps/authentication.py:38
+    Then error message should be displayed for wrong password # features/steps/authentication.py:52
+
+  Scenario: student authentication fails                      # features/authentication.feature:12
+    Given we have a student                                   # features/steps/authentication.py:8
+    When a student logins with incorrect username             # features/steps/authentication.py:17
+    Then error message should be displayed for wrong username # features/steps/authentication.py:31
+
+  Scenario: student authentication passes                    # features/authentication.feature:17
+    Given we have a student                                  # features/steps/authentication.py:8
+    When a student logins with correct username and password # features/steps/authentication.py:59
+    Then redirect to student profile submit timesheet        # features/steps/authentication.py:73
+
+Feature: View of Cooperating teacher # features/coop.feature:2
+
+  Scenario: Cooperating teacher approve                          # features/coop.feature:7
+    Given I am a registered cooperating teacher                  # features/steps/coop.py:67
+    When I click the log in with cooperating teacher user type   # features/steps/coop.py:134
+    Then I am able to see the approve/reject timesheet           # features/steps/coop.py:146
+    Then I will click on the approve button                      # features/steps/coop.py:151
+    Then The timesheets are approved and updated in the database # features/steps/coop.py:159
+    Then I will click on logout to logout                        # features/steps/coop.py:197
+
+  Scenario: Cooperating teacher reject                         # features/coop.feature:15
+    Given I am a registered cooperating teacher                # features/steps/coop.py:67
+    When I click the log in with cooperating teacher user type # features/steps/coop.py:134
+    Then I am able to see the approve/reject timesheet         # features/steps/coop.py:146
+    Then I will click on the reject button                     # features/steps/coop.py:164
+    Then The timesheets are rejected                           # features/steps/coop.py:172
+    Then I will click on logout to logout                      # features/steps/coop.py:197
+
+  Scenario: Cooperating teacher view time sheet                # features/coop.feature:23
+    Given I am a registered cooperating teacher                # features/steps/coop.py:67
+    When I click the log in with cooperating teacher user type # features/steps/coop.py:134
+    Then I am able to see the approve/reject timesheet         # features/steps/coop.py:146
+    Then I will click on the view time sheets button           # features/steps/coop.py:177
+    Then The previous timesheets webpage is displayed          # features/steps/coop.py:182
+    Then I will select a student                               # features/steps/coop.py:187
+    Then I will be able to view the timesheets                 # features/steps/coop.py:192
+    Then I will click on logout to logout                      # features/steps/coop.py:197
+
+Feature: Student Timesheet Submit View # features/student_submit_timesheet.feature:2
+
+  Scenario: Student time log save               # features/student_submit_timesheet.feature:7
+    Given I am a registered student             # features/steps/student_submit_timesheet.py:13
+    When I click on the log in                  # features/steps/student_submit_timesheet.py:22
+    Then I am able to see my time sheet page    # features/steps/student_submit_timesheet.py:34
+    Then I will add the time for the days       # features/steps/student_submit_timesheet.py:39
+    Then I will click on the save               # features/steps/student_submit_timesheet.py:56
+    Then the timesheet is saved in the database # features/steps/student_submit_timesheet.py:65
+    Then I click on the log out button          # features/steps/student_submit_timesheet.py:70
+
+  Scenario: Student time log update             # features/student_submit_timesheet.feature:16
+    Given I am a registered student             # features/steps/student_submit_timesheet.py:13
+    When I click on the log in                  # features/steps/student_submit_timesheet.py:22
+    Then I am able to see my time sheet page    # features/steps/student_submit_timesheet.py:34
+    Then I will update the time for the days    # features/steps/student_submit_timesheet.py:76
+    Then I will click on the save               # features/steps/student_submit_timesheet.py:56
+    Then the timesheet is saved in the database # features/steps/student_submit_timesheet.py:65
+    Then I click on the log out button          # features/steps/student_submit_timesheet.py:70
+
+  Scenario: Student time log submit                 # features/student_submit_timesheet.feature:25
+    Given I am a registered student                 # features/steps/student_submit_timesheet.py:13
+    When I click on the log in                      # features/steps/student_submit_timesheet.py:22
+    Then I am able to see my time sheet page        # features/steps/student_submit_timesheet.py:34
+    Then I will add the time for the days           # features/steps/student_submit_timesheet.py:39
+    Then I will click on the submit                 # features/steps/student_submit_timesheet.py:93
+    Then the timesheet is submitted in the database # features/steps/student_submit_timesheet.py:101
+    Then I click on the log out button              # features/steps/student_submit_timesheet.py:70
+
+Feature: View Submitted Timesheets for Students # features/student_view_timesheet.feature:2
+
+  Scenario: Student time log view                           # features/student_view_timesheet.feature:7
+    Given I am a registered student to view                 # features/steps/student_view_timesheet.py:66
+    Then I click on the log in                              # features/steps/student_view_timesheet.py:127
+    Then I am able to see my current timesheets submit page # features/steps/student_view_timesheet.py:139
+    Then I click on view previous timesheets                # features/steps/student_view_timesheet.py:144
+    Then The previous timesheets are displayed              # features/steps/student_view_timesheet.py:150
+    Then I click on View selected timesheets                # features/steps/student_view_timesheet.py:155
+    Then I am able to view the selected timesheets          # features/steps/student_view_timesheet.py:160
+    Then I click on Submit Timesheets                       # features/steps/student_view_timesheet.py:167
+    Then I go to the submit timesheet webpage               # features/steps/student_view_timesheet.py:172
+    Then I click on log out                                 # features/steps/student_view_timesheet.py:177
+
+Feature: View of Supervisor # features/supervisor.feature:2
+
+  Scenario: Supervisor views                                               # features/supervisor.feature:7
+    Given I am a registered supervisor                                     # features/steps/supervisor.py:11
+    Then I will click on log in button                                     # features/steps/supervisor.py:20
+    Then I will view the timesheets page for cooperating teachers under me # features/steps/supervisor.py:32
+    Then I will click on the logout button                                 # features/steps/supervisor.py:37
+
+5 features passed, 0 failed, 0 skipped
+11 scenarios passed, 0 failed, 0 skipped
+64 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m49.308s

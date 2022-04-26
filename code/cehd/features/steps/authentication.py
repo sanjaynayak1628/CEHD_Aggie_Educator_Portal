@@ -73,5 +73,4 @@ def step_impl(context):
 @then("redirect to student profile submit timesheet")
 def step_impl(context):
     cb = context.browser
-    # print(cb.current_url, '-----------------------')
     assert cb.current_url.endswith('/student/email/foo')

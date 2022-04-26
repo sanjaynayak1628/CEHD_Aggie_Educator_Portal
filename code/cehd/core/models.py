@@ -83,6 +83,8 @@ class Person(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     last_login_ip = models.CharField(max_length=50, null=True)
 
+    USERNAME_FIELD = 'uin'
+
     class Meta(AbstractBaseUser.Meta):
         db_table = "person"
         ordering = ['last_name', 'first_name']
