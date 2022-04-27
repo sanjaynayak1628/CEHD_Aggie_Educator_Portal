@@ -303,6 +303,6 @@ class TimeLogViewsEmailGet(APIView):
 
 
 def get_time_logs_generic(kwargs):
-    time_logs = TimeLogs.objects.all().filter(**kwargs)
+    time_logs = TimeLogs.objects.all().filter(**kwargs).order_by("log_date")
     time_logs_serializer = json.loads(serializers.serialize('json', time_logs))
     return time_logs_serializer

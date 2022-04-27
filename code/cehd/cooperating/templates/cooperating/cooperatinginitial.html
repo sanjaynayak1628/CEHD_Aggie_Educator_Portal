@@ -51,7 +51,8 @@
             </div>
         </div>
         <div class="alert alert-danger fade show text-center" role="alert">
-          Timesheets approval for current week can only be done on or after <strong>{{ data.approval_by_date }}</strong>
+            Timesheets approval of previous week can only be done on or after <strong>{{ data.approval_start_date }}</strong>. </br>
+            All timesheets should be approved/rejected by <strong>{{ data.approval_end_date }}</strong>
         </div>
     </div>
 
