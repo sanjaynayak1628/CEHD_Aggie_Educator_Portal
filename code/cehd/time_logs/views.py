@@ -119,7 +119,10 @@ class TimeLogViewsSubmit(APIView):
                 response_dict["message"] = "Entered time not submitted. Co-operating teacher not found. " \
                                            "Please save the time entries."
             if status_mode == status.HTTP_200_OK:
-                timesheet_submit()
+                student_email_select = request.data.get("student_email_select", "")
+                student_name_select = request.data.get("student_name_select", "")
+                submission_date = datetime.date.today().strftime("%Y-%m-%d")
+                timesheet_submit(student_name_select, student_email_select, submission_date)
         return Response(response_dict, status=status_mode)
 
 
@@ -140,8 +143,8 @@ class TimeLogViewsSave(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         return Response(
             {"status": "success",
-             "message": "Entered time entries saved successfully", "email": request.data['email'],
-             "data": response_data}, status=status.HTTP_200_OK)
+             "message": "Entered time entries saved successfully", "student_email_select_email":
+                 request.data['student_email_select'], "data": response_data}, status=status.HTTP_200_OK)
 
     def delete(self, request, student_uin=None, log_date=None):
         """

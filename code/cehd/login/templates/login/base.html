@@ -249,7 +249,8 @@
             // jsonObj.csrfmiddlewaretoken = csrfToken
             jsonObj.cooperating_teacher_email = document.getElementById('coop_teacher_email').innerText
             jsonObj.cooperating_teacher_name = document.getElementById('coop_teacher_fullname').innerText
-            jsonObj.email = document.getElementById('student_email').innerText
+            jsonObj.student_name_select = document.getElementById('student_fullname').innerText
+            jsonObj.student_email_select = document.getElementById('student_email').innerText
             jsonObj.data = []
             let student_email = jsonObj.email
 
@@ -297,6 +298,7 @@
             jsonObj.cooperating_teacher_email = document.getElementById('coop_coopappr_email').innerText
             jsonObj.cooperating_teacher_name = document.getElementById('coop_coopappr_name').innerText
             jsonObj.data = []
+            jsonObj.log_date_list = []
 
             for (let i = 1; i <= 7; i++) {
                 let dataObj = {}
@@ -305,6 +307,7 @@
                 
                 dataObj.student_email = document.getElementById('student_coopappr_email').innerText
                 let log_date_date = log_element.value
+                jsonObj.log_date_list.push(log_date_date)
                 dataObj.log_date = log_date_date
                 let notes = i + '_notes'
                 let notes_element = document.getElementById(notes)
@@ -395,7 +398,7 @@
                 let jsonObj = getFormDataSaveSubmit(formData);
                 refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
             } else if (submitId === "reject-timesheet") {
-                let jsonObj = {};
+                let jsonObj = getFormDataSaveSubmitCoop(formData);
                 let fetch_email = (document.getElementById('coop_coopappr_email').innerText).trim()
                 let submitUrl = '/coop/email/' + fetch_email + '/submit/approve/false';
                 refreshSaveSubmitCoop(jsonObj, submitUrl, csrfToken);
