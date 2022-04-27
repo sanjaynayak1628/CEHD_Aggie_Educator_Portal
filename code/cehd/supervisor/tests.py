@@ -163,6 +163,18 @@ class SupervisorTest(TestCase):
                                                                            "end_date": "2022-04-25"}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_supervisor_coop_year_dates(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher
+        return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_year_dates", kwargs={"super_email": "emily@xyz.com",
+                                                                            "coop_email": "clark@xyz.com",
+                                                                            "year": "2022",
+                                                                            "start_date": "2022-04-18",
+                                                                            "end_date": "2022-04-25"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_supervisor_coop_export(self):
         """
         This function is used to check the correctness of Supervisor API with selected cooperating teacher for export
@@ -241,4 +253,17 @@ class SupervisorTest(TestCase):
                                                                                   "start_date": "2022-04-18",
                                                                                   "end_date": "2022-04-25",
                                                                                   "export": "true"}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_supervisor_coop_year_dates_export(self):
+        """
+        This function is used to check the correctness of Supervisor API with selected cooperating teacher for export
+        functionality return: 200 Correct Response
+        """
+        response = client.get(reverse("supervisor_coop_year_dates_export", kwargs={"super_email": "emily@xyz.com",
+                                                                                   "coop_email": "clark@xyz.com",
+                                                                                   "year": "2022",
+                                                                                   "start_date": "2022-04-18",
+                                                                                   "end_date": "2022-04-25",
+                                                                                   "export": "true"}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)

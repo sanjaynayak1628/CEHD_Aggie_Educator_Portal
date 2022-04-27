@@ -126,6 +126,8 @@
                     window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
                 } else if (semester != '' && year == '' && startDate != '' && endDate != '') {
                     window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student  + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate;
+                } else if (semester == '' && year != '' && startDate != '' && endDate != '') {
+                    window.location.href = '/coop/email/' + coop_email  + '/view/student/' + student  + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
                 }
             }
         }
@@ -152,6 +154,8 @@
                     window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
                 } else if (semester != '' && year == '' && startDate != '' && endDate != '') {
                     window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate;
+                } else if (semester == '' && year != '' && startDate != '' && endDate != '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/year/' + year + '/start/' + startDate + '/end/' + endDate;
                 }
             }
         }
@@ -178,6 +182,8 @@
                     window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate + '/export/true';
                 } else if (semester != '' && year == '' && startDate != '' && endDate != '') {
                     window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate + '/export/true';
+                } else if (semester == '' && year != '' && startDate != '' && endDate != '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/year/' + year + '/start/' + startDate + '/end/' + endDate + '/export/true';
                 }
             }
         }
@@ -185,8 +191,10 @@
         function supCoopSelect() {
             let getButton = document.getElementById('view_selected_timesheets');
             let exportButton = document.getElementById('export_selected_timesheets');
-            exportButton.disabled = false;
             getButton.disabled = false;
+            if (exportButton != null) {
+                exportButton.disabled = false;
+            }
             supStartEndDateChange();
         }
 
@@ -205,24 +213,33 @@
             if (endDate == '' && startDate != '') {
                 alert("Please enter end date to view timesheets");
                 getButton.disabled = true;
-                exportButton.disabled = true;
+                if (exportButton != null) {
+                    exportButton.disabled = true;
+                }
             }
             else if (startDate == '' && endDate != '') {
                 alert("Please enter start date to view timesheets");
                 getButton.disabled = true;
-                exportButton.disabled = true;
+                if (exportButton != null) {
+                    exportButton.disabled = true;
+                }
             } else {
                 let coop = document.getElementById('coop_teachers');
                 if (coop != null){
-                    if(coop.value != '')
+                    if(coop.value != '') {
                         getButton.disabled = false;
-                        exportButton.disabled = false;
+                        if (exportButton != null) {
+                            exportButton.disabled = false;
+                        }
+                    }
                 }
                 let student = document.getElementById('coop_student');
                 if (student != null){
                     if(student.value != '')
                         getButton.disabled = false;
-                        exportButton.disabled = false;
+                        if (exportButton != null) {
+                            exportButton.disabled = false;
+                    }
                 }
             }
         }
