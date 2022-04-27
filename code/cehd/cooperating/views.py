@@ -16,9 +16,10 @@ from time_logs.models import TimeLogs
 from utils.emails import timesheet_approve, timesheet_reject
 from utils.utility import get_previous_current_week
 
-
 # pick a day - "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"
-APPROVAL_BY_DAY = "monday"
+APPROVAL_END_DAY = "wednesday"
+APPROVAL_START_DAY = "monday"
+WEEK_DAY_INDEX = {"monday": 1, "tuesday": 2, "wednesday": 3, "thursday": 4, "friday": 5, "saturday": 6, "sunday": 7}
 
 
 class CoopStudentCurrent(APIView):
@@ -40,17 +41,22 @@ class CoopStudentCurrent(APIView):
         # get the previous and current weeks time logs
         prev_cur_dates = get_previous_current_week()
         current = False
-        if datetime.date.today().strftime("%Y-%m-%d") > prev_cur_dates["current"][APPROVAL_BY_DAY]:
+        if datetime.date.today().strftime("%Y-%m-%d") > prev_cur_dates["current"][APPROVAL_END_DAY]:
             current = True
             # get approval due date
             # get next week Monday
-            nxt_wk_monday = datetime.datetime.strptime(prev_cur_dates["current"]["sunday"], "%Y-%m-%d").date() + \
-                            datetime.timedelta(days=1)
-            student_current_serializer["approval_by_date"] = nxt_wk_monday
+            nxt_wk_approval_start = datetime.datetime.strptime(prev_cur_dates["current"]["sunday"], "%Y-%m-%d").date() \
+                                    + datetime.timedelta(days=WEEK_DAY_INDEX[APPROVAL_START_DAY])
+            nxt_wk_approval_end = datetime.datetime.strptime(prev_cur_dates["current"]["sunday"], "%Y-%m-%d").date() \
+                                  + datetime.timedelta(days=WEEK_DAY_INDEX[APPROVAL_END_DAY])
+            student_current_serializer["approval_start_date"] = nxt_wk_approval_start
+            student_current_serializer["approval_end_date"] = nxt_wk_approval_end
         else:
             # get approval due date
-            student_current_serializer["approval_by_date"] = \
-                datetime.datetime.strptime(prev_cur_dates["current"]["monday"], "%Y-%m-%d").date()
+            student_current_serializer["approval_start_date"] = \
+                datetime.datetime.strptime(prev_cur_dates["current"][APPROVAL_START_DAY], "%Y-%m-%d").date()
+            student_current_serializer["approval_end_date"] = \
+                datetime.datetime.strptime(prev_cur_dates["current"][APPROVAL_END_DAY], "%Y-%m-%d").date()
 
         if current:
             kwargs["log_date__gte"] = prev_cur_dates["current"]["monday"]
@@ -75,7 +81,7 @@ class CoopStudentCurrent(APIView):
         if False in hours_approved_check:
             approved = False
 
-        # enable or disable the approve/reject button
+        # enable or disable the approve/reject button based on the approval end date
         if current:
             student_current_serializer["approve"] = "disabled"
         elif approved:
