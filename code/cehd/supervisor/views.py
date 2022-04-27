@@ -1,8 +1,12 @@
+import csv
 import json
+
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
-from student_placements.views import query_supervisor_email, get_student_super_coop, get_super_coop_details, query_student_list_details
+from student_placements.views import query_supervisor_email, get_student_super_coop, get_super_coop_details, \
+    query_student_list_details
 from time_logs.views import get_time_logs_generic
 
 
@@ -39,6 +43,7 @@ class SupervisorCoopView(APIView):
     """
     Get the list of cooperating teachers under the supervisor
     """
+
     def get(self, request, super_email, semester=None):
         """
         GET function implementation to get the list of cooperating teachers under the supervisor
@@ -53,7 +58,9 @@ class SupervisorCoopGet(APIView):
     """
     Get the time logs for each student against selected cooperating teacher under the supervisor
     """
-    def get(self, request, super_email, coop_email, semester=None, year=None, start_date=None, end_date=None):
+
+    def get(self, request, super_email, coop_email, semester=None, year=None, start_date=None, end_date=None,
+            export=None):
         """
         GET function to get the time logs for each student against selected cooperating teacher under the supervisor
         """
@@ -108,6 +115,35 @@ class SupervisorCoopGet(APIView):
             tmp["student_name"] = student_names[tl["fields"]["student_email"]]
             super_coop_data["timelogs"].append(tmp)
 
-        # print(super_coop_data)
+        if export == "true":
+            response = HttpResponse(content_type="text/csv")
+            csv_keys = ["student name", "student email", "cooperating teacher", "cooperating teacher email",
+                        "log date", "notes", "hours submitted", "hours approved", "approval due date", "semester",
+                        "semester year", "start time", "end time", "date submitted"]
+            writer = csv.writer(response)
+            writer.writerow(csv_keys)
+            for tl in super_coop_data["timelogs"]:
+                # list of data
+                # append data to the list in the same order as the csv keys
+                tmp = list()
+                tmp.append(tl["student_name"])
+                tmp.append(tl["student_email"])
+                tmp.append(super_coop_data["cooperating_teacher_selected"])
+                tmp.append(super_coop_data["cooperating_teacher_email"])
+                tmp.append(tl["log_date"])
+                tmp.append(tl["notes"])
+                tmp.append(tl["hours_submitted"])
+                tmp.append(tl["hours_approved"])
+                tmp.append(tl["approval_due_date"])
+                tmp.append(tl["semester"])
+                tmp.append(tl["semester_year"])
+                tmp.append(tl["start_time"])
+                tmp.append(tl["end_time"])
+                tmp.append(tl["date_submitted"])
+                writer.writerow(tmp)
+
+            response["Content-Disposition"] = 'attachment; filename=supervisor_data.csv'
+            return response
+
         context = {"status": "success", "message": "data retrieved", "data": super_coop_data}
         return render(request, f'supervisor/supervisorView.html', context, status=status.HTTP_200_OK)

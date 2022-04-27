@@ -24,4 +24,28 @@ urlpatterns = [
 
     path('email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/start/<str:start_date>/end/<str:end_date>',
          SupervisorCoopGet.as_view(), name='supervisor_coop_sem_dates'),
+
+    # URLs for export data as csv functionality
+    path('email/<str:super_email>/coop/<str:coop_email>/export/<str:export>',
+         SupervisorCoopGet.as_view(), name='supervisor_coop_export'),
+
+    path('email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/export/<str:export>',
+         SupervisorCoopGet.as_view(), name='supervisor_coop_sem_export'),
+
+    path('email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/year/<str:year>/export/<str:export>',
+         SupervisorCoopGet.as_view(), name='supervisor_coop_sem_year_export'),
+
+    path('email/<str:super_email>/coop/<str:coop_email>/year/<str:year>/export/<str:export>',
+         SupervisorCoopGet.as_view(), name='supervisor_coop_year_export'),
+
+    path('email/<str:super_email>/coop/<str:coop_email>/start/<str:start_date>/end/<str:end_date>/export/<str:export>',
+         SupervisorCoopGet.as_view(), name='supervisor_coop_dates_export'),
+
+    path(
+        'email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/year/<str:year>/start/<str:start_date>/end/<str:end_date>/export/<str:export>',
+        SupervisorCoopGet.as_view(), name='supervisor_coop_sem_dates_year_export'),
+
+    path(
+        'email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/start/<str:start_date>/end/<str:end_date>export/<str:export>',
+        SupervisorCoopGet.as_view(), name='supervisor_coop_sem_dates_export'),
 ]
