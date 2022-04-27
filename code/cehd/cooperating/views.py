@@ -17,6 +17,10 @@ from utils.emails import timesheet_approve, timesheet_reject
 from utils.utility import get_previous_current_week
 
 
+# pick a day - "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"
+APPROVAL_BY_DAY = "monday"
+
+
 class CoopStudentCurrent(APIView):
     """
     Get current semester student details of Cooperating View
@@ -36,7 +40,7 @@ class CoopStudentCurrent(APIView):
         # get the previous and current weeks time logs
         prev_cur_dates = get_previous_current_week()
         current = False
-        if datetime.date.today().strftime("%Y-%m-%d") > prev_cur_dates["current"]["monday"]:
+        if datetime.date.today().strftime("%Y-%m-%d") > prev_cur_dates["current"][APPROVAL_BY_DAY]:
             current = True
             # get approval due date
             # get next week Monday
@@ -155,10 +159,23 @@ class CoopTimeLogSubmit(APIView):
                     response_dict["message"] = "Entered time not approved. Co-operating teacher not found."
                 # send email notification to student regarding approval of timesheets
                 if status_mode == status.HTTP_200_OK:
-                    timesheet_approve()
+                    coop_name = cooperating_teacher_name
+                    approve_date = datetime.date.today().strftime("%Y-%m-%d")
+                    log_dates = request.data.get("log_date_list", [])
+                    log_dates = sorted(log_dates)
+                    start_date = log_dates[0]
+                    end_date = log_dates[-1]
+                    timesheet_approve(coop_name, approve_date, start_date, end_date)
             return Response(response_dict, status=status_mode)
         elif approve.lower() == "false":
-            timesheet_reject()
+            coop_name = request.data.get("cooperating_teacher_name", "")
+            coop_email = request.data.get("cooperating_teacher_email", "")
+            reject_date = datetime.date.today().strftime("%Y-%m-%d")
+            log_dates = request.data.get("log_date_list", [])
+            log_dates = sorted(log_dates)
+            start_date = log_dates[0]
+            end_date = log_dates[-1]
+            timesheet_reject(coop_name, coop_email, reject_date, start_date, end_date)
             return Response({"message": "Time entries rejected and notified to the student"}, status=status.HTTP_200_OK)
 
 

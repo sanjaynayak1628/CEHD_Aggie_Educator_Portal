@@ -42,38 +42,43 @@ def send_email(mail_subject, mail_content_html, recipients_mail_list):
         raise Exception("Errors occurred while sending email", send_errs)
 
 
-def timesheet_approve():
+def timesheet_approve(coop_name, approve_date, start_date, end_date):
     """
     Send email to student if time sheets are approved by the cooperating teacher
     """
     # mail server parameters
     mail_subject = "Timesheet Approved"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_APPROVE
-    mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \
-                        "awesome library called <b>smtplib</b> "
+    mail_content_html = "Hi, <br/>The timesheets submitted for the dates between {} and {} have been approved on {} " \
+                        "by {}.<br/>You can login to your account to verify the status of your submitted time sheets." \
+                        "<br/><br/>Best regards"\
+        .format(start_date, end_date, approve_date, coop_name)
     send_email(mail_subject, mail_content_html, recipients_mail_list)
 
 
-def timesheet_reject():
+def timesheet_reject(coop_name, coop_email, rejection_date, start_date, end_date):
     """
     Send email to student if time sheets are rejected by the cooperating teacher
     """
     # mail server parameters
-    mail_subject = "Timesheet Rejected"
+    mail_subject = "Timesheet Rejected | Contact your assigned cooperating teacher"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_REJECT
-    mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \
-                        "awesome library called <b>smtplib</b> "
+    mail_content_html = "Hi, <br/>The timesheets submitted for the dates between {} and {} have been rejected on {} " \
+                        "by {}.<br/>Please contact your assigned cooperating teacher, {} ({}) for more information. " \
+                        "<br/><br/>Best regards"\
+        .format(start_date, end_date, rejection_date, coop_name, coop_name, coop_email)
     send_email(mail_subject, mail_content_html, recipients_mail_list)
 
 
-def timesheet_submit():
+def timesheet_submit(student_name, student_email, submission_date):
     """
     Send email to cooperating teacher if time sheets are submitted by the student
     """
     # mail server parameters
     # print("Inside timesheet submit email")
-    mail_subject = "Timesheet Submitted"
+    mail_subject = "Timesheet Submitted | Waiting for approval"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_SUBMIT
-    mail_content_html = "Hi, Hope u are fine. <br/> This is a <b>test</b> mail from python script using an " \
-                        "awesome library called <b>smtplib</b> "
+    mail_content_html = "Hi, <br/>The student <b>{} ,{}</b> has submitted the timesheet on <b>{}</b> for approval. " \
+                        "Please login to your account to approve the time sheets.<br/><br/>Best regards"\
+        .format(student_name, student_email, submission_date)
     send_email(mail_subject, mail_content_html, recipients_mail_list)
