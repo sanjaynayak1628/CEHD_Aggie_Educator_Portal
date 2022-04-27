@@ -26,7 +26,6 @@ urlpatterns = [
          SupervisorCoopGet.as_view(), name='supervisor_coop_sem_dates'),
 
     # URLs for export data as csv functionality
-    path('email/<str:super_email>/export/<str:export>', SupervisorCoopView.as_view(), name='supervisor_all_export'),
     path('email/<str:super_email>/coop/<str:coop_email>/export/<str:export>',
          SupervisorCoopGet.as_view(), name='supervisor_coop_export'),
 
@@ -47,6 +46,6 @@ urlpatterns = [
         SupervisorCoopGet.as_view(), name='supervisor_coop_sem_dates_year_export'),
 
     path(
-        'email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/start/<str:start_date>/end/<str:end_date>export',
+        'email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/start/<str:start_date>/end/<str:end_date>export/<str:export>',
         SupervisorCoopGet.as_view(), name='supervisor_coop_sem_dates_export'),
 ]

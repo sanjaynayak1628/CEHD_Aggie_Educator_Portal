@@ -156,14 +156,43 @@
             }
         }
 
+        function exportSupervisorTimesheets() {
+            let semester = document.getElementById('semesters').value;
+            let year = document.getElementById('years').value;
+            let coop_email = document.getElementById('coop_teachers').value.trim()
+            let startDate = document.getElementById('start_date').value;
+            let endDate = document.getElementById('end_date').value;
+            let supervisor_email = document.getElementById('supervisor_email').innerText.trim();
+            if (coop_email != '') {
+                if (semester == '' && year == '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/export/true';
+                } else if (semester != '' && year == '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/export/true';
+                } else if (semester == '' && year != '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/year/' + year + '/export/true';
+                } else if (semester != '' && year != '' && startDate == '' && endDate == '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/year/' + year + '/export/true';
+                } else if (semester == '' && year == '' && startDate != '' && endDate != '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/start/' + startDate + '/end/' + endDate + '/export/true';
+                } else if (semester != '' && year != '' && startDate != '' && endDate != '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/year/' + year + '/start/' + startDate + '/end/' + endDate + '/export/true';
+                } else if (semester != '' && year == '' && startDate != '' && endDate != '') {
+                    window.location.href = '/supervisor/email/' + supervisor_email + '/coop/' + coop_email + '/semester/' + semester + '/start/' + startDate + '/end/' + endDate + '/export/true';
+                }
+            }
+        }
+
         function supCoopSelect() {
             let getButton = document.getElementById('view_selected_timesheets');
+            let exportButton = document.getElementById('export_selected_timesheets');
+            exportButton.disabled = false;
             getButton.disabled = false;
             supStartEndDateChange();
         }
 
         function supStartEndDateChange() {
             let getButton = document.getElementById('view_selected_timesheets');
+            let exportButton = document.getElementById('export_selected_timesheets');
             if(getButton == null){
                 return
             }
@@ -176,20 +205,24 @@
             if (endDate == '' && startDate != '') {
                 alert("Please enter end date to view timesheets");
                 getButton.disabled = true;
+                exportButton.disabled = true;
             }
             else if (startDate == '' && endDate != '') {
                 alert("Please enter start date to view timesheets");
                 getButton.disabled = true;
+                exportButton.disabled = true;
             } else {
                 let coop = document.getElementById('coop_teachers');
                 if (coop != null){
                     if(coop.value != '')
                         getButton.disabled = false;
+                        exportButton.disabled = false;
                 }
                 let student = document.getElementById('coop_student');
                 if (student != null){
                     if(student.value != '')
                         getButton.disabled = false;
+                        exportButton.disabled = false;
                 }
             }
         }

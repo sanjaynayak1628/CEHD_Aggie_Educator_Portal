@@ -98,11 +98,12 @@ USER = str(os.getenv('POSTGRES_USERNAME'))
 PASSWORD = str(os.getenv('POSTGRES_PASSWORD'))
 HOST = str(os.getenv('POSTGRES_HOSTNAME'))
 PORT = str(os.getenv('POSTGRES_PORT'))
+DBNAME = str(os.getenv('POSTGRES_DBNAME'))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'AggieEducatorPortal',
+        'NAME': DBNAME,
         'USER': USER,
         'PASSWORD': PASSWORD,
         'HOST': HOST,
