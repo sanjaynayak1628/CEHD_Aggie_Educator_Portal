@@ -6,7 +6,7 @@ urlpatterns = [
     # Student save time sheet URL
     path('email/<str:email>/save/', TimeLogViewsSave.as_view(), name='student_save_time_logs'),
     # student submit time sheet URL
-    path('email/<str:email>submit/', TimeLogViewsSubmit.as_view(), name="student_submit_time_logs"),
+    path('email/<str:email>/submit/', TimeLogViewsSubmit.as_view(), name="student_submit_time_logs"),
     # Student delete URLs from student UIN
     path('remove/uin/<int:student_uin>/date/<str:log_date>', TimeLogViewsSave.as_view(),
          name='student_delete_time_logs'),

@@ -401,10 +401,11 @@
             let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].defaultValue
 
             let submitId = event.submitter.id;
-            console.log(submitId)
+            // console.log(submitId)
             let submitUrl = '/student/save/';
             if (submitId === "submit-timesheet") {
-                submitUrl = '/student/submit/';
+                let fetch_email = (document.getElementById('student_email').innerText).trim()
+                submitUrl = '/student/email/'+ fetch_email +'/submit/';
                 let jsonObj = getFormDataSaveSubmit(formData);
                 refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
             } else if (submitId === "approve-timesheet") {
@@ -413,6 +414,8 @@
                 let jsonObj = getFormDataSaveSubmitCoop(formData);
                 refreshSaveSubmitCoop(jsonObj, submitUrl, csrfToken);
             } else if (submitId === "save-timesheet") {
+                let fetch_email = (document.getElementById('student_email').innerText).trim()
+                submitUrl = '/student/email/'+ fetch_email +'/save/';
                 let jsonObj = getFormDataSaveSubmit(formData);
                 refreshSaveSubmit(jsonObj, submitUrl, csrfToken);
             } else if (submitId === "reject-timesheet") {
