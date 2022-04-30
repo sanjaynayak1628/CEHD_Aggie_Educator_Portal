@@ -224,7 +224,7 @@
 * **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/year/\<str:year\>**
 * **Method:** - `GET`
 * **Description** - Get function to fetch all timesheets when year and student is selected from UI
-* **Input** - coop_email (str), student_email (str), semester(str)
+* **Input** - coop_email (str), student_email (str), year(str)
 * **Output** : Example
 ```
 { 
@@ -264,136 +264,95 @@
 ```
 ----
 
-
-
-
-**supervisor_coop_sem**
-* **URL - http://127.0.0.1:8000/supervisor/email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>**
+**coop_student_dates**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>/start/\<str:start_date\>/end/\<str:end_date\>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
-* **Input** - super_email (str), coop_email (str), semester (str)
+* **Description** - Get function to fetch all timesheets when start date, end date, year and student is selected from UI
+* **Input** - coop_email (str), student_email (str), semester(str), start_date (str), end_date (str)
 * **Output** : Example
 ```
-{
-	'status': 'success',
-	'message': 'data retrieved',
-	'data': {
-		'university_supervisor_email': 'johnny@xyz.com',
-		'cooperating_teacher_email': 'moore@xyz.com',
-		'cooperating_teachers': [{
-			'cooperating_teacher': 'Kasey Moore',
-			'cooperating_teacher_email': 'kaseymoore@xyz.com'
-		}, {
-			'cooperating_teacher': 'Michael Moore',
-			'cooperating_teacher_email': 'moore@xyz.com'
-		}],
-		'years': ['2022'],
-		'university_supervisor_name': 'John Paul',
-		'cooperating_teacher_selected': 'Michael Moore',
-		'cooperating_teacher_email_selected': 'moore@xyz.com',
-		'timelogs': [{
-			'student_uin': 123,
-			'student_email': 'abc@xyz.com',
-			'log_date': '2022-04-04',
-			'notes': 'submitted now test',
-			'hours_submitted': '4.0',
-			'hours_approved': False,
-			'approval_due_date': '2022-04-10',
-			'semester': 'sprng',
-			'semester_year': '2022',
-			'start_time': '2022-05-04T17:11:00Z',
-			'end_time': '2022-05-04T21:11:00Z',
-			'date_submitted': '2022-04-08',
-			'student_name': 'John C Doe'
-		}, ...]
-	}
-}
+{ 
+   "data":{ 
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "start_date":"2022-04-04", 
+      "end_date":"2022-04-08", 
+      "timelogs":[ 
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-05", 
+            "notes":"", 
+            "hours_submitted":"5.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-04-10", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-05T10:19:00Z", 
+            "end_time":"2022-05-05T15:19:00Z", 
+            "date_submitted":"2022-04-08" 
+         }, 
+     ] 
+   } 
+} 
 ```
 ----
 
-**supervisor_coop_sem_year**
-* **URL - http://127.0.0.1:8000/supervisor/email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>/year/<str:year>**
+**coop_student_sem_dates_year**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>/year/\<str:year\>/start/\<str:start_date\>/end/\<str:end_date\>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
-* **Input** - super_email (str), coop_email (str), semester (str), year (int)
+* **Description** - Get function to fetch all timesheets when start date, end date, year and student is selected from UI
+* **Input** - coop_email (str), student_email (str), semester(str), start_date (str), end_date (str), year (str)
 * **Output** : Example
 ```
-{
-	'status': 'success',
-	'message': 'data retrieved',
-	'data': {
-		'university_supervisor_email': 'johnny@xyz.com',
-		'cooperating_teacher_email': 'moore@xyz.com',
-		'cooperating_teachers': [{
-			'cooperating_teacher': 'Kasey Moore',
-			'cooperating_teacher_email': 'kaseymoore@xyz.com'
-		}, {
-			'cooperating_teacher': 'Michael Moore',
-			'cooperating_teacher_email': 'moore@xyz.com'
-		}],
-		'years': ['2022'],
-		'university_supervisor_name': 'John Paul',
-		'cooperating_teacher_selected': 'Michael Moore',
-		'cooperating_teacher_email_selected': 'moore@xyz.com',
-		'timelogs': [{
-			'student_uin': 123,
-			'student_email': 'abc@xyz.com',
-			'log_date': '2022-04-04',
-			'notes': 'submitted now test',
-			'hours_submitted': '4.0',
-			'hours_approved': False,
-			'approval_due_date': '2022-04-10',
-			'semester': 'sprng',
-			'semester_year': '2022',
-			'start_time': '2022-05-04T17:11:00Z',
-			'end_time': '2022-05-04T21:11:00Z',
-			'date_submitted': '2022-04-08',
-			'student_name': 'John C Doe'
-		}, ...]
-	}
+{ 
+   "data":{ 
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "semester":"spring", 
+      "start_date":"2022-04-04", 
+      "end_date":"2022-04-08", 
+      "timelogs":[ 
+
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-05", 
+            "notes":"", 
+            "hours_submitted":"5.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-04-10", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-05T10:19:00Z", 
+            "end_time":"2022-05-05T15:19:00Z", 
+            "date_submitted":"2022-04-08" 
+         }, 
+       ] 
+   } 
 }
 ```
 ----
-
-**supervisor_coop_year**
-* **URL - http://127.0.0.1:8000/supervisor/email/<str:super_email>/coop/<str:coop_email>/year/<str:year>**
-* **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
-* **Input** - super_email (str), coop_email (str), semester (str), year (int)
-* **Output** : Example
-```
-{
-	'status': 'success',
-	'message': 'data retrieved',
-	'data': {
-		'university_supervisor_email': 'johnny@xyz.com',
-		'cooperating_teacher_email': 'moore@xyz.com',
-		'cooperating_teachers': [{
-			'cooperating_teacher': 'Kasey Moore',
-			'cooperating_teacher_email': 'kaseymoore@xyz.com'
-		}, {
-			'cooperating_teacher': 'Michael Moore',
-			'cooperating_teacher_email': 'moore@xyz.com'
-		}],
-		'years': ['2022'],
-		'university_supervisor_name': 'John Paul',
-		'cooperating_teacher_selected': 'Michael Moore',
-		'cooperating_teacher_email_selected': 'moore@xyz.com',
-		'timelogs': [{
-			'student_uin': 123,
-			'student_email': 'abc@xyz.com',
-			'log_date': '2022-04-04',
-			'notes': 'submitted now test',
-			'hours_submitted': '4.0',
-			'hours_approved': False,
-			'approval_due_date': '2022-04-10',
-			'semester': 'sprng',
-			'semester_year': '2022',
-			'start_time': '2022-05-04T17:11:00Z',
-			'end_time': '2022-05-04T21:11:00Z',
-			'date_submitted': '2022-04-08',
-			'student_name': 'John C Doe'
-		}, ...]
-	}
-}
 ```
