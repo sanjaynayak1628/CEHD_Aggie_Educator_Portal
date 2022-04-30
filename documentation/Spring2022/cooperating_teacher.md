@@ -129,6 +129,144 @@
 ```
 ----
 
+**coop_student_sem**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>**
+* **Method:** - `GET`
+* **Description** - Get function to fetch all timesheets when semester and student is selected from UI
+* **Input** - coop_email (str), student_email (str), semester(str)
+* **Output** : Example
+```
+{ 
+   "data":{ 
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "semester":"spring", 
+      "timelogs":[ 
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-29", 
+            "notes":"current week friday", 
+            "hours_submitted":"3.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-05-02", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-09T15:03:00Z", 
+            "end_time":"2022-05-09T22:03:00Z", 
+            "date_submitted":"2022-04-27" 
+         }...
+      ] 
+   } 
+} 
+```
+----
+
+**coop_student_sem_year**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>/year/\<str:year\>**
+* **Method:** - `GET`
+* **Description** - Get function to fetch all timesheets when year, semester and student is selected from UI
+* **Input** - coop_email (str), student_email (str), semester(str), year(str)
+* **Output** : Example
+```
+{ 
+
+   "data":{ 
+
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "semester":"spring", 
+      "semester_year":"2022", 
+      "timelogs":[ 
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-04", 
+            "notes":"submitted now test", 
+            "hours_submitted":"4.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-04-10", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-04T17:11:00Z", 
+            "end_time":"2022-05-04T21:11:00Z", 
+            "date_submitted":"2022-04-08" 
+         }...
+      ] 
+   } 
+} 
+```
+----
+
+**coop_student_year**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/year/\<str:year\>**
+* **Method:** - `GET`
+* **Description** - Get function to fetch all timesheets when year and student is selected from UI
+* **Input** - coop_email (str), student_email (str), semester(str)
+* **Output** : Example
+```
+{ 
+   "data":{ 
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "semester_year":"2022", 
+      "timelogs":[ 
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-04", 
+            "notes":"submitted now test", 
+            "hours_submitted":"4.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-04-10", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-04T17:11:00Z", 
+            "end_time":"2022-05-04T21:11:00Z", 
+            "date_submitted":"2022-04-08" 
+         }...
+       ] 
+   } 
+}
+```
+----
+
+
+
+
 **supervisor_coop_sem**
 * **URL - http://127.0.0.1:8000/supervisor/email/<str:super_email>/coop/<str:coop_email>/semester/<str:semester>**
 * **Method:** - `GET`
