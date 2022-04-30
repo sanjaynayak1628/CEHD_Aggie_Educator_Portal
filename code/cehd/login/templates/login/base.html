@@ -48,6 +48,7 @@
     </style>
 
     <script>
+        //Add rows to table when submitting timesheed
         function addRow() {
             let table = document.getElementById("timesheet_table");
             let tableBody = table.getElementsByTagName("tbody")[0]
@@ -69,7 +70,10 @@
                     </td>
                 </tr>`
         }
+
+        // Window onload function - Functions with this block run only after the html has completely loaded
         window.onload = function () {
+            // Add even listeners on timelog submit (student) and co op teacher timesheet approval.
             const form = document.getElementById('timelog_submit_form');
             const form1 = document.getElementById('coop_submit_form');
             if (form != null) {
@@ -82,7 +86,8 @@
             supStartEndDateChange()
         };
 
-        function calculateTimeDiff(id) {
+        // Function to calculate timediff  - onblur functionality that can be added by client if required
+        // function calculateTimeDiff(id) {
             // counter = id.split('_')[0]
             // let log_date = counter + '_date'
             // let log_date_date = document.getElementById(log_date)
@@ -95,8 +100,9 @@
             // let end_time_time = document.getElementById(end_time)
             // // let eDateTime = new Date(Date.UTC(parseInt(log_date_date.substring(0, 4)), parseInt(log_date_date.substring(5, 7)), parseInt(log_date_date.substring(9, 11)), parseInt(end_time_time.substring(0, 2)), parseInt(end_time_time.substring(3, 5)), parseInt(end_time_time.substring(6, 8))))
             // console.log(Math.abs(new Date(end_time_time) - new Date(start_time_time)))
-        }
+        // }
 
+        // Generate get urls by taking html inputs for filtering by start and end date (Student user)
         function getTimesheetsByDate() {
             let startdate = document.getElementById('studentstart_date').value;
             let endDate = document.getElementById('studentend_date').value;
@@ -104,6 +110,8 @@
             window.location.href = '/student/email/' + student_email + "/start/" + startdate + "/end/" + endDate
         }
 
+        // Generate get urls by start and end date, coop email, student mail, semester and year (Coop user)
+        // student email is mandatory
         function getTimesheetsByCoopFilters() {
             let startDate = document.getElementById('start_date').value;
             let endDate = document.getElementById('end_date').value;
@@ -132,6 +140,8 @@
             }
         }
 
+        // Generate get urls by semester, year, coop eamil, start date, end date and supervisor email
+        // Coop teacher email is mandatory
         function getSupervisorTimesheets() {
             let semester = document.getElementById('semesters').value;
             let year = document.getElementById('years').value;
@@ -160,6 +170,7 @@
             }
         }
 
+        // Helper function for csv generation for supervisor user
         function exportSupervisorTimesheets() {
             let semester = document.getElementById('semesters').value;
             let year = document.getElementById('years').value;
@@ -188,6 +199,7 @@
             }
         }
 
+        // Disabling of the view selecting timesheets button based on selection
         function supCoopSelect() {
             let getButton = document.getElementById('view_selected_timesheets');
             let exportButton = document.getElementById('export_selected_timesheets');
@@ -198,6 +210,7 @@
             supStartEndDateChange();
         }
 
+        // Condition to ask for both start date and end date to be selected when trying to view a timesheet
         function supStartEndDateChange() {
             let getButton = document.getElementById('view_selected_timesheets');
             let exportButton = document.getElementById('export_selected_timesheets');
@@ -244,6 +257,7 @@
             }
         }
 
+        // Generate json post data for student timelogs
         function getFormDataSaveSubmit(formData) {
             let jsonObj = {}
             // jsonObj.csrfmiddlewaretoken = csrfToken
@@ -292,6 +306,7 @@
         }
 
 
+        // generate approval json data for coop teacher post
         function getFormDataSaveSubmitCoop(formData) {
             let jsonObj = {}
             // jsonObj.csrfmiddlewaretoken = csrfToken
@@ -342,6 +357,7 @@
             return jsonObj
         }
 
+        // Generate xhtml post request after generation of json data for student
         function refreshSaveSubmit(jsonObj, submitUrl, csrfToken) {
             let xhr = new XMLHttpRequest()
             xhr.open("POST", submitUrl, true)
@@ -359,6 +375,7 @@
             xhr.send(JSON.stringify(jsonObj))
         }
 
+        // Generate xhtml post request after generation of json data for coop teacher
         function refreshSaveSubmitCoop(jsonObj, submitUrl, csrfToken) {
             let xhr = new XMLHttpRequest()
             xhr.open("POST", submitUrl, true)
@@ -377,6 +394,7 @@
             xhr.send(JSON.stringify(jsonObj))
         }
 
+        // Timelog submit event handler. When submit is clicked, this runs asynchronously
         function handleTimelogSubmit(event) {
             event.preventDefault();
             const formData = new FormData(event.target);
