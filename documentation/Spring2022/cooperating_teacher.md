@@ -267,7 +267,7 @@
 **coop_student_dates**
 * **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>/start/\<str:start_date\>/end/\<str:end_date\>**
 * **Method:** - `GET`
-* **Description** - Get function to fetch all timesheets when start date, end date, year and student is selected from UI
+* **Description** - Get function to fetch all timesheets when start date, end date, semester and student is selected from UI
 * **Input** - coop_email (str), student_email (str), semester(str), start_date (str), end_date (str)
 * **Output** : Example
 ```
@@ -312,7 +312,7 @@
 **coop_student_sem_dates_year**
 * **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>/year/\<str:year\>/start/\<str:start_date\>/end/\<str:end_date\>**
 * **Method:** - `GET`
-* **Description** - Get function to fetch all timesheets when start date, end date, year and student is selected from UI
+* **Description** - Get function to fetch all timesheets when semester,  start date, end date, year and student is selected from UI
 * **Input** - coop_email (str), student_email (str), semester(str), start_date (str), end_date (str), year (str)
 * **Output** : Example
 ```
@@ -404,8 +404,8 @@
 **coop_student_year_dates**
 * **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/year/\<str:year\>/start/\<str:start_date\>/end/\<str:end_date\>**
 * **Method:** - `GET`
-* **Description** - Get function to fetch all timesheets when start date, end date and student is selected from UI
-* **Input** - coop_email (str), student_email (str), start_date (str), end_date (str)
+* **Description** - Get function to fetch all timesheets when year, start date, end date and student is selected from UI
+* **Input** - coop_email (str), student_email (str), year (str), start_date (str), end_date (str)
 * **Output** : Example
 ```
 { 
