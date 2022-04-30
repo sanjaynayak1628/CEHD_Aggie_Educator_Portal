@@ -93,7 +93,7 @@ class TimeLogViewsSubmit(APIView):
     Submit the time sheets entered by the student
     """
 
-    def post(self, request):
+    def post(self, request, email):
         """
         POST function to submit the time sheets
         """
@@ -131,7 +131,7 @@ class TimeLogViewsSave(APIView):
     Save time sheets to the DB
     """
 
-    def post(self, request):
+    def post(self, request, email):
         """
         POST function implementation to save the time sheets into the DB
         """
