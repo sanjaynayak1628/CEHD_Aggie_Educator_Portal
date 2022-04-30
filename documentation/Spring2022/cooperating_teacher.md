@@ -355,4 +355,143 @@
 }
 ```
 ----
+
+**coop_student_dates**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>/start/\<str:start_date\>/end/\<str:end_date\>**
+* **Method:** - `GET`
+* **Description** - Get function to fetch all timesheets when start date, end date, year and student is selected from UI
+* **Input** - coop_email (str), student_email (str), semester(str), start_date (str), end_date (str)
+* **Output** : Example
+```
+{ 
+   "data":{ 
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "start_date":"2022-04-04", 
+      "end_date":"2022-04-08", 
+      "timelogs":[ 
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-05", 
+            "notes":"", 
+            "hours_submitted":"5.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-04-10", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-05T10:19:00Z", 
+            "end_time":"2022-05-05T15:19:00Z", 
+            "date_submitted":"2022-04-08" 
+         }, 
+     ] 
+   } 
+} 
+```
+----
+
+**coop_student_year_dates**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/semester/\<str:semester\>/year/\<str:year\>/start/\<str:start_date\>/end/\<str:end_date\>**
+* **Method:** - `GET`
+* **Description** - Get function to fetch all timesheets when start date, end date, year and student is selected from UI
+* **Input** - coop_email (str), student_email (str), semester(str), start_date (str), end_date (str), year (str)
+* **Output** : Example
+```
+{ 
+   "data":{ 
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "semester":"spring", 
+      "start_date":"2022-04-04", 
+      "end_date":"2022-04-08", 
+      "timelogs":[ 
+
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-05", 
+            "notes":"", 
+            "hours_submitted":"5.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-04-10", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-05T10:19:00Z", 
+            "end_time":"2022-05-05T15:19:00Z", 
+            "date_submitted":"2022-04-08" 
+         }, 
+       ] 
+   } 
+}
+```
+----
+
+**coop_student_year_dates**
+* **URL - coop/email/\<str:coop_email\>/view/student/\<str:student_email\>/year/\<str:year\>/start/\<str:start_date\>/end/\<str:end_date\>**
+* **Method:** - `GET`
+* **Description** - Get function to fetch all timesheets when start date, end date and student is selected from UI
+* **Input** - coop_email (str), student_email (str), start_date (str), end_date (str)
+* **Output** : Example
+```
+{ 
+   "data":{ 
+      "cooperating_teacher_email":"moore@xyz.com", 
+      "students":[ 
+         { 
+            "student_full_name":"John C Doe", 
+            "student_email":"abc@xyz.com" 
+         } 
+      ], 
+      "years":[ 
+         "2022" 
+      ], 
+      "cooperating_teacher_name":"Michael Moore", 
+      "student_email_selected":"abc@xyz.com", 
+      "student_full_name_selected":"John C Doe", 
+      "semester_year":"2022", 
+      "start_date":"2022-04-04", 
+      "end_date":"2022-04-08", 
+      "timelogs":[ 
+
+         { 
+            "student_uin":123, 
+            "student_email":"abc@xyz.com", 
+            "log_date":"2022-04-05", 
+            "notes":"",
+            "hours_submitted":"5.0", 
+            "hours_approved":false, 
+            "approval_due_date":"2022-04-10", 
+            "semester":"sprng", 
+            "semester_year":"2022", 
+            "start_time":"2022-05-05T10:19:00Z", 
+            "end_time":"2022-05-05T15:19:00Z", 
+            "date_submitted":"2022-04-08" 
+         }, 
+      ] 
+   } 
+} 
+```
+----
 ```
