@@ -447,4 +447,91 @@
 } 
 ```
 ----
+
+**coop_appr**
+* **URL - coop/email/\<str:email\>/submit/approve/\<str:approve\>**
+* **Method:** - `POST`
+* **Description** - POST function to approve/reject timesheets into DB
+* **Input** - coop_email (str), approve (str)
+* **Output** : Example
+```
+{
+   "status":"success",
+   "message":"Time entries approved successfully",
+   "data":[
+      {
+         "student_email":"abc@xyz.com",
+         "log_date":"2022-04-18",
+         "notes":"previous week monday",
+         "student_uin":"123",
+         "approval_due_date":"2022-04-25",
+         "hours_submitted":"0.0",
+         "semester":"sprng",
+         "semester_year":"2022",
+         "start_time":"2022-05-08T20:54:00.000Z",
+         "end_time":"2022-05-08T11:54:00.000Z",
+         "hours_approved":true,
+         "created":false
+      },
+      {
+         "student_email":"abc@xyz.com",
+         "log_date":"2022-04-19",
+         "notes":"previous week tuesday",
+         "student_uin":"123",
+         "approval_due_date":"2022-04-25",
+         "hours_submitted":"4.0",
+         "semester":"sprng",
+         "semester_year":"2022",
+         "start_time":"2022-05-09T11:59:00.000Z",
+         "end_time":"2022-05-09T14:59:00.000Z",
+         "hours_approved":true,
+         "created":false
+      },
+      {
+         "student_email":"abc@xyz.com",
+         "log_date":"2022-04-20",
+         "notes":"previous week wednesday",
+         "student_uin":"123",
+         "approval_due_date":"2022-04-25",
+         "hours_submitted":"2.0",
+         "semester":"sprng",
+         "semester_year":"2022",
+         "start_time":"2022-04-30T04:32:00.000Z",
+         "end_time":"2022-04-30T06:32:00.000Z",
+         "hours_approved":true,
+         "created":false
+      },
+      {
+         "student_email":"abc@xyz.com",
+         "log_date":"2022-04-21",
+         "notes":"previous week thursday",
+         "student_uin":"123",
+         "approval_due_date":"2022-04-25",
+         "hours_submitted":"2.0",
+         "semester":"sprng",
+         "semester_year":"2022",
+         "start_time":"2022-05-01T06:32:00.000Z",
+         "end_time":"2022-05-01T09:32:00.000Z",
+         "hours_approved":true,
+         "created":false
+      },
+      {
+         "student_email":"abc@xyz.com",
+         "log_date":"2022-04-22",
+         "notes":"previous week friday",
+         "student_uin":"123",
+         "approval_due_date":"2022-04-25",
+         "hours_submitted":"1.0",
+         "semester":"sprng",
+         "semester_year":"2022",
+         "start_time":"2022-05-02T07:32:00.000Z",
+         "end_time":"2022-05-02T09:32:00.000Z",
+         "hours_approved":true,
+         "created":false
+      }
+   ]
+}
+```
+----
+
 ```
