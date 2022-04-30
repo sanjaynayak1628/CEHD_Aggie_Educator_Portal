@@ -72,7 +72,7 @@
 **supervisor_coop_sem**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given semester
 * **Input** - super_email (str), coop_email (str), semester (str)
 * **Output** : Example
 ```
@@ -116,7 +116,7 @@
 **supervisor_coop_sem_year**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>/year/\<str:year>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given semester and year
 * **Input** - super_email (str), coop_email (str), semester (str), year (int)
 * **Output** : Example
 ```
@@ -160,7 +160,7 @@
 **supervisor_coop_year**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/year/\<str:year>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given year
 * **Input** - super_email (str), coop_email (str), year (str)
 * **Output** : Example
 ```
@@ -205,7 +205,7 @@
 **supervisor_coop_dates**
 * **URL - /supervisor/email/email/\<str:super_email>/coop/\<str:coop_email>/start/\<str:start_date>/end/\<str:end_date>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given start date and end date
 * **Input** - super_email (str), coop_email (str), start_date (str), end_date (str)
 * **Output** : Example
 ```
@@ -250,7 +250,7 @@
 **supervisor_coop_sem_dates_year**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>/year/\<str:year>/start/\<str:start_date>/end/\<str:end_date>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given semester, year, start date and end date
 * **Input** - super_email (str), coop_email (str), semester (str), year (str), start_date (str), end_date (str)
 * **Output** : Example
 ```
@@ -294,7 +294,7 @@
 **supervisor_coop_sem_dates**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>/start/\<str:start_date>/end/\<str:end_date>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given semester, start date and end date
 * **Input** - super_email (str), coop_email (str), semester (str), start_date (str), end_date (str)
 * **Output** : Example
 ```
@@ -338,7 +338,7 @@
 **supervisor_coop_year_dates**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/year/\<str:year>/start/\<str:start_date>/end/\<str:end_date>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given year, start date and end date
 * **Input** - super_email (str), coop_email (str), year (str), start_date (str), end_date (str)
 * **Output** : Example
 ```
@@ -426,7 +426,7 @@
 **supervisor_coop_sem_export**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>/export/\<str:export>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor and export them as a csv file
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given semester and export them as a csv file
 * **Input** - super_email (str), coop_email (str), export (str), semester (str), export (str)
 * **Output** : Example
 ```
@@ -471,7 +471,7 @@
 **supervisor_coop_sem_year_export**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>/year/\<str:year>/export/\<str:export>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor and export them as a csv file
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given semester and year and export them as a csv file
 * **Input** - super_email (str), coop_email (str), export (str), semester (str), year (str), export (str)
 * **Output** : Example
 ```
@@ -516,7 +516,7 @@
 **supervisor_coop_year_export**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/year/\<str:year>/export/\<str:export>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor and export them as a csv file
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given year and export them as a csv file
 * **Input** - super_email (str), coop_email (str), export (str), year (str), export (str)
 * **Output** : Example
 ```
@@ -561,7 +561,7 @@
 **supervisor_coop_dates_export**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/start/\<str:start_date>/end/\<str:end_date>/export/\<str:export>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor and export them as a csv file
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the given start date and end date and export them as a csv file
 * **Input** - super_email (str), coop_email (str), export (str), start_date (str), end_date (str)
 * **Output** : Example
 ```
@@ -606,7 +606,7 @@
 **supervisor_coop_sem_dates_year_export**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>/year/\<str:year>/start/\<str:start_date>/end/\<str:end_date>/export/\<str:export>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor and export them as a csv file
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the specific filters and export them as a csv file
 * **Input** - super_email (str), coop_email (str), export (str), start_date (str), end_date (str), semester (str), year (str)
 * **Output** : Example
 ```
@@ -651,7 +651,7 @@
 **supervisor_coop_sem_dates_export**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/semester/\<str:semester>/start/\<str:start_date>/end/\<str:end_date>/export/\<str:export>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor and export them as a csv file
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the specific filters and export them as a csv file
 * **Input** - super_email (str), coop_email (str), export (str), start_date (str), end_date (str), semester (str)
 * **Output** : Example
 ```
@@ -696,7 +696,7 @@
 **supervisor_coop_year_dates_export**
 * **URL - /supervisor/email/\<str:super_email>/coop/\<str:coop_email>/year/\<str:year>/start/\<str:start_date>/end/\<str:end_date>/export/\<str:export>**
 * **Method:** - `GET`
-* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor and export them as a csv file
+* **Description** - GET function to get the time logs for each student against selected cooperating teacher under the supervisor with the specific filters and export them as a csv file
 * **Input** - super_email (str), coop_email (str), export (str), start_date (str), end_date (str)
 * **Output** : Example
 ```
