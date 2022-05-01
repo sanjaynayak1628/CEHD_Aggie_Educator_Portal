@@ -14,7 +14,7 @@ As per the client requirements, the application would be developed in Django fra
 
 # Heroku Deployment
 1. Connect Heroku-CLI with gitbash
-2. heroku login (Authenticate and connect to your heroku account)
+2. `heroku login` (Authenticate and connect to your heroku account)
 3. Go to the folder where you have your github repo set
 5. `heroku create`\
 If more than one apps present in your heroku account and you want to use a particular app, use the following command else directly go to step 5
