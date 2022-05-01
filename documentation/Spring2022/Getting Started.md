@@ -47,18 +47,15 @@ Migrate the migrations into the database: `python manage.py migrate`
 Reference: https://docs.djangoproject.com/en/4.0/topics/migrations/
 
 ## Deployment to Heroku
-To deploy to Heroku, open the git bash (if not installed, install git bash first).
-Please follow the steps listed down in the link, https://devcenter.heroku.com/articles/git, to properly configure the Heroku CLI with git bash and use it to push your application to Heroku server.
-Important commands to note:
-
-•	`heroku login -i`
-
-•	`heroku create`
-
-•	`git push heroku main`
-
-•	`git subtree push --prefix code/cehd heroku <branch-name>:main`
-(This is used to deploy code to Heroku from a branch other than main, where the code is in the sub-directory `code/cehd`)
+Please follow the steps listed down in the link, https://devcenter.heroku.com/articles/git, to properly configure the Heroku CLI with git bash and use it to push your application to Heroku server. Some of the important steps are included below.
+1.	`heroku login -i` (Authenticate and connect to your heroku account)
+2.	Go to the folder where you have your github repo set
+3.	`heroku create`
+4.	If more than one apps present in your heroku account and you want to use a particular app, use the following command else directly go to step 5
+5.	`heroku git:remote -a \<app-name\>`
+6.	`heroku config:set DISABLE_COLLECTSTATIC=0` (To push to heroku from a non-master branch use the following command)
+7.	`git subtree push --prefix \<sub folder path to Django app\> heroku \<non-master branch-name\>:main`
+(This command is used to deploy code to Heroku from a branch other than main, where the code is in the sub-directory code/cehd)
 
 ## BDD (Behavioral Driven Development) Setup
 For running the BDD tests, the libraries `behave`, `behave-django`, `factory_boy`, and `selenium` needs to be installed on the system. Since the BDD of the application uses chrome as its web driver, it needs to be downloaded before running the BDD test cases.  Use the link, https://chromedriver.chromium.org/downloads, to download the chrome web driver. 
