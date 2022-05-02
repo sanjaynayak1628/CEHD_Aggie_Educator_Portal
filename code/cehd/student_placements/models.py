@@ -28,4 +28,4 @@ class StudentPlacements(models.Model):
 
     class Meta:
         db_table = "student_placements"
-        unique_together = (('uin', 'semester'),)
+        unique_together = (('uin', 'semester', 'semester_year'),)

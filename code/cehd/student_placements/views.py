@@ -114,7 +114,7 @@ def query_supervisor_email(email, semester):
     if semester:
         kwargs["semester"] = config["reverse_semester"][semester]
     sp_items = StudentPlacements.objects.all().filter(**kwargs) \
-        .distinct("university_supervisor_email", "cooperating_teacher_email")
+        .distinct("university_supervisor_email", "cooperating_teacher_email", "semester", "semester_year")
     sp_item_serializer = json.loads(serializers.serialize('json', sp_items))
     return sp_item_serializer
 
@@ -132,21 +132,6 @@ class StudentPlacementsGet(APIView):
         if len(sp_item_serializer) > 0:
             sp_item_serializer = sp_item_serializer[0]
         else:
-            sp_item_serializer = None
-        return Response({"status": "success", "data": sp_item_serializer}, status=status.HTTP_200_OK)
-
-
-class SupervisorGet(APIView):
-    """
-    Query the student placements table for information based on supervisor email and/or semester
-    """
-
-    def get(self, request, email, semester=None):
-        """
-        GET function to query the student placements table for information based on supervisor email and/or semester
-        """
-        sp_item_serializer = query_supervisor_email(email, semester)
-        if len(sp_item_serializer) < 0:
             sp_item_serializer = None
         return Response({"status": "success", "data": sp_item_serializer}, status=status.HTTP_200_OK)
 
@@ -213,7 +198,8 @@ def query_coop_email(coop_email, semester):
     kwargs["cooperating_teacher_email"] = coop_email
     if semester:
         kwargs["semester"] = config["reverse_semester"][semester]
-    students_list = StudentPlacements.objects.all().filter(**kwargs).distinct("student_email")
+    students_list = StudentPlacements.objects.all().filter(**kwargs).distinct("student_email", "semester",
+                                                                              "semester_year")
     students_list_serializer = json.loads(serializers.serialize('json', students_list))
     students = set()
     for st in students_list_serializer:

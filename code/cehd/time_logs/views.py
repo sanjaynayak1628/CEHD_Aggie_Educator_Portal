@@ -302,7 +302,10 @@ class TimeLogViewsEmailGet(APIView):
         return render(request, f'time_logs/{visit_html}', context)
 
 
-def get_time_logs_generic(kwargs):
-    time_logs = TimeLogs.objects.all().filter(**kwargs).order_by("log_date")
+def get_time_logs_generic(kwargs, query=None):
+    if query is None:
+        time_logs = TimeLogs.objects.all().filter(**kwargs).order_by("log_date")
+    else:
+        time_logs = TimeLogs.objects.all().filter(query).order_by("log_date")
     time_logs_serializer = json.loads(serializers.serialize('json', time_logs))
     return time_logs_serializer

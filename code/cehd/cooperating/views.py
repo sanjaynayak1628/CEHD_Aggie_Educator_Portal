@@ -4,6 +4,7 @@ views file describing the APIs used in coop time sheet API
 import json
 import datetime
 
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
@@ -185,10 +186,27 @@ class CoopTimeLogSubmit(APIView):
             return Response({"message": "Time entries rejected and notified to the student"}, status=status.HTTP_200_OK)
 
 
-def query_sp_coop_student(coop_email, semester):
+def get_selected_student_details(student_list_serializer, student_email):
+    """
+    Helper function to get the list of semester and semester year during which the student was under the cooperating
+    teacher
+    """
+
+    sem_year = set()
+    for d in student_list_serializer:
+        data = d["fields"]
+        if data["student_email"] == student_email:
+            sem_year.add((data["semester"], data["semester_year"]))
+    student_select_sem_year = list(sem_year)
+    student_select_sem_year = sorted(student_select_sem_year, key=lambda x:(x[1], x[0]))
+    return student_select_sem_year
+
+
+def query_sp_coop_student(coop_email, semester, student_email=None):
     """
     Helper function to get the list of students under the cooperating teacher
     """
+
     student_list_serializer, st_list = query_coop_email(coop_email, semester)
     students_dict = dict()
     students_dict["cooperating_teacher_email"] = coop_email
@@ -202,11 +220,12 @@ def query_sp_coop_student(coop_email, semester):
             if student.get("cooperating_teacher_name", None) is None:
                 students_dict["cooperating_teacher_name"] = data["cooperating_teacher"]
             years.add(data["semester_year"])
-        years = sorted(years)
         students_dict["years"] = list(years)
     student_details, student_details_list = query_student_list_details(st_list)
     for k, v in student_details.items():
         students_dict["students"].append({"student_full_name": v, "student_email": k})
+    if student_email:
+        students_dict["select_student_sem_year"] = get_selected_student_details(student_list_serializer, student_email)
     return students_dict
 
 
@@ -236,7 +255,7 @@ class CoopViewGet(APIView):
         """
 
         # create the data to be consumed by API
-        student_coop_all = query_sp_coop_student(coop_email, None)
+        student_coop_all = query_sp_coop_student(coop_email, None, student_email)
         student_coop_all["student_email_selected"] = student_email
         st_list = student_coop_all["students"]
         student_list = set()
@@ -245,22 +264,36 @@ class CoopViewGet(APIView):
             if st["student_email"] == student_email:
                 student_coop_all["student_full_name_selected"] = st["student_full_name"]
         kwargs = dict()
-        kwargs["student_email__in"] = list(student_list)
+        query = Q()
+        # kwargs["student_email__in"] = list(student_list)
+        kwargs["student_email"] = student_email
+        query = query & (Q(student_email=student_email))
         if semester:
             with open("config.json") as json_config_file:
                 config = json.load(json_config_file)
             kwargs["semester"] = config["reverse_semester"][semester.lower()]
             student_coop_all["semester"] = semester
+            query = query & (Q(semester=config["reverse_semester"][semester.lower()]))
         if year:
             kwargs["semester_year"] = year
             student_coop_all["semester_year"] = year
+            query = query & (Q(semester_year=year))
         if start_date:
             kwargs["log_date__gte"] = start_date
             student_coop_all["start_date"] = start_date
+            query = query & (Q(log_date__gte=start_date))
         if end_date:
             kwargs["log_date__lte"] = end_date
             student_coop_all["end_date"] = end_date
-        time_logs_serializer = get_time_logs_generic(kwargs)
+            query = query & (Q(log_date__lte=end_date))
+
+        if semester is None or year is None:
+            query_sem_year = Q()
+            for sem_year in student_coop_all.get("select_student_sem_year", []):
+                query_sem_year = query_sem_year | (Q(semester=sem_year[0]) & Q(semester_year=sem_year[1]))
+            query = query & query_sem_year
+
+        time_logs_serializer = get_time_logs_generic(kwargs, query)
         student_coop_all["timelogs"] = list()
         for tl in time_logs_serializer:
             tmp = dict(tl["fields"])
