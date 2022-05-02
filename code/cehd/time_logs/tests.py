@@ -84,6 +84,7 @@ class StudentViewTest(TestCase):
             "cooperating_teacher_email": "cooperating_teacher@xyz.com",
             "cooperating_teacher_name": "Andrew George",
             "email": "joejonas@xyz.com",
+            "student_email_select": "joejonas@xyz.com",
             "data": [{
                 "student_uin": "10",
                 "student_email": "joejonas@xyz.com",
@@ -103,6 +104,7 @@ class StudentViewTest(TestCase):
             "cooperating_teacher_email": "cooperating_teacher@xyz.com",
             "cooperating_teacher_name": "Andrew George",
             "email": "joejonas@xyz.com",
+            "student_email_select": "joejonas@xyz.com",
             "data": [{
                 "student_uin": "120",
                 "student_email": "joejonas@xyz.com",
@@ -121,6 +123,7 @@ class StudentViewTest(TestCase):
             "cooperating_teacher_email": "",
             "cooperating_teacher_name": "Andrew George",
             "email": "joejonas@xyz.com",
+            "student_email_select": "joejonas@xyz.com",
             "data": [{
                 "student_uin": "120",
                 "student_email": "joejonas@xyz.com",
@@ -139,6 +142,7 @@ class StudentViewTest(TestCase):
             "cooperating_teacher_email": "cooperating_teacher@xyz.com",
             "cooperating_teacher_name": "",
             "email": "joejonas@xyz.com",
+            "student_email_select": "joejonas@xyz.com",
             "data": [{
                 "student_uin": "120",
                 "student_email": "joejonas@xyz.com",
@@ -158,8 +162,8 @@ class StudentViewTest(TestCase):
         This function is used to check the correctness of Student View POST APIs - submit
         return: 200 Correct Response
         """
-        response = client.post(reverse('student_submit_time_logs'), data=json.dumps(self.valid_submit_save_payload),
-                               content_type="application/json")
+        response = client.post(reverse('student_submit_time_logs', kwargs={"email": "joejonas@xyz.com"}),
+                               data=json.dumps(self.valid_submit_save_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_valid_submit_without_name(self):
@@ -167,7 +171,7 @@ class StudentViewTest(TestCase):
         This function is used to check the correctness of Student View POST APIs - submit
         return: 200 Correct Response
         """
-        response = client.post(reverse('student_submit_time_logs'),
+        response = client.post(reverse('student_submit_time_logs', kwargs={"email": "joejonas@xyz.com"}),
                                data=json.dumps(self.valid_submit_payload_without_name), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -176,8 +180,8 @@ class StudentViewTest(TestCase):
         This function is used to check the correctness of Student View POST APIs - submit
         return: 400 Error Response
         """
-        response = client.post(reverse('student_submit_time_logs'), data=json.dumps(self.invalid_submit_payload),
-                               content_type="application/json")
+        response = client.post(reverse('student_submit_time_logs', kwargs={"email": "joejonas@xyz.com"}),
+                               data=json.dumps(self.invalid_submit_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_invalid_submit_data(self):
@@ -185,8 +189,8 @@ class StudentViewTest(TestCase):
         This function is used to check the correctness of Student View POST APIs - submit
         return: 400 Error Response
         """
-        response = client.post(reverse('student_submit_time_logs'), data=json.dumps(self.invalid_save_payload),
-                               content_type="application/json")
+        response = client.post(reverse('student_submit_time_logs', kwargs={"email": "joejonas@xyz.com"}),
+                               data=json.dumps(self.invalid_save_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_valid_save(self):
@@ -194,8 +198,8 @@ class StudentViewTest(TestCase):
         This function is used to check the correctness of Student View POST APIs - save
         return: 200 Correct Response
         """
-        response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.valid_submit_save_payload),
-                               content_type="application/json")
+        response = client.post(reverse('student_save_time_logs', kwargs={"email": "joejonas@xyz.com"}),
+                               data=json.dumps(self.valid_submit_save_payload), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_invalid_save(self):
@@ -203,8 +207,8 @@ class StudentViewTest(TestCase):
         This function is used to check the correctness of Student View POST APIs - save
         return: 400 Error Response
         """
-        response = client.post(reverse('student_save_time_logs'), data=json.dumps(self.invalid_save_payload),
-                               content_type="application/json")
+        response = client.post(reverse('student_save_time_logs', kwargs={"email": "joejonas@xyz.com"}),
+                               data=json.dumps(self.invalid_save_payload), content_type="application/json")
         response_dict = response.json()
         self.assertEqual(response_dict.get("message", ""),
                          "Time entered for dates: 2020-04-04 are not saved. Please re-save again!")

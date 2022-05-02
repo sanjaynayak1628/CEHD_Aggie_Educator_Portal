@@ -93,6 +93,7 @@ class CoopTest(TestCase):
             "cooperating_teacher_email": "cclark@xyz.com",
             "cooperating_teacher_name": "Kent Clark Jr.",
             "email": "abc@xyz.com",
+            "log_date_list": ["2020-04-04"],
             "data": [{
                 "student_uin": "10",
                 "student_email": "joejonas@xyz.com",
@@ -113,6 +114,7 @@ class CoopTest(TestCase):
             "cooperating_teacher_email": "cclark@xyz.com",
             "cooperating_teacher_name": "Kent Clark Jr. 1",
             "email": "abc1@xyz.com",
+            "log_date_list": ["2020-04-04"],
             "data": [{
                 "student_uin": "10",
                 "student_email": "joejonas@xyz.com",
@@ -132,6 +134,7 @@ class CoopTest(TestCase):
             "cooperating_teacher_email": "",
             "cooperating_teacher_name": "",
             "email": "joejonas@xyz.com",
+            "log_date_list": ["2020-04-04"],
             "data": [{
                 "student_uin": "120",
                 "student_email": "joejonas@xyz.com",
@@ -152,6 +155,7 @@ class CoopTest(TestCase):
             "cooperating_teacher_email": "clark@xyz.com",
             "cooperating_teacher_name": "Kent Clarke",
             "email": "joejonas@xyz.com",
+            "log_date_list": ["2020-04-04"],
             "data": [{
                 "student_uin": "120",
                 "student_email": "joejonas@xyz.com",

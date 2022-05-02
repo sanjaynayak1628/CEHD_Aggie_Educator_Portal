@@ -1,4 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.urls import reverse
+from rest_framework import status
+
+client = Client()
 
 
 class DatabaseConnectionTest(TestCase):
@@ -22,3 +26,24 @@ class DatabaseConnectionTest(TestCase):
             print("Exception occurred")
             check = False
         self.assertEqual(check, True)
+
+    def test_login_page(self):
+        """
+        Test to check the accessibility to login page
+        """
+        response = client.get(reverse("login"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_register_page(self):
+        """
+        Test to check the accessibility to register page
+        """
+        response = client.get(reverse("register"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_logout_page(self):
+        """
+        Test to check the accessibility to logout page
+        """
+        response = client.get(reverse("logout"))
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)

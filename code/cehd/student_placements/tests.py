@@ -1,5 +1,4 @@
 import datetime
-import json
 
 from django.test import TestCase, Client
 from django.urls import reverse
