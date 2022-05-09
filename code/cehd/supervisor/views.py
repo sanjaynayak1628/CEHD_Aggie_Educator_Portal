@@ -19,6 +19,7 @@ def query_sp_supervisor_coop(super_email, semester):
     coop_dict["university_supervisor_email"] = super_email
     coop_dict["cooperating_teachers"] = list()
     coop_dict["years"] = list()
+    check_coop = dict()
     if len(sp_item_serializer) > 0:
         years = set()
         for d in sp_item_serializer:
@@ -30,7 +31,9 @@ def query_sp_supervisor_coop(super_email, semester):
                 coop_dict["university_supervisor_name"] = data["university_supervisor"]
             coop["cooperating_teacher"] = data["cooperating_teacher"]
             coop["cooperating_teacher_email"] = data["cooperating_teacher_email"]
-            coop_dict["cooperating_teachers"].append(coop)
+            if data["cooperating_teacher_email"] not in check_coop:
+                coop_dict["cooperating_teachers"].append(coop)
+                check_coop[data["cooperating_teacher_email"]] = 1
             years.add(data["semester_year"])
         years = sorted(years)
         coop_dict["years"] = list(years)
@@ -72,6 +75,7 @@ class SupervisorCoopGet(APIView):
         super_coop_data["cooperating_teachers"] = list()
         super_coop_data["years"] = list()
         sp_item_serializer = query_supervisor_email(super_email, None)
+        check_coop = dict()
         if len(sp_item_serializer) > 0:
             years = set()
             for d in sp_item_serializer:
@@ -84,7 +88,9 @@ class SupervisorCoopGet(APIView):
                 if data["cooperating_teacher_email"] == coop_email:
                     super_coop_data["cooperating_teacher_selected"] = data["cooperating_teacher"]
                     super_coop_data["cooperating_teacher_email_selected"] = data["cooperating_teacher_email"]
-                super_coop_data["cooperating_teachers"].append(coop)
+                if data["cooperating_teacher_email"] not in check_coop:
+                    super_coop_data["cooperating_teachers"].append(coop)
+                    check_coop[data["cooperating_teacher_email"]] = 1
                 years.add(data["semester_year"])
             years = sorted(years)
             super_coop_data["years"] = list(years)

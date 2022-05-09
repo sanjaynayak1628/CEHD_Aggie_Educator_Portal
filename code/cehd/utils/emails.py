@@ -78,7 +78,7 @@ def timesheet_submit(student_name, student_email, submission_date):
     # print("Inside timesheet submit email")
     mail_subject = "Timesheet Submitted | Waiting for approval"
     recipients_mail_list = RECIPIENTS_MAIL_LIST_SUBMIT
-    mail_content_html = "Hi, <br/>The student <b>{} ,{}</b> has submitted the timesheet on <b>{}</b> for approval. " \
+    mail_content_html = "Hi, <br/>The student <b>{}, {}</b> has submitted the timesheet on <b>{}</b> for approval. " \
                         "Please login to your account to approve the time sheets.<br/><br/>Best regards"\
         .format(student_name, student_email, submission_date)
     send_email(mail_subject, mail_content_html, recipients_mail_list)
