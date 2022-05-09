@@ -33,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'arcane-temple-55328.herokuapp.com',
-    'enigmatic-waters-43189.herokuapp.com',
+    'tamu-cehd.herokuapp.com',
     '127.0.0.1'
 ]
 
