@@ -5,6 +5,8 @@ Aggie Educator Portal for students and cooperating teachers for College of Educa
 
 **Team Members**: Manisha Dixit, Sruti Patnaik, Rajesh Satpathy, Piyush Nayak, Sanjay Nayak
 
+**Aggie Educator Portal link** - https://tamu-cehd.herokuapp.com/
+
 ## Objective
 The main objective of the project is to create an application to record, maintain and approve the time logs of the students.  This is a new application which is being designed to address the requirement of the College of Education and Human Development (CEHD) under the supervision of Strader, R Arlen (strader@tamu.edu). The students would be filling the time logs for each working day in the application, which would be notified via mail to the cooperating teacher for approval. In short, our application would help in digitalising the manual timesheet logging and approval process of the students. 
 
